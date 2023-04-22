@@ -2,6 +2,6 @@ import React from "react";
 
 export default function MovieRegisterPage() {
   return (
-      <h1>직원이 영화를 등록하는 페이지</h1>
+    <a class="btn btn-primary" href="/officialsregister" role="button">인물 등록</a>
   );
 }
