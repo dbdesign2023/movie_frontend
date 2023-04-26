@@ -1,5 +1,10 @@
+@font-face {
+  font-family: "NanumBarunGothic";
+  src: url("./assets/NanumBarunGothic.ttf"); }
+
 .App {
   text-align: center;
+  font-family: "NanumBarunGothic";
 }
 
 .App-logo {
@@ -35,4 +40,29 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.title-text-container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.content-text-container {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.bottom-container {
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.button-container {
+  padding-left: 10px;
+  margin-right: 10px;
 }
