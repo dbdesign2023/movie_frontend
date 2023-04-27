@@ -1,9 +1,13 @@
 .form-container{
     padding: 10px;
     .row{
-        padding: 5px;
+        padding: 4px;
     }
-    .col-sm-2{
+    .col-1{
+        display: flex;
+        align-items: center;
+    }
+    .col-sm-1{
         display: flex;
         justify-content: flex-end;
         align-items: center;
@@ -12,12 +16,21 @@
         display: flex;
         align-items: center;
     }
-    .col-sm-3{
+    .col-sm-2{
         display: flex;
         justify-content: flex-end;
         align-items: center;
     }
     .col-3{
+        display: flex;
+        align-items: center;
+    }
+    .col-sm-3{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .col-4{
         display: flex;
         align-items: center;
     }
@@ -35,7 +48,16 @@
         justify-content: flex-end;
         align-items: center;
     }
-    .col-4{
+    .col-7{
+        display: flex;
+        align-items: center;
+    }
+    .col-sm-7{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .col-9{
         display: flex;
         align-items: center;
     }
@@ -51,10 +73,6 @@
     .col-sm-10{
         display: flex;
         justify-content: flex-end;
-        align-items: center;
-    }
-    .col-10{
-        display: flex;
         align-items: center;
     }
     .inner-form-container{
@@ -82,7 +100,7 @@
     .actor-form-container{
         border-color: #6c757d;
         border-width: 1px;
-        border-radius: 3px;
+        border-radius: 5px;
         border-style: groove;
         display: flex;
         align-items: center;

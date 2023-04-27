@@ -338,108 +338,121 @@ export default function MovieRegisterPage() {
             <div className='col-sm-2'>
               <div className='content-text-container'>배우</div>
             </div>
-            <div className='col-10'>
+            <div className='col-8'>
               <div className='actor-form-container'>
-                <div class="col-6">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-secondary">선택된 감독</button>
+                <div class='row'>
+                  <div class="col-6">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-secondary">선택된 감독</button>
+                      <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">//인물 불러오기 API</a></li>
+                        <li><a class="dropdown-item" href="#">//인물 불러오기 API</a></li>
+                        <li><a class="dropdown-item" href="#">//인물 불러오기 API</a></li>
+                        <li><a class="dropdown-item" href="#">//인물 불러오기 API</a></li>
+                      </ul>
+                    </div>    
+                    <div className='content-text-container'></div>
+                    <button type="button" class="btn btn-outline-secondary" onClick={showOfficialModal}>추가</button>
+                    <Modal
+                      visible={officialModalOpen}
+                      effect='fadeInDown'
+                      onClickAway={closeOfficialModal}
+                    >
+                      <div className='modal-container'>
+                        <div className='title-text-center-container'>
+                          <div className='center'>
+                            인물 등록
+                          </div>
+                        </div>
+                        <div className='form-container'>
+                          <div class="row">
+                            <div class="col-sm-2">
+                              <div className='content-text-container'>이름</div>
+                            </div>
+                            <div class="col-10">
+                              <div class="half-inner-form-container">
+                                <input type="text" class="form-control" value={officialName} onChange={(event) => setOfficialName(event.target.value)}/>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-2">
+                              <div className='content-text-container'>생년월일</div>
+                            </div>
+                            <div class="col-10">
+                              <div class="half-inner-form-container">
+                                <input type="date" class="inputField" value={officialDate} onChange={(event) => setOfficialDate(event.target.value)}/>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-2">
+                              <div className='content-text-container'>사진</div>
+                            </div>
+                            <div class="col-10">
+                              <img src={officialMainImg} style={{maxWidth:"110px"}}></img>
+                            </div>
+                          </div>
+                        <div class="row">
+                            <div class="col-sm-2">
+                            </div>
+                            <div class="col-sm-10">
+                              <input class="form-control" type="file" id="formFile" placeholder="" onChange={setPreviewImg}/>
+                          </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-2">
+                            <div className='content-text-container'>국적</div>
+                          </div>
+                            <div class="col-10">
+                              <div class="half-inner-form-container">
+                                <input type="text" class="form-control" value={nation} onChange={(event) => setNation(event.target.value)}/>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-2">
+                              <div className='content-text-container'>정보</div>
+                            </div>
+                            <div class="col-10">
+                              <input type="text" class="form-control" value={officialInfo} onChange={(event) => setOfficialInfo(event.target.value)}/>
+                            </div>
+                          </div>
+                          <div className='bottom-container'>
+                            <div className='button-container'>
+                              <button type="button" class="btn btn-secondary" onClick={closeOfficialModal}>닫기</button>
+                            </div>
+                            <div className='button-container'>
+                              <button type="button" class="btn btn-outline-success  " onClick={setOfficialReset}>초기화</button>
+                            </div>
+                            <div className='button-container'>
+                              <button type="button" class="btn btn-success">등록</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Modal>
+                  </div>
+                  <div className="col-3">
+                    <input type="text" class="form-control" placeholder='극중 이름 입력' onChange={(event) => setOfficialInfo(event.target.value)}/>
+                  </div>
+                  <div className="col-3">
+                    <button type="button" class="btn btn-secondary">주연</button>
                     <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                       <span class="visually-hidden">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">//인물 불러오기 API</a></li>
-                      <li><a class="dropdown-item" href="#">//인물 불러오기 API</a></li>
-                      <li><a class="dropdown-item" href="#">//인물 불러오기 API</a></li>
-                      <li><a class="dropdown-item" href="#">//인물 불러오기 API</a></li>
+                      <li><a class="dropdown-item" href="#">주연</a></li>
+                      <li><a class="dropdown-item" href="#">조연</a></li>
                     </ul>
-                  </div>    
-                  <div className='content-text-container'></div>
-                  <button type="button" class="btn btn-outline-secondary" onClick={showOfficialModal}>추가</button>
-                  <Modal
-                    visible={officialModalOpen}
-                    effect='fadeInDown'
-                    onClickAway={closeOfficialModal}
-                  >
-                    <div className='modal-container'>
-                      <div className='title-text-center-container'>
-                        <div className='center'>
-                          인물 등록
-                        </div>
-                      </div>
-                      <div className='form-container'>
-                        <div class="row">
-                          <div class="col-sm-2">
-                            <div className='content-text-container'>이름</div>
-                          </div>
-                          <div class="col-10">
-                            <div class="half-inner-form-container">
-                              <input type="text" class="form-control" value={officialName} onChange={(event) => setOfficialName(event.target.value)}/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-2">
-                            <div className='content-text-container'>생년월일</div>
-                          </div>
-                          <div class="col-10">
-                            <div class="half-inner-form-container">
-                              <input type="date" class="inputField" value={officialDate} onChange={(event) => setOfficialDate(event.target.value)}/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-2">
-                            <div className='content-text-container'>사진</div>
-                          </div>
-                          <div class="col-10">
-                            <img src={officialMainImg} style={{maxWidth:"110px"}}></img>
-                          </div>
-                        </div>
-                      <div class="row">
-                          <div class="col-sm-2">
-                          </div>
-                          <div class="col-sm-10">
-                            <input class="form-control" type="file" id="formFile" placeholder="" onChange={setPreviewImg}/>
-                        </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-2">
-                          <div className='content-text-container'>국적</div>
-                        </div>
-                          <div class="col-10">
-                            <div class="half-inner-form-container">
-                              <input type="text" class="form-control" value={nation} onChange={(event) => setNation(event.target.value)}/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-2">
-                            <div className='content-text-container'>정보</div>
-                          </div>
-                          <div class="col-10">
-                            <input type="text" class="form-control" value={officialInfo} onChange={(event) => setOfficialInfo(event.target.value)}/>
-                          </div>
-                        </div>
-                        <div className='bottom-container'>
-                          <div className='button-container'>
-                            <button type="button" class="btn btn-secondary" onClick={closeOfficialModal}>닫기</button>
-                          </div>
-                          <div className='button-container'>
-                            <button type="button" class="btn btn-outline-success  " onClick={setOfficialReset}>초기화</button>
-                          </div>
-                          <div className='button-container'>
-                            <button type="button" class="btn btn-success">등록</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Modal>
-                </div>
-                <div className="col-6">
-                  <input type="text" class="form-control" placeholder='극중 이름 입력' onChange={(event) => setOfficialInfo(event.target.value)}/>
+                  </div>
                 </div>
               </div>
-              <div className='content-text-container'></div>
+            </div>
+            <div className='col-1'>
               <button type="button" class="btn btn-secondary" >추가</button>
             </div>  
           </div>
