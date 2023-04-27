@@ -42,6 +42,14 @@
   }
 }
 
+.title-text-center-container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+}
+
 .title-text-container {
   padding-top: 20px;
   padding-bottom: 20px;
