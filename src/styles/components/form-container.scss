@@ -5,26 +5,46 @@
     }
     .col-sm-2{
         display: flex;
-        align-items: center;
         justify-content: flex-end;
+        align-items: center;
+    }
+    .col-2{
+        display: flex;
+        align-items: center;
     }
     .col-sm-3{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .col-3{
         display: flex;
         align-items: center;
     }
     .col-sm-4{
         display: flex;
-        align-items: center;
         justify-content: flex-end;
+        align-items: center;
+    }
+    .col-4{
+        display: flex;
+        align-items: center;
     }
     .col-sm-10{
         display: flex;
+        justify-content: flex-end;
         align-items: center;
-        text-align: left;
-        .inner-form-container{
-            padding-right: 10px;
-            width: 50%;
-        }
+    }
+    .col-10{
+        display: flex;
+        align-items: center;
+    }
+    .inner-form-container{
+        display: flex;
+    }
+    .half-inner-form-container{
+        display: flex;
+        width: 50%;
     }
     .inputField {
         display: block;
@@ -40,5 +60,8 @@
         appearance: none;
         border-radius: 0.375rem;
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    .actor-form-container{
+        border-color: #198754;
     }
 }
