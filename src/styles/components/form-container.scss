@@ -26,7 +26,25 @@
         justify-content: flex-end;
         align-items: center;
     }
+    .col-6{
+        display: flex;
+        align-items: center;
+    }
+    .col-sm-6{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
     .col-4{
+        display: flex;
+        align-items: center;
+    }
+    .col-sm-9{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .col-10{
         display: flex;
         align-items: center;
     }
@@ -62,6 +80,12 @@
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
     .actor-form-container{
-        border-color: #198754;
+        border-color: #6c757d;
+        border-width: 1px;
+        border-radius: 3px;
+        border-style: groove;
+        display: flex;
+        align-items: center;
+        padding: 5px;
     }
 }
