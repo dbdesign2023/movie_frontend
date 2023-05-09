@@ -1,15 +1,18 @@
+import axios from 'axios';
 import React, { useEffect } from 'react';
 import Modal from 'react-awesome-modal';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import '../../styles/components/modal-container.scss';
+
 import '../../styles/components/form-container.scss';
 import '../../styles/MovieRegisterPage.scss';
 
-function RatingAddForm() {
+function RatingAddForm(props) {
+  const closeRatingModal = props.closeRatingModal;
   const {
     register,
-    handleSubmit,
-    formState: { isSubmitting, isDirty, errors },
+    formState: { isDirty, errors },
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -29,7 +32,7 @@ function RatingAddForm() {
   return (
     <div className='modal-container'>
       <div className='title-text-center-container'>등급 목록</div>
-      <div className='form-container' onSubmit={handleSubmit(onSubmit)}>
+      <div className='form-container'>
         <div className='row'>// 등급 목록 api 받아서 보여주는 곳</div>
         <div className='row'>
           <div class='col-sm-3'>
@@ -45,7 +48,6 @@ function RatingAddForm() {
               {...register('password', {
                 required: '비밀번호를 입력해주세요.',
               })}
-              onChange={(event) => setRating(event.target.value)}
             />
           </div>
           <div class='col-2'>
@@ -119,6 +121,7 @@ export default function MovieRegisterPage() {
   };
 
   const [genre, setGenre] = useState('');
+  const [rating, setRating] = useState('');
 
   const setPreviewImg = (event) => {
     var reader = new FileReader();
@@ -162,7 +165,7 @@ export default function MovieRegisterPage() {
             <div className='inner-form-container'>
               <div class='btn-group'>
                 <button type='button' class='btn btn-secondary'>
-                  hi
+                  {rating}
                 </button>
                 <button
                   type='button'
