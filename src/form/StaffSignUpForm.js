@@ -1,9 +1,8 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
-function StaffSignupForm() {
-  const [role, setRole] = useState('');
+export default function StaffSignupForm() {
 
   const {
     register,
@@ -12,17 +11,17 @@ function StaffSignupForm() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    try {
-      data.role = role;
-      console.log('data', data);
-
-      await new Promise((r) => setTimeout(r, 1000));
-      const url = `http://25.14.225.33.:8080/admin/signup`;
-      const response = await axios.post(url, data);
+      try {
+          const formData = new FormData();
+        console.log('data', data);
+      await new Promise((r) => setTimeout(r, 100));
+          const url = `http://25.14.225.33:8080/admin/signup`;
+          formData.append("name", data.name);
+          formData.append("loginId", data.loginId);
+          formData.append("password", data.password);
+        console.log('formData', formData);
+      const response = await axios.post(url, formData);
       console.log(response.data);
-      alert(
-        '회원가입 신청이 완료되었습니다. 승인이 완료되면 로그인이 가능합니다.',
-      );
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -30,7 +29,7 @@ function StaffSignupForm() {
   };
 
   return (
-    <div className='staff-signup-form-container'>
+    <div className='FormContainer'>
       <form className='staff-signup-form' onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor='name'>이름</label>
         <input
@@ -96,8 +95,4 @@ function StaffSignupForm() {
       </form>
     </div>
   );
-}
-// 직원이 등록된 영화 목록을 확인하는 페이지
-export default function StaffSignUpPage() {
-  return <StaffSignupForm />;
 }

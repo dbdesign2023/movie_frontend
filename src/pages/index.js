@@ -8,12 +8,12 @@ import {
 } from 'react-router-dom';
 import { AuthContext } from '../services/AuthContext';
 
-import MovieModifyPage from './staff/MovieModifyPage';
-import MovieRegisterPage from './staff/MovieRegisterPage';
-import StaffLoginPage from './staff/StaffLoginPage';
-import StaffMovieListPage from './staff/StaffMovieListPage';
-import StaffSignUpPage from './staff/StaffSignUpPage';
-import TestMainPage from './TestMainPage';
+import MovieModifyPage from './MovieModifyPage';
+import MovieRegisterPage from './MovieRegisterPage';
+import StaffLoginPage from './StaffLoginPage';
+import StaffMovieListPage from './StaffMovieListPage';
+import StaffSignUpPage from './StaffSignUpPage';
+import MainPage from './MainPage';
 
 function PrivateRoute({ staffAuth, customerAuth }) {
   const value = useContext(AuthContext);
@@ -26,7 +26,7 @@ function PrivateRoute({ staffAuth, customerAuth }) {
   if (!staffAuth && !customerAuth) {
     //로그인, 회원가입 페이지
     return isStaffLogin ? (
-      <Navigate replace to='/staff' />
+      <Navigate replace to='/' />
     ) : isCustomerLogin ? (
       <Navigate replace to='/' />
     ) : (
@@ -42,16 +42,20 @@ function PrivateRoute({ staffAuth, customerAuth }) {
 }
 
 function Router() {
+  const value = useContext(AuthContext);
+  const setIsStaffLogin = value.setIsStaffLogin;
   return (
     <BrowserRouter>
       <Routes>
-        {/**로그인 안해야지만 접근 가능 */}
-        <Route
-          element={<PrivateRoute customerAuth={false} staffAuth={false} />}
-        >
-          <Route path='/' element={<TestMainPage />} />
-          <Route path='/stafflogin' element={<StaffLoginPage />} />
+        {/**로그인 안 해도 접근 가능 */}
+        <Route>
+          <Route path='/' element={<MainPage />} />
+          <Route
+            path='/stafflogin'
+            element={<StaffLoginPage setIsStaffLogin={setIsStaffLogin} />}
+          />
           <Route path='/staffsignup' element={<StaffSignUpPage />} />
+          <Route path='/stafflogin' elememt={<StaffLoginPage />} />
         </Route>
         {/**고객 or 직원 로그인 해야만 접근 가능 */}
         <Route
@@ -61,7 +65,10 @@ function Router() {
         <Route element={<PrivateRoute customerAuth={false} staffAuth={true} />}>
           <Route path='/moviemodify' element={<MovieModifyPage />} />
           <Route path='/movieregister' element={<MovieRegisterPage />} />
-          <Route path='/staffmovielist' element={<StaffMovieListPage />} />
+          <Route
+            path='/movielist'
+            element={<StaffMovieListPage setIsStaffLogin={setIsStaffLogin} />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
