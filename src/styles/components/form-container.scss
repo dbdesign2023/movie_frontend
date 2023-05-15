@@ -1,109 +1,118 @@
-.form-container{
-    padding: 10px;
-    .row{
-        padding: 4px;
-    }
-    .col-1{
-        display: flex;
-        align-items: center;
-    }
-    .col-sm-1{
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    .col-2{
-        display: flex;
-        align-items: center;
-    }
-    .col-sm-2{
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    .col-3{
-        display: flex;
-        align-items: center;
-    }
-    .col-sm-3{
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    .col-4{
-        display: flex;
-        align-items: center;
-    }
-    .col-sm-4{
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    .col-6{
-        display: flex;
-        align-items: center;
-    }
-    .col-sm-6{
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    .col-7{
-        display: flex;
-        align-items: center;
-    }
-    .col-sm-7{
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    .col-9{
-        display: flex;
-        align-items: center;
-    }
-    .col-sm-9{
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    .col-10{
-        display: flex;
-        align-items: center;
-    }
-    .col-sm-10{
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    .inner-form-container{
-        display: flex;
-    }
-    .half-inner-form-container{
-        display: flex;
-        width: 50%;
-    }
-    .inputField {
-        display: block;
-        width: 100%;
-        padding: 0.375rem 0.75rem;
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: 1.5;
-        color: #212529;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #ced4da;
-        appearance: none;
-        border-radius: 0.375rem;
-        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    }
-    .actor-form-container{
-        border-color: #6c757d;
-        border-width: 1px;
-        border-radius: 5px;
-        border-style: groove;
-        display: flex;
-        align-items: center;
-        padding: 5px;
-    }
+.form-container {
+  padding: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  .row {
+    padding: 4px;
+  }
+  .col-1 {
+    display: flex;
+    align-items: center;
+  }
+  .col-sm-1 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .col-2 {
+    display: flex;
+    align-items: center;
+  }
+  .col-sm-2 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .col-3 {
+    display: flex;
+    align-items: center;
+  }
+  .col-sm-3 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .col-4 {
+    display: flex;
+    align-items: center;
+  }
+  .col-sm-4 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .col-6 {
+    display: flex;
+    align-items: center;
+  }
+  .col-sm-6 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .col-7 {
+    display: flex;
+    align-items: center;
+  }
+  .col-sm-7 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .col-9 {
+    display: flex;
+    align-items: center;
+  }
+  .col-sm-9 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .col-10 {
+    display: flex;
+    align-items: center;
+  }
+  .col-sm-10 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .inner-form-container {
+    display: flex;
+  }
+  .half-inner-form-container {
+    display: flex;
+    width: 50%;
+  }
+  .inputField {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    appearance: none;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  .actor-form-container {
+    border-color: #6c757d;
+    border-width: 1px;
+    border-radius: 5px;
+    border-style: groove;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+  }
+  .input-alert {
+    color: rgb(214, 3, 3);
+    grid-column: 1 / -1;
+    // display: flex;
+    // justify-content: flex-start;
+    margin-bottom: 5px;
+  }
 }

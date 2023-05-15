@@ -1,8 +1,28 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import Modal from 'react-awesome-modal';
+import StaffLoginForm from '../form/StaffLoginForm';
+import StaffSignUpForm from '../form/StaffSignUpForm';
 
 import { AuthContext } from '../services/AuthContext';
 
+import '../styles/components/_header.scss';
+
 function Unlogined() {
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [signUpModalOpen, setSignUpModalOpen] = useState(false);
+
+  const showLoginModal = () => {
+    setLoginModalOpen(true);
+  };
+  const closeLoginModal = () => {
+    setLoginModalOpen(false);
+  };
+  const showSignUpModal = () => {
+    setSignUpModalOpen(true);
+  };
+  const closeSignUpModal = () => {
+    setSignUpModalOpen(false);
+  };
   return (
     <>
       <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
@@ -12,18 +32,38 @@ function Unlogined() {
           </a>
         </li>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' href='/stafflogin'>
+          <a
+            className='nav-link active'
+            aria-current='page'
+            onClick={showLoginModal}
+          >
             로그인
           </a>
+          {loginModalOpen && <Modal setLoginModalOpen={showLoginModal} />}
+          <Modal
+            visible={loginModalOpen}
+            effect='fadeInDown'
+            onClickAway={closeLoginModal}
+          >
+            <StaffLoginForm />
+          </Modal>
         </li>
         <li className='nav-item'>
           <a
             className='nav-link active'
             aria-current='page'
-            href='/staffsignup'
+            onClick={showSignUpModal}
           >
             회원가입
           </a>
+          {signUpModalOpen && <Modal setSignUpModalOpen={showSignUpModal} />}
+          <Modal
+            visible={signUpModalOpen}
+            effect='fadeInDown'
+            onClickAway={closeSignUpModal}
+          >
+            <StaffSignUpForm closeSignUpModal={closeSignUpModal} />
+          </Modal>
         </li>
       </ul>
     </>

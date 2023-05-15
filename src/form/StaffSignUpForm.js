@@ -1,25 +1,34 @@
-import axios from 'axios';
 import React from 'react';
+import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 
-export default function StaffSignupForm() {
+import '../styles/components/form-container.scss';
+import '../styles/components/modal-container.scss';
+
+export default function StaffSignUpForm(props) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
 
   const onSubmit = async (data) => {
+    const api = '/user/signup';
+    const formData = new FormData();
+
+    const resetForm = () => {
+      reset;
+    };
+
     try {
-      const formData = new FormData();
-      console.log('data', data);
-      await new Promise((r) => setTimeout(r, 100));
-      const url = `http://183.96.25.218/admin/signup`;
+      //console.log('data', data);
       formData.append('name', data.name);
       formData.append('loginId', data.loginId);
       formData.append('password', data.password);
       console.log('formData', formData);
-      const response = await axios.post(url, formData);
+
+      const response = await serverapi.post(api, formData);
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -28,70 +37,91 @@ export default function StaffSignupForm() {
   };
 
   return (
-    <div className='FormContainer'>
-      <form className='staff-signup-form' onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor='name'>이름</label>
-        <input
-          id='name'
-          type='text'
-          name='name'
-          placeholder='이름'
-          aria-invalid={!isDirty ? undefined : errors.name ? 'true' : 'false'}
-          {...register('name', {
-            required: '이름을 입력해주세요.',
-          })}
-        />
-        {errors.name && (
-          <small role='alert' className='input-alert'>
-            {errors.name.message}
-          </small>
-        )}
-        <label htmlFor='loginId'>아이디</label>
-        <input
-          id='loginId'
-          type='text'
-          name='loginId'
-          placeholder='아이디'
-          aria-invalid={
-            !isDirty ? undefined : errors.loginId ? 'true' : 'false'
-          }
-          {...register('loginId', {
-            required: '아이디를 입력해주세요.',
-          })}
-        />
-        {errors.loginId && (
-          <small role='alert' className='input-alert'>
-            {errors.loginId.message}
-          </small>
-        )}
-        <label htmlFor='password'>비밀번호</label>
-        <input
-          id='password'
-          type='text'
-          name='password'
-          placeholder='비밀번호'
-          aria-invalid={
-            !isDirty ? undefined : errors.password ? 'true' : 'false'
-          }
-          {...register('password', {
-            required: '비밀번호를 입력해주세요.',
-          })}
-        />
-        {errors.password && (
-          <small role='alert' className='input-alert'>
-            {errors.password.message}
-          </small>
-        )}
-        <div className='signup-button-container'>
-          <button
-            className='signup-button'
-            type='submit'
-            disabled={isSubmitting}
-          >
-            직원 회원가입 신청하기
-          </button>
-        </div>
-      </form>
+    <div className='modal-container'>
+      <div className='title-text-center-container'>직원 회원 가입</div>
+      <div className='form-container'>
+        <form className='staff-signup-form' onSubmit={handleSubmit(onSubmit)}>
+          <div className='row'>
+            <div className='col-sm-3'>
+              <div className='content-text-container'>이름</div>
+            </div>
+            <div className='col-sm-8'>
+              <input
+                class='form-control'
+                type='text'
+                placeholder='이름을 입력하세요'
+                aria-invalid={
+                  !isDirty ? undefined : errors.name ? 'true' : 'false'
+                }
+                {...register('name', {
+                  required: '이름을 입력해주세요.',
+                })}
+              />
+              {errors.name && (
+                <small role='alert' className='input-alert'>
+                  {errors.name.message}
+                </small>
+              )}
+            </div>
+          </div>
+          <div className='row'>
+            <div className='col-sm-3'>
+              <div className='content-text-container'>아이디</div>
+            </div>
+            <div className='col-sm-8'>
+              <input
+                class='form-control'
+                type='text'
+                placeholder='아이디를 입력하세요'
+                aria-invalid={
+                  !isDirty ? undefined : errors.loginId ? 'true' : 'false'
+                }
+                {...register('loginId', {
+                  required: '아이디를 입력해주세요.',
+                })}
+              />
+              {errors.loginId && (
+                <small role='alert' className='input-alert'>
+                  {errors.loginId.message}
+                </small>
+              )}
+            </div>
+          </div>
+          <div className='row'>
+            <div className='col-sm-3'>
+              <div className='content-text-container'>비밀번호</div>
+            </div>
+            <div className='col-sm-8'>
+              <input
+                class='form-control'
+                type='text'
+                placeholder='비밀번호를 입력하세요'
+                aria-invalid={
+                  !isDirty ? undefined : errors.password ? 'true' : 'false'
+                }
+                {...register('password', {
+                  required: '비밀번호를 입력해주세요.',
+                })}
+              />
+              {errors.password && (
+                <small role='alert' className='input-alert'>
+                  {errors.password.message}
+                </small>
+              )}
+            </div>
+          </div>
+          <div className='bottom-container'>
+            <button
+              type='submit'
+              class='btn btn-secondary'
+              onClick={props.closSignUpModal && resetForm}
+              disabled={isSubmitting}
+            >
+              직원 회원가입
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

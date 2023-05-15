@@ -22,7 +22,6 @@ import StaffMoviePage from './StaffMoviePage';
 import StaffMyPagePage from './StaffMyPage';
 import StaffSchedulePage from './StaffSchedulePage';
 import StaffTheaterPage from './StaffTheaterPage';
-import StaffSignUpForm from '../form/StaffSignUpForm';
 
 function PrivateRoute({ staffAuth, customerAuth }) {
   const value = useContext(AuthContext);
@@ -34,7 +33,7 @@ function PrivateRoute({ staffAuth, customerAuth }) {
 
   if (!staffAuth && !customerAuth) {
     //로그인, 회원가입 페이지
-    return <Navigate replace to='/staffsignup' />;
+    return <Navigate replace to='/nonmember' />;
   } else if (staffAuth) {
     //직원페이지
     return !isStaffLogin ? <Navigate replace to='/' /> : <Outlet />;
@@ -50,16 +49,10 @@ function Router() {
       <Routes>
         {/**any logined or unlogined */}
         <Route>
-          <Route path='/' element={<MoviePage />} />{' '}
-          {/** MoviPage가 메인화면 */}
+          <Route path='/' element={<MoviePage />} />
+          {/** MoviePage가 메인화면 */}
           <Route path='/schedule' element={<SchedulePage />} />
-        </Route>
-        {/**unlogined */}
-        <Route
-          element={<PrivateRoute customerAuth={false} staffAuth={false} />}
-        >
           <Route path='/nonmember' element={<NonmemberPage />} />
-          <Route path='/staffsignup' element={<StaffSignUpForm />} />
         </Route>
         {/**customer logined */}
         <Route element={<PrivateRoute customerAuth={true} staffAuth={false} />}>
