@@ -8,12 +8,21 @@ import {
 } from 'react-router-dom';
 import { AuthContext } from '../services/AuthContext';
 
-import MovieModifyPage from './MovieModifyPage';
-import MovieRegisterPage from './MovieRegisterPage';
-import StaffLoginPage from './StaffLoginPage';
-import StaffMovieListPage from './StaffMovieListPage';
-import StaffSignUpPage from './StaffSignUpPage';
-import MainPage from './MainPage';
+import MoviePage from './MoviePage';
+import MyPagePage from './MyPagePage';
+import NonmemberPage from './NonmemberPage';
+import NotFoundPage from './NotFoundPage';
+import SchedulePage from './SchedulePage';
+import TicketingPage from './TicketingPage';
+
+import StaffCastPage from './StaffCastPage';
+import StaffCustomerPage from './StaffCustomerPage';
+import StaffGenreRatingPage from './StaffGenreRatingPage';
+import StaffMoviePage from './StaffMoviePage';
+import StaffMyPagePage from './StaffMyPage';
+import StaffSchedulePage from './StaffSchedulePage';
+import StaffTheaterPage from './StaffTheaterPage';
+import StaffSignUpForm from '../form/StaffSignUpForm';
 
 function PrivateRoute({ staffAuth, customerAuth }) {
   const value = useContext(AuthContext);
@@ -25,51 +34,49 @@ function PrivateRoute({ staffAuth, customerAuth }) {
 
   if (!staffAuth && !customerAuth) {
     //로그인, 회원가입 페이지
-    return isStaffLogin ? (
-      <Navigate replace to='/' />
-    ) : isCustomerLogin ? (
-      <Navigate replace to='/' />
-    ) : (
-      <Outlet />
-    );
+    return <Navigate replace to='/staffsignup' />;
   } else if (staffAuth) {
     //직원페이지
-    return !isStaffLogin ? <Navigate replace to='/stafflogin' /> : <Outlet />;
+    return !isStaffLogin ? <Navigate replace to='/' /> : <Outlet />;
   } else {
     //고객페이지
-    return !isCustomerLogin ? <Navigate replace to='/login' /> : <Outlet />;
+    return !isCustomerLogin ? <Navigate replace to='/' /> : <Outlet />;
   }
 }
 
 function Router() {
-  const value = useContext(AuthContext);
-  const setIsStaffLogin = value.setIsStaffLogin;
   return (
     <BrowserRouter>
       <Routes>
-        {/**로그인 안 해도 접근 가능 */}
+        {/**any logined or unlogined */}
         <Route>
-          <Route path='/' element={<MainPage />} />
-          <Route
-            path='/stafflogin'
-            element={<StaffLoginPage setIsStaffLogin={setIsStaffLogin} />}
-          />
-          <Route path='/staffsignup' element={<StaffSignUpPage />} />
-          <Route path='/stafflogin' elememt={<StaffLoginPage />} />
+          <Route path='/' element={<MoviePage />} />{' '}
+          {/** MoviPage가 메인화면 */}
+          <Route path='/schedule' element={<SchedulePage />} />
         </Route>
-        {/**고객 or 직원 로그인 해야만 접근 가능 */}
+        {/**unlogined */}
         <Route
-          element={<PrivateRoute customerAuth={true} staffAuth={false} />}
-        ></Route>
-        {/**직원 로그인 해야만 접근 가능 */}
-        <Route element={<PrivateRoute customerAuth={false} staffAuth={true} />}>
-          <Route path='/moviemodify' element={<MovieModifyPage />} />
-          <Route path='/movieregister' element={<MovieRegisterPage />} />
-          <Route
-            path='/movielist'
-            element={<StaffMovieListPage setIsStaffLogin={setIsStaffLogin} />}
-          />
+          element={<PrivateRoute customerAuth={false} staffAuth={false} />}
+        >
+          <Route path='/nonmember' element={<NonmemberPage />} />
+          <Route path='/staffsignup' element={<StaffSignUpForm />} />
         </Route>
+        {/**customer logined */}
+        <Route element={<PrivateRoute customerAuth={true} staffAuth={false} />}>
+          <Route path='/mypage' element={<MyPagePage />} />
+          <Route path='/ticketing' element={<TicketingPage />} />
+        </Route>
+        {/**staff logined */}
+        <Route element={<PrivateRoute customerAuth={false} staffAuth={true} />}>
+          <Route path='/staffmovie' element={<StaffMoviePage />} />
+          <Route path='/staffmypage' element={<StaffMyPagePage />} />
+          <Route path='/staffschedule' element={<StaffSchedulePage />} />
+          <Route path='/staffcast' element={<StaffCastPage />} />
+          <Route path='/staffgenrerating' element={<StaffGenreRatingPage />} />
+          <Route path='/stafftheater' element={<StaffTheaterPage />} />
+          <Route path='/staffcustomer' element={<StaffCustomerPage />} />
+        </Route>
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

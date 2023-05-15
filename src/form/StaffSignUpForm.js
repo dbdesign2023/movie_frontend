@@ -3,7 +3,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function StaffSignupForm() {
-
   const {
     register,
     handleSubmit,
@@ -11,15 +10,15 @@ export default function StaffSignupForm() {
   } = useForm();
 
   const onSubmit = async (data) => {
-      try {
-          const formData = new FormData();
-        console.log('data', data);
+    try {
+      const formData = new FormData();
+      console.log('data', data);
       await new Promise((r) => setTimeout(r, 100));
-          const url = `http://25.14.225.33:8080/admin/signup`;
-          formData.append("name", data.name);
-          formData.append("loginId", data.loginId);
-          formData.append("password", data.password);
-        console.log('formData', formData);
+      const url = `http://183.96.25.218/admin/signup`;
+      formData.append('name', data.name);
+      formData.append('loginId', data.loginId);
+      formData.append('password', data.password);
+      console.log('formData', formData);
       const response = await axios.post(url, formData);
       console.log(response.data);
     } catch (error) {
