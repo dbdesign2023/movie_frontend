@@ -31,7 +31,7 @@ export default function StaffLoginForm(props) {
     try {
       formData.append('loginId', data.loginId);
       formData.append('password', data.password);
-      console.log('formData', formData);
+      console.log('Request body', formData);
 
       const response = await serverapi.post(api, formData);
       console.log('response', response.data);

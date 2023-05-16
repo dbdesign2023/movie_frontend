@@ -1,10 +1,11 @@
 @font-face {
-  font-family: "NanumBarunGothic";
-  src: url("./assets/NanumBarunGothic.ttf"); }
+  font-family: 'NanumBarunGothic';
+  src: url('./assets/NanumBarunGothic.ttf');
+}
 
 .App {
   text-align: center;
-  font-family: "NanumBarunGothic";
+  font-family: 'NanumBarunGothic';
 }
 
 .App-logo {
