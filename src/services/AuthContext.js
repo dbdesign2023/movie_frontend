@@ -11,14 +11,18 @@ export const ContextProvider = (props) => {
     /**고객 */
     if (!localStorage.getItem('customerToken')) {
       setIsCustomerLogin(false);
+      console.log('CustomerLogin X');
     } else {
       setIsCustomerLogin(true);
+      console.log('CustomerLogin O');
     }
     /**직원 */
     if (!localStorage.getItem('staffToken')) {
       setIsStaffLogin(false);
+      console.log('StaffLogin X');
     } else {
       setIsStaffLogin(true);
+      console.log('StaffLogin O');
     }
   }, []);
 

@@ -6,20 +6,24 @@ import '../styles/components/form-container.scss';
 import '../styles/components/modal-container.scss';
 
 export default function StaffSignUpForm(props) {
+  const closeSignUpModal = props.closeSignUpModal;
+
   const {
     register,
     handleSubmit,
-    reset,
+    resetField,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    const api = '/user/signup';
-    const formData = new FormData();
+  const resetData = () => {
+    resetField('name');
+    resetField('loginId');
+    resetField('password');
+  };
 
-    const resetForm = () => {
-      reset;
-    };
+  const onSubmit = async (data) => {
+    const api = '/admin/signup';
+    const formData = new FormData();
 
     try {
       //console.log('data', data);
@@ -29,7 +33,9 @@ export default function StaffSignUpForm(props) {
       console.log('formData', formData);
 
       const response = await serverapi.post(api, formData);
-      console.log(response.data);
+      console.log('response', response.data);
+
+      resetData();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -111,10 +117,13 @@ export default function StaffSignUpForm(props) {
             </div>
           </div>
           <div className='bottom-container'>
+            <button class='btn btn-secondary' onClick={resetData}>
+              초기화
+            </button>
             <button
               type='submit'
-              class='btn btn-secondary'
-              onClick={props.closSignUpModal && resetForm}
+              class='btn btn-success'
+              onClick={closeSignUpModal}
               disabled={isSubmitting}
             >
               직원 회원가입

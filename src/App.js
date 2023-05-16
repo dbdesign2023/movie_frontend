@@ -9,7 +9,9 @@ function App() {
     <ContextProvider>
       <div className='App'>
         <Header />
-        <Router />
+        <div style={{ minHeight: '100vh' }}>
+          <Router />
+        </div>
         <Footer />
       </div>
     </ContextProvider>

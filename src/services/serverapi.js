@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const baseURL =
-  process.env.REACT_APP_API_ORIGIN + process.env.REACT_APP_API_DEFAULT_PREFIX;
+const baseURL = process.env.REACT_APP_API_ORIGIN;
 console.log(baseURL);
 const serverapi = axios.create();
 
