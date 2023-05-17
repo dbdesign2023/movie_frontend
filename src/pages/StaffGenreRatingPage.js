@@ -13,9 +13,16 @@ export default function StaffGenreRatingPage() {
 
   const getGenreList = async () => {
     const api = '/movie/genre/list';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
 
     try {
-      const response = await serverapi.get(api);
+      console.log('staffToken', token);
+      const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
       setGenreList(response.data);
@@ -24,9 +31,11 @@ export default function StaffGenreRatingPage() {
       alert(error.response.data.message);
     }
   };
+
   const showGenreModal = () => {
     setGenreModalOpen(true);
   };
+
   const closeGenreModal = () => {
     setGenreModalOpen(false);
   };

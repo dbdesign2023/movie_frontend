@@ -24,7 +24,7 @@ export default function StaffGenreAddForm(props) {
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ` + { token },
       },
     };
     let stringData = '';
@@ -34,7 +34,7 @@ export default function StaffGenreAddForm(props) {
       stringData = data.genre;
       console.log('Request body', stringData);
 
-      const response = await serverapi.post(api, stringData, options);
+      const response = await serverapi.get(api, stringData, options);
       console.log('response', response.data);
 
       resetData();
