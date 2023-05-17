@@ -3,15 +3,46 @@ import { useState } from 'react';
 
 import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
+import '../styles/MovieRegisterPage.scss';
+import axios from 'axios';
 
 export default function CustomerLoginForm() {
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [clickcheck, setClickcheck] = useState(false);
-  function loginHandler() {
+  let header = {}
+  const loginHandler = async()=>{
     setClickcheck(true);
-    if (login_id && password) {
-      console.log('CHECK');
+    if(login_id && password){
+      try {
+        const formData = new FormData();
+        await new Promise((r) => setTimeout(r, 100));
+        const url = `http://25.14.225.33:8080/customer/signin`;
+        formData.append("loginId", login_id);
+        formData.append("password", password);
+        console.log('formData', formData);
+        const response = await axios.post(url, formData);
+        console.log(response.data);
+        localStorage.setItem("customerToken", response.data);
+        const token = localStorage.getItem('customerToken')
+        header ={
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+        await new Promise((r) => setTimeout(r, 100));
+        const url2 = `http://25.14.225.33:8080/customer/getCustomerData`;
+        console.log(header)
+        const response2 = await axios.get(
+          url2,
+          header
+        )
+        console.log(response2.data)
+      } 
+      catch (error) {
+        console.log(error);
+      }
     }
   }
   return (
