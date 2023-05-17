@@ -15,6 +15,12 @@ import StaffMovieListPage from './StaffMovieListPage';
 import StaffSignUpPage from './StaffSignUpPage';
 import MainPage from './MainPage';
 
+import CustomerLoginPage from './CustomerLoginPage'; 
+import CustomerRegisterPage from './CustomerRegisterPage';
+import CustomerMovieListPage from './CustomerMovieListPage';
+import TicketingPage from './TicketingPage';
+import PaymentPage from './PaymentPage';
+
 function PrivateRoute({ staffAuth, customerAuth }) {
   const value = useContext(AuthContext);
   const isStaffLogin = value.isStaffLogin;
@@ -50,6 +56,11 @@ function Router() {
         {/**로그인 안 해도 접근 가능 */}
         <Route>
           <Route path='/' element={<MainPage />} />
+          <Route path='/login' element={<CustomerLoginPage />}/>
+          <Route path='/signup' element={<CustomerRegisterPage />}/>
+          <Route path='/movielist2' element={<CustomerMovieListPage />}/>
+          <Route path='/ticketing' element={<TicketingPage />}/>
+          <Route path='/payment' element={<PaymentPage />}/>
           <Route
             path='/stafflogin'
             element={<StaffLoginPage setIsStaffLogin={setIsStaffLogin} />}
