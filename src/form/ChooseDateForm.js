@@ -3,138 +3,23 @@ import Modal from 'react-awesome-modal';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import '../styles/components/modal-container.scss';
-import '../styles/components/form-container.scss';
-
-export default function TicketingForm() {
-  const [rundate, setRundate] = useState('');
-  const [modalstate, setModalstate] = useState(false);
-  const [scheduledata, setScheduledata] = useState();
-  useEffect(() => {
-    //날짜 변경시 상영일정 db에서 가져오기
-  }, [rundate]);
-  const navigate = useNavigate();
-  function clickHandler() {
-    setScheduledata(this);
-    setModalstate(true);
-  }
-  const closeModal = () => {
-    setModalstate(false);
-  };
-  function ok() {
-    navigate('/payment');
-  }
-  function clickSeatHandler() {
-    const expires = new Date();
-    expires.setMinutes(expires.getMinutes() + 60);
-    navigate('/payment');
-  }
-  const data = [
-    {
-      schedule_id: 1,
-      movie_title: '아바타 물의 길',
-      theater_name: '제 1관',
-      start_time: '2023-05-10 09:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 2,
-      movie_title: '아바타 물의 길',
-      theater_name: '제 1관',
-      start_time: '2023-05-10 12:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 3,
-      movie_title: '아바타 물의 길',
-      theater_name: '제 1관',
-      start_time: '2023-05-10 15:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 4,
-      movie_title: '아바타 물의 길',
-      theater_name: '제 1관',
-      start_time: '2023-05-10 18:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 5,
-      movie_title: '아바타 물의 길',
-      theater_name: '제 3관',
-      start_time: '2023-05-10 10:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 6,
-      movie_title: '아바타 물의 길',
-      theater_name: '제 3관',
-      start_time: '2023-05-10 13:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 7,
-      movie_title: '아바타 물의 길',
-      theater_name: '제 3관',
-      start_time: '2023-05-10 16:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 8,
-      movie_title: '아바타 물의 길',
-      theater_name: '제 3관',
-      start_time: '2023-05-10 19:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 9,
-      movie_title: '가디언즈 오브 갤럭시: Volume 3',
-      theater_name: '제 2관',
-      start_time: '2023-05-10 09:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 10,
-      movie_title: '가디언즈 오브 갤럭시: Volume 3',
-      theater_name: '제 2관',
-      start_time: '2023-05-10 12:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 11,
-      movie_title: '가디언즈 오브 갤럭시: Volume 3',
-      theater_name: '제 2관',
-      start_time: '2023-05-10 15:00:00',
-      running_time: 150,
-    },
-    {
-      schedule_id: 12,
-      movie_title: '가디언즈 오브 갤럭시: Volume 3',
-      theater_name: '제 2관',
-      start_time: '2023-05-10 18:00:00',
-      running_time: 150,
-    },
-  ];
-  const pdata = [];
-  let ppdata = data.map((tmp, idx) => {
-    let start_time = new Date(tmp.start_time);
-    let end_time = new Date(start_time);
-    let start_h = start_time.getHours();
-    let start_m = start_time.getMinutes();
-    end_time.setMinutes(end_time.getMinutes() + tmp.running_time);
-    let end_h = end_time.getHours();
-    let end_m = end_time.getMinutes();
-    if (start_h < 10) {
-      start_h = '0' + start_h;
+export default function ChooseDateForm() {
+    const [rundate,setRundate] = useState("")
+    const [modalstate,setModalstate] = useState(false)
+    const [scheduledata,setScheduledata] = useState();
+    useEffect(() => {
+        //날짜 변경시 상영일정 db에서 가져오기
+      },[rundate]);
+    const navigate = useNavigate()
+    function clickHandler(){
+        setScheduledata(this)
+        setModalstate(true)
     }
     if (start_m < 10) {
       start_m = '0' + start_m;
     }
-    if (end_h < 10) {
-      end_h = '0' + end_h;
-    }
-    if (end_m < 10) {
-      end_m = '0' + end_m;
+    function ok(){
+        navigate('/chooseseat')
     }
     start_time = start_h + ':' + start_m;
     end_time = end_h + ':' + end_m;

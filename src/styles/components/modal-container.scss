@@ -1,10 +1,11 @@
 .modal-container {
-  box-sizing: border-box;
-  padding: 20px;
-  width: 700px;
+    box-sizing: border-box;
+    padding: 20px;
+    width: 650px;
+    max-height: 900px;
+    overflow: auto;
 }
 
-.btn-close {
-  display: flex;
-  flex-direction: row;
+.hidden {
+    visibility: hidden;
 }

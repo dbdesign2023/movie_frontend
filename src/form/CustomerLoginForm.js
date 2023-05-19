@@ -1,42 +1,49 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 
 import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
 import '../styles/MovieRegisterPage.scss';
 import axios from 'axios';
+import { AuthContext } from '../services/AuthContext';
 
 export default function CustomerLoginForm() {
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [clickcheck, setClickcheck] = useState(false);
-  let header = {}
+  const value = useContext(AuthContext);
+  const setIsCustomerLogin = value.setIsCustomerLogin;
+
   const loginHandler = async()=>{
     setClickcheck(true);
     if(login_id && password){
       try {
         const formData = new FormData();
         await new Promise((r) => setTimeout(r, 100));
-        const url = `http://25.14.225.33:8080/customer/signin`;
+        const url = `http://localhost:8080/customer/signin`;
         formData.append("loginId", login_id);
         formData.append("password", password);
-        console.log('formData', formData);
+        axios.defaults.withCredentials=true;
         const response = await axios.post(url, formData);
         console.log(response.data);
         localStorage.setItem("customerToken", response.data);
+        setIsCustomerLogin(true)
         const token = localStorage.getItem('customerToken')
-        header ={
+        const header = {
           headers: {
             "Authorization": `Bearer ${token}`,
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "*"
           },
         }
         await new Promise((r) => setTimeout(r, 100));
-        const url2 = `http://25.14.225.33:8080/customer/getCustomerData`;
+        const url2 = `http://localhost:8080/customer/getCustomerData`;
         console.log(header)
         const response2 = await axios.get(
           url2,
-          header
+          header,
+          {
+            withCredientials: true
+          }
         )
         console.log(response2.data)
       } 
