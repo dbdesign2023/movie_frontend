@@ -6,6 +6,7 @@ import '../styles/components/form-container.scss';
 import '../styles/MovieRegisterPage.scss';
 import axios from 'axios';
 import { AuthContext } from '../services/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function CustomerLoginForm() {
   const [login_id, setId] = useState('');
@@ -13,7 +14,7 @@ export default function CustomerLoginForm() {
   const [clickcheck, setClickcheck] = useState(false);
   const value = useContext(AuthContext);
   const setIsCustomerLogin = value.setIsCustomerLogin;
-
+  const navigate = useNavigate();
   const loginHandler = async()=>{
     setClickcheck(true);
     if(login_id && password){
@@ -23,29 +24,11 @@ export default function CustomerLoginForm() {
         const url = `http://localhost:8080/customer/signin`;
         formData.append("loginId", login_id);
         formData.append("password", password);
-        axios.defaults.withCredentials=true;
         const response = await axios.post(url, formData);
         console.log(response.data);
         localStorage.setItem("customerToken", response.data);
         setIsCustomerLogin(true)
-        const token = localStorage.getItem('customerToken')
-        const header = {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Access-Control-Allow-Origin": "*"
-          },
-        }
-        await new Promise((r) => setTimeout(r, 100));
-        const url2 = `http://localhost:8080/customer/getCustomerData`;
-        console.log(header)
-        const response2 = await axios.get(
-          url2,
-          header,
-          {
-            withCredientials: true
-          }
-        )
-        console.log(response2.data)
+        navigate('/customermovielist')
       } 
       catch (error) {
         console.log(error);

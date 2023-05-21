@@ -1,5 +1,5 @@
 import React from 'react';
-
+import CustomerMyPageForm from '../form/CustomerMyPageForm';
 export default function MyPagePage() {
-  return <p>마이페이지 보여주는 페이지</p>;
+  return <CustomerMyPageForm />;
 }
