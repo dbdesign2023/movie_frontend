@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
-
+import React, { useContext, useState } from 'react';
+import Modal from 'react-awesome-modal';
 import { AuthContext } from '../services/AuthContext';
+import StaffMypageModifyForm from '../form/StaffMyPageModifyForm';
 
 import '../styles/components/_header.scss';
 
@@ -34,6 +35,15 @@ function Logined(props) {
   const setIsCustomerLogin = value.setIsCustomerLogin;
   const setIsStaffLogin = value.setIsStaffLogin;
 
+  const [mypageModifyOpen, setMypageModifyOpen] = useState(false);
+  const showMypageModify = () => {
+    setMypageModifyOpen(true);
+  };
+
+  const closeMypageModify = () => {
+    setMypageModifyOpen(false);
+  };
+
   const Logout = () => {
     localStorage.clear();
     setIsCustomerLogin(false);
@@ -44,13 +54,30 @@ function Logined(props) {
     <>
       <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
         <li className='nav-item'>
-          <a
-            className='nav-link active'
-            aria-current='page'
-            href={isCustomerLogin ? '/mypage' : '/staff/mypage'}
+          {isCustomerLogin ? (
+            <a className='nav-link active' aria-current='page' href='/mypage'>
+              마이페이지
+            </a>
+          ) : (
+            <a
+              className='nav-link active'
+              aria-current='page'
+              onClick={showMypageModify}
+            >
+              마이페이지
+            </a>
+          )}
+          {mypageModifyOpen && <Modal setMypageModifyOpen={showMypageModify} />}
+          <Modal
+            visible={mypageModifyOpen}
+            effect='fadeInDown'
+            onClickAway={closeMypageModify}
           >
-            마이페이지
-          </a>
+            <StaffMypageModifyForm
+              closeMypageModify={closeMypageModify}
+              Logout={Logout}
+            />
+          </Modal>
         </li>
         <li className='nav-item'>
           <a className='nav-link active' aria-current='page' onClick={Logout}>

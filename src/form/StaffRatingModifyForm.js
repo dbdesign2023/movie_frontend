@@ -5,24 +5,26 @@ import { useForm } from 'react-hook-form';
 import '../styles/components/form-container.scss';
 import '../styles/components/modal-container.scss';
 
-export default function StaffRatingAddForm(props) {
-  const closeRatingModal = props.closeRatingModal;
+export default function StaffRatingModifyForm(props) {
+  const closeRatingModify = props.closeRatingModify;
   const setRatingList = props.setRatingList;
+  const rating = props.rating;
 
   const {
     register,
     handleSubmit,
     resetField,
+    setValue,
     formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
-    resetField('name');
-    resetField('minAge');
+    setValue('name', rating.name);
+    resetField('minAge', rating.minAge);
   };
 
   const onSubmit = async (data) => {
-    const api = '/movie/rating/add';
+    const api = '/movie/rating/modify';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -32,6 +34,8 @@ export default function StaffRatingAddForm(props) {
     const formData = new FormData();
 
     try {
+      //console.log('data', data);
+      formData.append('ratingId', rating.ratingId);
       formData.append('name', data.name);
       formData.append('minAge', data.minAge);
       console.log('Request body', formData);
@@ -54,10 +58,10 @@ export default function StaffRatingAddForm(props) {
           type='button'
           class='btn-close'
           aria-label='Close'
-          onClick={closeRatingModal}
+          onClick={closeRatingModify}
         ></button>
       </div>
-      <div className='title-text-center-container'>등급 추가</div>
+      <div className='title-text-center-container'>등급 수정</div>
       <div className='form-container'>
         <form
           className='staff-rating-add-form'
@@ -72,7 +76,7 @@ export default function StaffRatingAddForm(props) {
                 class='form-control'
                 type='text'
                 placeholder='등급 이름을 입력하세요'
-                defaultValue=''
+                defaultValue={rating.name}
                 aria-invalid={
                   !isDirty ? undefined : errors.name ? 'true' : 'false'
                 }
@@ -96,12 +100,12 @@ export default function StaffRatingAddForm(props) {
                 class='form-control'
                 type='number'
                 placeholder='제한 나이를 입력하세요'
-                defaultValue=''
+                defaultValue={rating.minAge}
                 aria-invalid={
                   !isDirty ? undefined : errors.minAge ? 'true' : 'false'
                 }
                 {...register('minAge', {
-                  required: '제한 나이를 입력해주세요.',
+                  required: '등급 이름을 입력해주세요.',
                 })}
               />
               {errors.minAge && (
@@ -120,10 +124,10 @@ export default function StaffRatingAddForm(props) {
               <button
                 type='submit'
                 class='btn btn-success'
-                onClick={closeRatingModal}
+                onClick={closeRatingModify}
                 disabled={!(isDirty && isValid)}
               >
-                등록
+                수정
               </button>
             </div>
           </div>
