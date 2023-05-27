@@ -67,7 +67,6 @@ export default function CustomerMyPageForm() {
     const [name, setName] = useState();
     const [login_id, setId] = useState();
     const [nickname, setNickname] = useState();
-    const [password, setPassword] = useState();
     const [birthdate, setBirthdate] = useState();
     const [phone_number, setPhonenumber] = useState();
     const [email, setEmail] = useState();
@@ -86,6 +85,7 @@ export default function CustomerMyPageForm() {
     const clickokHandler = ()=>{
         if(check_phone_number.test(phone_number) && check_email.test(email)){
             patchdata()
+            closeModal()
         }
         else{
             setCheckstate(true)
