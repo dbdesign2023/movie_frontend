@@ -176,7 +176,7 @@ function StaffRatingPage() {
   );
 }
 
-export default function StaffRatingRatingPage() {
+export default function StaffGenreRatingPage() {
   return (
     <>
       <div className='row'>

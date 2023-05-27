@@ -19,7 +19,7 @@ export default function StaffMypageModifyForm(props) {
 
   useEffect(() => {
     //getInfo();
-    setInfo({ name: 'd', id: 'd', password: 'd' });
+    setInfo({ name: 'd', loginId: 'd', password: 'd' });
   }, []);
 
   const getInfo = async () => {
@@ -45,7 +45,7 @@ export default function StaffMypageModifyForm(props) {
 
   const resetData = () => {
     setValue('name', info.name);
-    setValue('loginId', info.id);
+    setValue('loginId', info.loginId);
     setValue('password', '');
     setValue('password2', '');
   };
@@ -145,7 +145,7 @@ export default function StaffMypageModifyForm(props) {
               <div className='content-text-container'>아이디</div>
             </div>
             <div className='col-sm-8'>
-              <input class='form-control' value={info.id} />
+              <input class='form-control' value={info.loginId} />
             </div>
           </div>
           <div className='row'>
