@@ -7,6 +7,7 @@ import '../styles/components/modal-container.scss';
 
 export default function StaffMypageModifyForm(props) {
   const closeMypageModify = props.closeMypageModify;
+  const Logout = props.Logout;
   const [info, setInfo] = useState({});
 
   const {
@@ -47,6 +48,31 @@ export default function StaffMypageModifyForm(props) {
     setValue('loginId', info.id);
     setValue('password', '');
     setValue('password2', '');
+  };
+
+  const exit = async () => {
+    const api = '/admin/signup'; // 회원탈퇴로 바꾸기
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      console.log('staffToken', token);
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      closeMypageModify();
+      alert('회원탈퇴 되었습니다.');
+      // 로그 아웃
+      Logout();
+      window.location.replace('/');
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
   };
 
   const onSubmit = async (data) => {
@@ -179,6 +205,10 @@ export default function StaffMypageModifyForm(props) {
               disabled={!(isDirty && isValid)}
             >
               수정
+            </button>
+            &nbsp; &nbsp; &nbsp;
+            <button class='btn btn-danger' onClick={exit}>
+              회원탈퇴
             </button>
           </div>
         </form>

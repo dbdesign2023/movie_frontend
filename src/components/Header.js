@@ -73,7 +73,10 @@ function Logined(props) {
             effect='fadeInDown'
             onClickAway={closeMypageModify}
           >
-            <StaffMypageModifyForm closeMypageModify={closeMypageModify} />
+            <StaffMypageModifyForm
+              closeMypageModify={closeMypageModify}
+              Logout={Logout}
+            />
           </Modal>
         </li>
         <li className='nav-item'>
