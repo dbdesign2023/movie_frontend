@@ -102,6 +102,7 @@ export default function StaffLoginForm(props) {
             <button class='btn btn-secondary' onClick={resetData}>
               초기화
             </button>
+            &nbsp; &nbsp; &nbsp;
             <button
               type='submit'
               class='btn btn-success'

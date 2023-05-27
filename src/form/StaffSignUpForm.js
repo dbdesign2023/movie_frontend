@@ -100,7 +100,7 @@ export default function StaffSignUpForm(props) {
             <div className='col-sm-8'>
               <input
                 class='form-control'
-                type='text'
+                type='password'
                 placeholder='비밀번호를 입력하세요'
                 aria-invalid={
                   !isDirty ? undefined : errors.password ? 'true' : 'false'
@@ -120,6 +120,7 @@ export default function StaffSignUpForm(props) {
             <button class='btn btn-secondary' onClick={resetData}>
               초기화
             </button>
+            &nbsp; &nbsp; &nbsp;
             <button
               type='submit'
               class='btn btn-success'
