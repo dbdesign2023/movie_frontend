@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import Modal from 'react-awesome-modal';
 import { useState } from 'react';
+import '../styles/components/modal-container.scss';
+import '../styles/components/form-container.scss';
+import '../styles/components/page-container.scss';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -179,8 +182,8 @@ export default function ChooseDateForm(date) {
         setModalstate(true)
         localStorage.setItem("schedule_id",this.id)
     }
-    if (start_m < 10) {
-      start_m = '0' + start_m;
+    const closeModal = () => {
+        setModalstate(false)
     }
     function ok(){
         navigate('/chooseseat')
@@ -240,60 +243,5 @@ export default function ChooseDateForm(date) {
                 </Modal>
             </div>
         </div>
-        <div className='row justify-content-evenly'>
-          {rundate === '' && <div>날짜를 선택해주세요</div>}
-          {rundate !== '' &&
-            pdata.map((item, idx) => (
-              <div key={idx} className='row'>
-                <h3>{item.movie_title}</h3>
-                {item.schedule.map((sc, idx) => (
-                  <div key={idx}>
-                    <div>{sc.theater_name}</div>
-                    {sc.start_time.map((time, idx) => (
-                      <button
-                        key={idx}
-                        className='btn btn-info m-2'
-                        onClick={clickHandler.bind(time)}
-                      >
-                        <div>시작시간 {time}</div>
-                        <div>끝시간 {sc.end_time[idx]}</div>
-                      </button>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            ))}
-        </div>
-        <Modal
-          visible={modalstate}
-          effect='fadeInDown'
-          onClickAway={closeModal}
-        >
-          <div className='modal-container'>
-            <div className='title-text-center-container'>
-              {scheduledata} 에 예매 하시겠습니까?
-            </div>
-            <div className='bottom-container'>
-              <div className='button-container'>
-                <button
-                  type='button'
-                  className='btn btn-primary m-1'
-                  onClick={ok}
-                >
-                  예
-                </button>
-                <button
-                  type='button'
-                  className='btn btn-secondary m-1'
-                  onClick={closeModal}
-                >
-                  아니오
-                </button>
-              </div>
-            </div>
-          </div>
-        </Modal>
-      </div>
-    </div>
-  );
-}
+    );
+  }

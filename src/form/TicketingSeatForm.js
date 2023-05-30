@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
+import '../styles/components/modal-container.scss';
+import '../styles/components/form-container.scss';
+import '../styles/components/page-container.scss';
 import Modal from 'react-awesome-modal';
 import seat from '../img/seat.png'
 import seat_gray from '../img/seat_gray.png'
@@ -153,23 +156,6 @@ export default function TicketingSeatForm(){
                         </div>
                 </Modal>
             </div>
-          ))}
         </div>
-        <Modal visible={error} effect='fadeInDown' onClickAway={closeError}>
-          <div style={{ color: 'red' }}>이미 예매된 좌석입니다.</div>
-        </Modal>
-      </div>
-      <div className='bottom-container'>
-        <div className='button-container'>
-          <button
-            type='button'
-            className='btn btn-secondary m-1'
-            onClick={closeModal}
-          >
-            닫기
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+    );
+  }

@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import Modal from 'react-awesome-modal';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
 import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
-import '../styles/MovieRegisterPage.scss';
+import '../styles/components/page-container.scss';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -133,19 +131,8 @@ export default function CustomerMovieListForm() {
                         </div>
                     ))}
                 </div>
-              </Modal>
-              <button
-                key={item.movie_id}
-                className='btn btn-white'
-                onClick={clickHandler.bind(item)}
-              >
-                <img src={item.poster_url} className='w-100' />
-                <h4>{item.title}</h4>
-              </button>
             </div>
             {moviedetailpage()}
         </div>
-      </div>
-    </div>
-  );
-}
+    );
+  }

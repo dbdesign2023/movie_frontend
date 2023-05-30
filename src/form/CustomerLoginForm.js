@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
-import '../styles/MovieRegisterPage.scss';
+import '../styles/components/page-container.scss';
 import axios from 'axios';
 import { AuthContext } from '../services/AuthContext';
 import { useNavigate } from 'react-router-dom';
