@@ -5,7 +5,7 @@ import Modal from 'react-awesome-modal';
 export default function PaymentForm() {
     return (
         <div className="payment-ticketing-form-container">
-            <TicketingSeatForm/>
+            결제페이지
         </div>
     );
 }

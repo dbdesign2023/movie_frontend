@@ -6,6 +6,7 @@ import '../styles/components/page-container.scss';
 import Modal from 'react-awesome-modal';
 import seat from '../img/seat.png'
 import seat_gray from '../img/seat_gray.png'
+import seat_choose from '../img/seat_choosepng.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 export default function TicketingSeatForm(){
@@ -53,6 +54,7 @@ export default function TicketingSeatForm(){
         }
     }
     useEffect(()=>{
+        localStorage.setItem('SeatList', JSON.stringify([]));
         const pdata = []
         const size = []
         let row = 0
@@ -71,7 +73,7 @@ export default function TicketingSeatForm(){
                 while(coltmp !== tmp.col_num){
                     coltmp++
                     pdata[tmp.row_num-1].col_num.push(tmp.col_num)
-                    pdata[tmp.row_num-1].ticketed.push(2)
+                    pdata[tmp.row_num-1].ticketed.push(3)
                     size[row]++
                 }
                 pdata[tmp.row_num-1].col_num.push(tmp.col_num)
@@ -94,25 +96,39 @@ export default function TicketingSeatForm(){
         setPdata(pdata)
         setSize(size)
     },[])
-    const [error, setError] = useState(false)
     const [choosenseat, setSeat] = useState({})
-    const [seatmodal,setSeatmodal] = useState(false)
     function chooseSeat(){
-        setSeat(this)
-        setSeatmodal(true)
-    }
-    const closeSeatmodal = () =>{
-        setSeatmodal(false)
+        const tmp = this
+        setTimeout(function() {
+          reservation(tmp)
+        }, 100);
+        //setSeatmodal(true)
     }
     const choosenSeat = ()=>{
-        setError(true)
+      alert("이미 예매/선택된 좌석입니다.")
     }
-    const closeError = ()=>{
-        setError(false)
-    }
+
     const navigate = useNavigate();
+    const reservation = (seat) =>{
+      if(seat.row){
+        let seatlist = JSON.parse(localStorage.getItem('SeatList'))
+        let string = seat.row.toString() + '-' + seat.col.toString()
+        if(!seatlist.includes(string)){
+          pdata[seat.row-1].ticketed[seat.col-1] = 2
+          seatlist.push(string)
+          localStorage.setItem('SeatList', JSON.stringify(seatlist));
+          setSeat(seat)
+        }
+      }
+    }
     const gotopaymentpage = () =>{
+      let seatlist = JSON.parse(localStorage.getItem('SeatList'))
+      if(seatlist.length !==0){
         navigate('/payment')
+      }
+      else{
+        alert("좌석을 선택해 주세요.")
+      }
     }
     const image_style = {
         width:'100%',
@@ -127,34 +143,17 @@ export default function TicketingSeatForm(){
                 <div className='row'>
                     {pdata && pdata.map((item,idx1)=>(
                         <div key={idx1} className='row justify-content-center'>
-                        {item.col_num.map((tmp,idx2)=>(
+                        {item.ticketed.map((tmp,idx2)=>(
                             <div key={idx2} style={{width:size[idx1].toString()+'%'}} className='p-0'>
-                                <img src={item.ticketed[idx2]===0?seat:seat_gray} onClick={item.ticketed[idx2]===0?chooseSeat.bind({col:tmp,row:item.row_num}):choosenSeat} className={item.ticketed[idx2]===2?"hidden":""}style={image_style}></img>
+                                <img src={tmp===0?seat: tmp === 1?seat_gray:seat_choose} onClick={tmp===0?chooseSeat.bind({col:item.col_num[idx2],row:item.row_num}):choosenSeat} className={tmp===3?"hidden":""}style={image_style}></img>
                             </div>
                         ))}
                         </div>
                     ))}
                 </div>
-                <Modal
-                    visible={error}
-                    effect='fadeInDown'
-                    onClickAway={closeError}>
-                        <div style={{color:'red'}}>
-                            이미 예매된 좌석입니다.
-                        </div>
-                </Modal>
-                <Modal                    
-                    visible={seatmodal}
-                    effect='fadeInDown'
-                    onClickAway={closeSeatmodal}>
-                        <div className='content-text-container'>
-                            좌석 {choosenseat.row}-{choosenseat.col} 을 예매하시겠습니까?
-                        </div>
-                        <div className='button-container'>
-                            <button type="button" className="btn btn-primary m-1" onClick={gotopaymentpage}>예매하기</button>
-                            <button type="button" className="btn btn-secondary m-1" onClick={closeSeatmodal}>닫기</button>
-                        </div>
-                </Modal>
+            </div>
+            <div>
+              <button type="button" className="btn btn-primary m-1" onClick={gotopaymentpage}>결제</button>
             </div>
         </div>
     );
