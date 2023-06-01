@@ -124,6 +124,8 @@ export default function TicketingSeatForm(){
     const gotopaymentpage = () =>{
       let seatlist = JSON.parse(localStorage.getItem('SeatList'))
       if(seatlist.length !==0){
+        localStorage.setItem('FinSeatList', JSON.stringify(seatlist));
+        localStorage.removeItem('SeatList')
         navigate('/payment')
       }
       else{
