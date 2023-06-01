@@ -18,7 +18,7 @@ export default function CustomerTicketForm(props) {
             string = tmp
         }
         else{
-            string = string + ',' + tmp
+            string = string + ', ' + tmp
         }
         setString(string)
         })
