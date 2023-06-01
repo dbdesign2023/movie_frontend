@@ -29,64 +29,85 @@ export default function TicketingSeatForm(){
         }
         return data
     }
-    const data = setData()
-    const [pdata, setPdata] = useState([])
-    const [size, setSize] = useState([])
-    const getdata = async(date)=>{
+    const getdata = async()=>{
         try{
             const token = localStorage.getItem('customerToken')
             const schedule = localStorage.getItem('schedule_id')
-            const header = {
-                headers: {
-                "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
-                },
+            let header = null
+            if(token){
+                header = {
+                    headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Access-Control-Allow-Origin": "*"
+                    },
+                }
             }
-            const url = ip+`/schedule/date/`+date;
+            else{
+                header = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*"
+                        },
+                }
+            }
+            const url = ip+`/schedule/`+schedule+`/seats`;
             const response = await axios.get(
                 url,
                 header
             )
-            setData(response.data)
+            setSeatData(response.data)
         }
         catch (error) {
             console.log(error)
         }
     }
+    const [data, setSeatData] = useState([])
+    const [pdata, setPdata] = useState([])
+    const [size, setSize] = useState([])
     useEffect(()=>{
+        getdata()
         localStorage.setItem('SeatList', JSON.stringify([]));
+    },[])
+    useEffect(()=>{
+        if(data){
         const pdata = []
         const size = []
         let row = 0
+        let maxrow = 0
         data.map((tmp,idx)=>{
+            console.log(pdata)
             if(pdata.length === 0){
                 size.push(0)
                 pdata.push({
-                    row_num:tmp.row_num,
-                    col_num:[tmp.col_num],
-                    ticketed:[tmp.ticketed]
+                    row_num:tmp.row,
+                    col_num:[tmp.column],
+                    ticketed:[tmp.empty?0:1]
                 })
                 size[row]++
             }
-            else if(data[idx-1].row_num === tmp.row_num){
-                var coltmp = data[idx-1].col_num+1
-                while(coltmp !== tmp.col_num){
+            else if(pdata[row].row_num === tmp.row){
+                var coltmp = data[idx-1].column+1
+                while(coltmp !== tmp.column){
                     coltmp++
-                    pdata[tmp.row_num-1].col_num.push(tmp.col_num)
-                    pdata[tmp.row_num-1].ticketed.push(3)
+                    pdata[row].col_num.push(tmp.column)
+                    pdata[row].ticketed.push(3)
                     size[row]++
                 }
-                pdata[tmp.row_num-1].col_num.push(tmp.col_num)
-                pdata[tmp.row_num-1].ticketed.push(tmp.ticketed)
+                pdata[row].col_num.push(tmp.column)
+                pdata[row].ticketed.push(tmp.empty?0:1)
                 size[row]++
             }
             else{
                 pdata.push({
-                    row_num:tmp.row_num,
-                    col_num:[tmp.col_num],
-                    ticketed:[tmp.ticketed]
+                    row_num:tmp.row,
+                    col_num:[tmp.column],
+                    ticketed:[tmp.empty?0:1]
                 })
                 size[row] = parseInt(100/size[row])
+                if(size[row]>maxrow)
+                {
+                    maxrow = size[row]
+                    console.log(maxrow)
+                }
                 size.push(0)
                 row++
                 size[row]++
@@ -94,8 +115,10 @@ export default function TicketingSeatForm(){
         })
         size[row] = parseInt(100/size[row])
         setPdata(pdata)
-        setSize(size)
-    },[])
+        setSize(maxrow)
+        console.log('A'.charCodeAt())
+    }
+    },[data])
     const [choosenseat, setSeat] = useState({})
     function chooseSeat(){
         const tmp = this
@@ -111,10 +134,11 @@ export default function TicketingSeatForm(){
     const navigate = useNavigate();
     const reservation = (seat) =>{
       if(seat.row){
+        console.log(pdata)
         let seatlist = JSON.parse(localStorage.getItem('SeatList'))
-        let string = seat.row.toString() + '-' + seat.col.toString()
+        let string = seat.row.toString() + seat.col.toString()
         if(!seatlist.includes(string)){
-          pdata[seat.row-1].ticketed[seat.col-1] = 2
+          pdata[seat.row.charCodeAt()-'A'.charCodeAt()].ticketed[seat.col-1] = 2
           seatlist.push(string)
           localStorage.setItem('SeatList', JSON.stringify(seatlist));
           setSeat(seat)
@@ -144,9 +168,9 @@ export default function TicketingSeatForm(){
             <div className='seat-container'>
                 <div className='row'>
                     {pdata && pdata.map((item,idx1)=>(
-                        <div key={idx1} className='row justify-content-center'>
+                        <div key={idx1} className='row justify-content-start'>
                         {item.ticketed.map((tmp,idx2)=>(
-                            <div key={idx2} style={{width:size[idx1].toString()+'%'}} className='p-0'>
+                            <div key={idx2} style={{width:size.toString()+'%'}} className='p-0'>
                                 <img src={tmp===0?seat: tmp === 1?seat_gray:seat_choose} onClick={tmp===0?chooseSeat.bind({col:item.col_num[idx2],row:item.row_num}):choosenSeat} className={tmp===3?"hidden":""}style={image_style}></img>
                             </div>
                         ))}

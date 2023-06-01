@@ -51,9 +51,11 @@ export default function CustomerMovieListForm() {
       };
     function clickHandler() {
         setMovie(this)
-        if(moviedetail){
-            showModal()
-        }
+        setTimeout(()=>{
+            if(moviedetail){
+                showModal()
+            }
+        },200)
     };
     const getMoviedetail = async(movie)=>{
         const url = ip+`/schedule/movie/`+movie.movieId;
