@@ -1,17 +1,38 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 
 import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
+import '../styles/components/page-container.scss';
+import axios from 'axios';
+import { AuthContext } from '../services/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function CustomerLoginForm() {
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [clickcheck, setClickcheck] = useState(false);
-  function loginHandler() {
+  const value = useContext(AuthContext);
+  const setIsCustomerLogin = value.setIsCustomerLogin;
+  const navigate = useNavigate();
+  const loginHandler = async()=>{
     setClickcheck(true);
-    if (login_id && password) {
-      console.log('CHECK');
+    if(login_id && password){
+      try {
+        const formData = new FormData();
+        await new Promise((r) => setTimeout(r, 100));
+        const url = `http://localhost:8080/customer/signin`;
+        formData.append("loginId", login_id);
+        formData.append("password", password);
+        const response = await axios.post(url, formData);
+        console.log(response.data);
+        localStorage.setItem("customerToken", response.data);
+        setIsCustomerLogin(true)
+        navigate('/customermovielist')
+      } 
+      catch (error) {
+        console.log(error);
+      }
     }
   }
   return (

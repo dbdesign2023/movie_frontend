@@ -22,7 +22,7 @@ export default function StaffGenreModifyForm(props) {
   };
 
   const onSubmit = async (data) => {
-    const api = '/movie/genre/modify';
+    const api = '/movie/genre/modify'; // 수정
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {

@@ -25,10 +25,11 @@ import StaffTheaterPage from './StaffTheaterPage';
 import CustomerLoginPage from './CustomerLoginPage'; 
 import CustomerRegisterPage from './CustomerRegisterPage';
 import CustomerMovieListPage from './CustomerMovieListPage';
-import CustomerTicketingPage from './CustomerTicketingPage';
-import PaymentPage from './PaymentPage';
+import ChooseDatePage from './ChooseDatePage';
+import ChooseSeatPage from './ChooseSeatPage';
 import MainPage from './MainPage';
-
+import CustomerTicketForm from '../form/CustomerTicketForm';
+import CustomerPaymentPage from './CustomerPaymentPage';
 function PrivateRoute({ staffAuth, customerAuth }) {
   const value = useContext(AuthContext);
   const isStaffLogin = value.isStaffLogin;
@@ -74,12 +75,16 @@ function Router() {
           <Route path='/staff/genrerating' element={<StaffGenreRatingPage />} />
           <Route path='/staff/theater' element={<StaffTheaterPage />} />
           <Route path='/staff/customer' element={<StaffCustomerPage />} />
+
           <Route path='/main' element={<MainPage />} />
           <Route path='/login' element={<CustomerLoginPage />}/>
           <Route path='/signup' element={<CustomerRegisterPage />}/>
           <Route path='/customermovielist' element={<CustomerMovieListPage />}/>
-          <Route path='/customerticketing' element={<CustomerTicketingPage />}/>
-          <Route path='/payment' element={<PaymentPage />}/>
+          <Route path='/choosedate' element={<ChooseDatePage />}/>
+          <Route path='/chooseseat' element={<ChooseSeatPage />}/>
+          <Route path='/payment' element={<CustomerPaymentPage />}/>
+          <Route path='/test' element={<CustomerTicketForm />}/>
+
           {/**마음대로 안 돼서 일단 가둬놓음 
           <Route
             path='/stafflogin'
