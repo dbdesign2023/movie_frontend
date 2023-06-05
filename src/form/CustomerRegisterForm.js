@@ -22,50 +22,41 @@ export default function CustomerRegisterForm() {
   const [email, setEmail] = useState('');
   const [clickcheck, setClickcheck] = useState(false);
   const navigate = useNavigate();
-  const closemodal = () => {
-    setRegisterfin(false);
-  };
-  const openmodal = () => {
-    setRegisterfin(true);
-  };
-  const gotologinpage = () => {
-    navigate('/login');
-  };
-  var check_phone_number = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
-  var check_email =
-    /^[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*\.[a-zA-Z]{2,}$/i;
-  const registerHandler = async () => {
-    console.log(check_phone_number.test(phone_number));
-    setClickcheck(true);
-    if (
-      name &&
-      login_id &&
-      password &&
-      nickname &&
-      birthdate &&
-      gender &&
-      check_phone_number.test(phone_number) &&
-      check_email.test(email)
-    ) {
-      try {
-        const formData = new FormData();
-        await new Promise((r) => setTimeout(r, 100));
-        const url = `http://localhost:8080/customer/signup`;
-        formData.append('name', name);
-        formData.append('loginId', login_id);
-        formData.append('password', password);
-        formData.append('nickname', nickname);
-        formData.append('birthdate', birthdate);
-        formData.append('gender', gender);
-        formData.append('phoneNo', phone_number);
-        formData.append('email', email);
-        console.log('formData', formData);
-        const response = await axios.post(url, formData);
-        console.log(response.data);
-        openmodal();
-      } catch (error) {
-        console.log(error);
-        alert(error.response.data.message);
+  const closemodal = () =>{
+    setRegisterfin(false)
+  }
+  const openmodal = () =>{
+    setRegisterfin(true)
+  }
+  const gotologinpage = () =>{
+    navigate('/login')
+};
+var check_phone_number = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/
+var check_email = /^[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*\.[a-zA-Z]{2,}$/i
+const registerHandler = async () => {
+  console.log(check_phone_number.test(phone_number))
+  setClickcheck(true)
+  if(name && login_id && password && nickname && birthdate && gender && check_phone_number.test(phone_number) && check_email.test(email)){
+    try {
+      const formData = new FormData();
+      await new Promise((r) => setTimeout(r, 100));
+      const url = `http://localhost:8080/customer/signup`;
+      formData.append("name", name);
+      formData.append("loginId", login_id);
+      formData.append("password", password);
+      formData.append("nickname", nickname);
+      formData.append("birthdate", birthdate);
+      formData.append("gender", gender);
+      formData.append("phoneNo", phone_number);
+      formData.append("email", email);
+      console.log('formData', formData);
+      const response = await axios.post(url, formData);
+      console.log(response.data);
+      openmodal()
+      } 
+    catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
       }
     }
   };

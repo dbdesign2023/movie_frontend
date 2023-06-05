@@ -18,10 +18,11 @@ import StaffTheaterPage from './StaffTheaterPage';
 import CustomerLoginPage from './CustomerLoginPage';
 import CustomerRegisterPage from './CustomerRegisterPage';
 import CustomerMovieListPage from './CustomerMovieListPage';
-import CustomerTicketingPage from './CustomerTicketingPage';
-import PaymentPage from './PaymentPage';
+import ChooseDatePage from './ChooseDatePage';
+import ChooseSeatPage from './ChooseSeatPage';
 import MainPage from './MainPage';
-
+import CustomerTicketForm from '../form/CustomerTicketForm';
+import CustomerPaymentPage from './CustomerPaymentPage';
 function Router() {
   return (
     <BrowserRouter>
@@ -41,6 +42,7 @@ function Router() {
           <Route path='/staff/genrerating' element={<StaffGenreRatingPage />} />
           <Route path='/staff/theater' element={<StaffTheaterPage />} />
           <Route path='/staff/customer' element={<StaffCustomerPage />} />
+
           <Route path='/main' element={<MainPage />} />
           <Route path='/login' element={<CustomerLoginPage />} />
           <Route path='/signup' element={<CustomerRegisterPage />} />
@@ -48,6 +50,11 @@ function Router() {
             path='/customermovielist'
             element={<CustomerMovieListPage />}
           />
+          <Route path='/choosedate' element={<ChooseDatePage />} />
+          <Route path='/chooseseat' element={<ChooseSeatPage />} />
+          <Route path='/payment' element={<CustomerPaymentPage />} />
+          <Route path='/test' element={<CustomerTicketForm />} />
+
           <Route
             path='/customerticketing'
             element={<CustomerTicketingPage />}

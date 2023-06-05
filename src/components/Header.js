@@ -15,12 +15,12 @@ function Unlogined() {
           </a>
         </li>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' href='/nonmember'>
+          <a className='nav-link active' aria-current='page' href='/login'>
             로그인
           </a>
         </li>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' href='/nonmember'>
+          <a className='nav-link active' aria-current='page' href='/signup'>
             회원가입
           </a>
         </li>
