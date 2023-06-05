@@ -5,7 +5,7 @@ import StaffGenreModifyForm from '../form/StaffGenreModifyForm';
 
 export default function GenreComponent(props) {
   const genre = props.genre;
-  const setGenreList = props.setGenreList;
+  const getGenreList = props.getGenreList;
 
   const [genreModifyOpen, setGenreModifyOpen] = useState(false);
 
@@ -31,7 +31,7 @@ export default function GenreComponent(props) {
       const response = await serverapi.delete(api, options);
       console.log('response', response.data);
 
-      setGenreList(response.data);
+      getGenreList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -39,7 +39,8 @@ export default function GenreComponent(props) {
   };
 
   return (
-    <tr key={genre.genreId}>
+    <tr key={genre.code}>
+      <td>{genre.code}</td>
       <td>{genre.name}</td>
       <td>
         <button class='btn btn-warning' onClick={showGenreModify}>
@@ -53,16 +54,13 @@ export default function GenreComponent(props) {
         >
           <StaffGenreModifyForm
             closeGenreModify={closeGenreModify}
-            setGenreList={setGenreList}
+            getGenreList={getGenreList}
             genre={genre}
           />
         </Modal>
       </td>
       <td>
-        <button
-          class='btn btn-danger'
-          onClick={() => deleteGenre(genre.genreId)}
-        >
+        <button class='btn btn-danger' onClick={() => deleteGenre(genre.code)}>
           삭제
         </button>
       </td>

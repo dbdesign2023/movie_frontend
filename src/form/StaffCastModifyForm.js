@@ -5,14 +5,17 @@ import { useForm } from 'react-hook-form';
 import '../styles/components/form-container.scss';
 import '../styles/components/modal-container.scss';
 
-export default function StaffCastAddForm(props) {
-  const closeCastModal = props.closeCastModal;
+export default function StaffCastModifyForm(props) {
+  const closeCastModify = props.closeCastModify;
+  const setCastList = props.setCastList;
+  const cast = props.cast;
 
   const {
     register,
     handleSubmit,
     resetField,
-    formState: { isSubmitting, isDirty, errors },
+    setValue,
+    formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
@@ -49,7 +52,7 @@ export default function StaffCastAddForm(props) {
           type='button'
           class='btn-close'
           aria-label='Close'
-          onClick={closeCastModal}
+          onClick={closeCastModify}
         ></button>
       </div>
       <div className='title-text-center-container'>인물 추가</div>
@@ -136,8 +139,8 @@ export default function StaffCastAddForm(props) {
               <button
                 type='submit'
                 class='btn btn-success'
-                onClick={closeCastModal}
-                disabled={isSubmitting}
+                onClick={closeCastModify}
+                disabled={!(isDirty && isValid)}
               >
                 등록
               </button>
