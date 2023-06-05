@@ -40,7 +40,7 @@ const registerHandler = async () => {
     try {
       const formData = new FormData();
       await new Promise((r) => setTimeout(r, 100));
-      const url = `http://25.14.225.33:8080/customer/signup`;
+      const url = `http://localhost:8080/customer/signup`;
       formData.append("name", name);
       formData.append("loginId", login_id);
       formData.append("password", password);

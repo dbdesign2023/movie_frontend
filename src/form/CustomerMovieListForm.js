@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function CustomerMovieListForm() {
-    const ip = `http://25.14.225.33:8080`;
+    const ip = `http://localhost:8080`;
     const url = ip+`/api/posters?fileName=`;
     const [allmovie, setAllmovie] = useState();
     const [ticketing, setTicketingOpen] = useState(false);
@@ -74,6 +74,7 @@ export default function CustomerMovieListForm() {
     }
     const navigate = useNavigate();
     const gototicketingpage = () =>{
+        localStorage.setItem("movieschedule", moviedetail);
         navigate('/choosedate')
     };
     const moviedetailpage = () =>{
