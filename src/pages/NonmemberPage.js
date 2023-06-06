@@ -1,5 +1,5 @@
 import React from 'react';
-
+import NonmemberTicketForm from '../form/NonmemberTicketForm';
 export default function NonmemberPage() {
-  return <p>비회원 조회하는 페이지</p>;
+  return <NonmemberTicketForm/>;
 }

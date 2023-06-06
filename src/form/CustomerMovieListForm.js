@@ -58,7 +58,7 @@ export default function CustomerMovieListForm() {
         },200)
     };
     const getMoviedetail = async(movie)=>{
-        const url = ip+`/schedule/movie/`+movie.movieId;
+        const url = ip+`/movie/detail?id=`+movie.movieId;
         const token = localStorage.getItem('customerToken')
         const header = {
             headers: {
@@ -74,7 +74,7 @@ export default function CustomerMovieListForm() {
     }
     const navigate = useNavigate();
     const gototicketingpage = () =>{
-        localStorage.setItem("movieschedule", moviedetail);
+        localStorage.setItem("movie", JSON.stringify(moviedetail))
         navigate('/choosedate')
     };
     const moviedetailpage = () =>{
@@ -93,21 +93,21 @@ export default function CustomerMovieListForm() {
                         <div className='row'>
                             <div className='w-50'>
                                 <h3 className='row'>
-                                    감독: {moviedetail[0].movieDTO.director.name}
+                                    감독: {moviedetail.director.name}
                                 </h3>
                                 <h3 className='row'>
-                                    언어: {moviedetail[0].movieDTO.language}
+                                    언어: {moviedetail.language}
                                 </h3>
                             </div>
                             <div className='w-50'>
                                 <div>
-                                    {movie.rating.name}
+                                    {movie.rating}
                                 </div>
                             </div>
                         </div>
                         <img src={url+movie.fileName} className='w-100' alt='poster_image'/>
                         <h4>
-                            {moviedetail[0].movieDTO.info}
+                            {moviedetail.info}
                         </h4>
                         <div className='bottom-container'>
                             <div className='button-container'>

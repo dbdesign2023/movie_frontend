@@ -10,7 +10,7 @@ import seat_choose from '../img/seat_choosepng.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 export default function TicketingSeatForm(){
-    const ip = `http://25.14.225.33:8080`;
+    const ip = `http://localhost:8080`;
     function setData(){
         const data = []
         for(var i = 1; i < 30; i++){
@@ -145,16 +145,85 @@ export default function TicketingSeatForm(){
         }
       }
     }
+    const mem_post_ticket = async()=>{
+        const seatlist = JSON.parse(localStorage.getItem('SeatList'))
+        const formData = new FormData();
+        const scid = localStorage.getItem("schedule_id")
+        formData.append("scheduleId", scid)
+        formData.append("seats", seatlist)
+        const url = ip+`/ticket/reservation`;
+        const token = localStorage.getItem('customerToken')
+        const header = {
+            headers: {
+            "Authorization": `Bearer ${token}`,
+            "Access-Control-Allow-Origin": "*"
+            },
+        }
+        const response = await axios.post(
+            url,
+            header,
+            formData
+        )
+        console.log(response.data)
+        localStorage.setItem('ticket_data', JSON.stringify(response.data))
+    }
+    const [phone, setPhone] = useState()
+    const [password, setPassword] = useState()
+    const [modal, setModal] = useState(false)
+
+    const openModal = ()=>{
+        setModal(true)
+    }
+    const closeModal = ()=>{
+        setModal(false)
+    }
+    const nonmem_post_ticket = async()=>{
+        const seatlist = JSON.parse(localStorage.getItem('SeatList'))
+        const formData = new FormData();
+        const scid = localStorage.getItem("schedule_id")
+        formData.append("scheduleId", scid)
+        formData.append("seats", seatlist)
+        formData.append("phoneNo", phone)
+        formData.append("password", password)
+        const url = ip+`/ticket/reservation`;
+        const header = {
+            headers: {
+            "Access-Control-Allow-Origin": "*"
+            },
+        }
+        const response = await axios.post(
+            url,
+            header,
+            formData
+        )
+        console.log(response.data)
+        localStorage.setItem('ticket_data', JSON.stringify(response.data))
+    }
     const gotopaymentpage = () =>{
-      let seatlist = JSON.parse(localStorage.getItem('SeatList'))
-      if(seatlist.length !==0){
-        localStorage.setItem('FinSeatList', JSON.stringify(seatlist));
-        localStorage.removeItem('SeatList')
-        navigate('/payment')
-      }
-      else{
-        alert("좌석을 선택해 주세요.")
-      }
+        const seatlist = JSON.parse(localStorage.getItem('SeatList'))
+        if(seatlist.length !==0){
+            const token = localStorage.getItem("customerToken")
+            if(token){
+                mem_post_ticket()
+                //navigate('/payment')
+            }
+            else{
+                openModal()
+            }
+        }
+        else{
+            alert("좌석을 선택해 주세요.")
+        }
+    }
+    var check_phone_number = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/
+    const nonmemgotopaymentpage = () =>{
+        if(check_phone_number.test(phone) && password){
+            nonmem_post_ticket()
+            //navigate('/payment')
+        }
+        else{
+            alert("휴대폰 번호(-제외 11자리)와 비밀번호를 입력해주세요.")
+        }
     }
     const image_style = {
         width:'100%',
@@ -181,6 +250,39 @@ export default function TicketingSeatForm(){
             <div>
               <button type="button" className="btn btn-primary m-1" onClick={gotopaymentpage}>결제</button>
             </div>
+            <Modal          
+                visible={modal}
+                effect='fadeInDown'
+                onClickAway={closeModal}>
+                <h4 style={{paddingTop:30,paddingRight:30,paddingLeft:30}}>
+                    비회원은 휴대폰 번호와 비밀번호를 입력해야 합니다.
+                </h4>
+                <div>
+                    <div className='content-text-container'>휴대폰 번호</div>
+                </div>
+                <div style={{paddingLeft:50,paddingRight:50}}>
+                    <input
+                        type='text'
+                        className='form-control'
+                        value={phone}
+                        onChange={(event) => setPhone(event.target.value)}
+                    />
+                </div>
+                <div>
+                    <div className='content-text-container'>비밀번호</div>
+                </div>
+                <div style={{paddingLeft:50,paddingRight:50}}>
+                    <input
+                        type='text'
+                        className='form-control'
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                    />
+                </div>
+                <div style={{padding:10}}>
+                    <button type="button" className="btn btn-primary m-1" onClick={nonmemgotopaymentpage}>결제</button>
+                </div>
+            </Modal>
         </div>
     );
   }
