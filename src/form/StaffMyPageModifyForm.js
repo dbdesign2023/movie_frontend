@@ -12,6 +12,9 @@ export default function StaffMypageModifyForm(props) {
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
 
+  const [isLoading, setLoading] = useState(false);
+  const [isLoading2, setLoading2] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -52,7 +55,7 @@ export default function StaffMypageModifyForm(props) {
     setValue('password2', '');
   };
 
-  const exit = async () => {
+  async function exit() {
     const api = '/admin/delete'; // 회원탈퇴로 바꾸기
     const token = localStorage.getItem('staffToken');
     const options = {
@@ -63,10 +66,16 @@ export default function StaffMypageModifyForm(props) {
     };
     let stringData = '';
 
+    const yesOrNo = window.confirm('회원을 탈퇴하시겠습니까?');
+    if (yesOrNo === false) {
+      return;
+    }
+
     try {
       if (password !== password2) {
         alert('입력된 비밀번호가 다릅니다.');
       } else {
+        setLoading2(true);
         stringData = password;
         console.log('Request body', stringData);
 
@@ -82,8 +91,10 @@ export default function StaffMypageModifyForm(props) {
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading2(false);
     }
-  };
+  }
 
   const onSubmit = async (data) => {
     const api = '/admin/modify';
@@ -93,29 +104,30 @@ export default function StaffMypageModifyForm(props) {
         Authorization: `Bearer ${token}`,
       },
     };
-    const formData = new FormData();
 
     try {
-      //console.log('data', data);
+      setLoading(true);
+      console.log('data', data);
 
       if (data.password !== data.password2) {
         alert('입력한 비밀번호가 같지 않습니다.');
       } else {
-        formData.append('name', data.name);
-        formData.append('loginId', info.loginId);
-        formData.append('password', data.password);
-        console.log('Request body', formData);
+        delete data['password2'];
+        //console.log('data', data);
 
-        const response = await serverapi.post(api, formData, options);
+        const response = await serverapi.post(api, data, options);
         console.log('response', response.data);
 
         getInfo();
-        resetData();
         closeMypageModify();
+        alert('회원 정보가 수정되었습니다');
+        resetData();
       }
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,7 +173,7 @@ export default function StaffMypageModifyForm(props) {
               <div className='content-text-container'>아이디</div>
             </div>
             <div className='col-sm-8'>
-              <input class='form-control' value={info.loginId} />
+              <span>{info.loginId}</span>
             </div>
           </div>
           <div className='row'>
@@ -214,7 +226,7 @@ export default function StaffMypageModifyForm(props) {
           </div>
           <div className='bottom-container'>
             <button class='btn btn-secondary' onClick={resetData}>
-              초기화
+              저장된 정보
             </button>
             &nbsp; &nbsp; &nbsp;
             <button
@@ -222,12 +234,24 @@ export default function StaffMypageModifyForm(props) {
               class='btn btn-success'
               disabled={!(isDirty && isValid)}
             >
-              수정
+              {isLoading ? (
+                <div className='spinner-border' role='status'>
+                  <span className='sr-only' />
+                </div>
+              ) : (
+                <span>수정</span>
+              )}
             </button>
             &nbsp; &nbsp; &nbsp;
-            <button class='btn btn-danger' onClick={exit}>
-              회원탈퇴
-            </button>
+            <div class='btn btn-danger' onClick={exit}>
+              {isLoading2 ? (
+                <div className='spinner-border' role='status'>
+                  <span className='sr-only' />
+                </div>
+              ) : (
+                <span>회원 탈퇴</span>
+              )}
+            </div>
           </div>
         </form>
       </div>

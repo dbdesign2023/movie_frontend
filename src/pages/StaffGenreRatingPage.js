@@ -11,14 +11,10 @@ import '../styles/components/page-container.scss';
 function StaffGenrePage() {
   const [genreModalOpen, setGenreModalOpen] = useState(false);
   const [genreList, setGenreList] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     getGenreList();
-    /*setGenreList([
-      { genreId: 1, name: '1번 장르' },
-      { genreId: 2, name: '2번 장르' },
-      { genreId: 3, name: '3번 장르' },
-    ]);*/
   }, []);
 
   const getGenreList = async () => {
@@ -31,7 +27,8 @@ function StaffGenrePage() {
     };
 
     try {
-      console.log('staffToken', token);
+      setLoading(true);
+
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
@@ -39,6 +36,8 @@ function StaffGenrePage() {
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,7 +53,13 @@ function StaffGenrePage() {
     <>
       <div className='add-button-container'>
         <button class='btn btn-success' onClick={showGenreModal}>
-          장르 추가
+          {isLoading ? (
+            <div className='spinner-border' role='status'>
+              <span className='sr-only' />
+            </div>
+          ) : (
+            <span>장르 추가</span>
+          )}
         </button>
         {genreModalOpen && <Modal setGenreModalOpen={showGenreModal} />}
         <Modal
@@ -74,8 +79,8 @@ function StaffGenrePage() {
             <tr>
               <th scope='col'>코드</th>
               <th scope='col'>이름</th>
-              <th scope='col'>삭제</th>
               <th scope='col'>수정</th>
+              <th scope='col'>삭제</th>
             </tr>
           </thead>
           <tbody>
@@ -96,14 +101,10 @@ function StaffGenrePage() {
 function StaffRatingPage() {
   const [ratingModalOpen, setRatingModalOpen] = useState(false);
   const [ratingList, setRatingList] = useState([]);
+  const [isLoading2, setLoading2] = useState(false);
 
   useEffect(() => {
     getRatingList();
-    /*setRatingList([
-      { ratingId: 1, name: '11세 미만', minAge: 11 },
-      { ratingId: 2, name: '12세 미만', minAge: 12 },
-      { ratingId: 3, name: '13세 미만', minAge: 13 },
-    ]);*/
   }, []);
 
   const getRatingList = async () => {
@@ -116,7 +117,8 @@ function StaffRatingPage() {
     };
 
     try {
-      console.log('staffToken', token);
+      setLoading2(true);
+
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
@@ -124,6 +126,8 @@ function StaffRatingPage() {
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading2(false);
     }
   };
 
@@ -139,7 +143,13 @@ function StaffRatingPage() {
     <>
       <div className='add-button-container'>
         <button class='btn btn-success' onClick={showRatingModal}>
-          등급 추가
+          {isLoading2 ? (
+            <div className='spinner-border' role='status'>
+              <span className='sr-only' />
+            </div>
+          ) : (
+            <span>등급 추가</span>
+          )}
         </button>
         {ratingModalOpen && <Modal setRatingModalOpen={showRatingModal} />}
         <Modal
@@ -157,10 +167,10 @@ function StaffRatingPage() {
         <table class='table table-striped'>
           <thead>
             <tr>
+              <th scope='col'>코드</th>
               <th scope='col'>이름</th>
-              <th scope='col'>제한 나이</th>
-              <th scope='col'>삭제</th>
               <th scope='col'>수정</th>
+              <th scope='col'>삭제</th>
             </tr>
           </thead>
           <tbody>

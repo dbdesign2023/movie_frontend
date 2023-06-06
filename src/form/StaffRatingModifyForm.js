@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 
@@ -10,17 +10,18 @@ export default function StaffRatingModifyForm(props) {
   const getRatingList = props.getRatingList;
   const rating = props.rating;
 
+  const [isLoading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
-    resetField,
     setValue,
     formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
+    setValue('code', rating.code);
     setValue('name', rating.name);
-    resetField('minAge', rating.minAge);
   };
 
   const onSubmit = async (data) => {
@@ -31,23 +32,23 @@ export default function StaffRatingModifyForm(props) {
         Authorization: `Bearer ${token}`,
       },
     };
-    const formData = new FormData();
 
     try {
-      //console.log('data', data);
-      formData.append('ratingId', rating.ratingId);
-      formData.append('name', data.name);
-      formData.append('minAge', data.minAge);
-      console.log('Request body', formData);
+      setLoading(true);
+      console.log('Request body', data);
 
-      const response = await serverapi.post(api, formData, options);
+      const response = await serverapi.post(api, data, options);
       console.log('response', response.data);
 
+      closeRatingModify();
+      alert('수정되었습니다');
       getRatingList();
       resetData();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,7 +70,15 @@ export default function StaffRatingModifyForm(props) {
         >
           <div className='row'>
             <div class='col-sm-3'>
-              <div className='content-text-container'>이름</div>
+              <div className='content-text-container'>등급 코드</div>
+            </div>
+            <div class='col-sm-9'>
+              <span>{rating.code}</span>
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>등급 이름</div>
             </div>
             <div class='col-sm-9'>
               <input
@@ -91,43 +100,24 @@ export default function StaffRatingModifyForm(props) {
               )}
             </div>
           </div>
-          <div className='row'>
-            <div class='col-sm-3'>
-              <div className='content-text-container'>제한 나이</div>
-            </div>
-            <div class='col-sm-9'>
-              <input
-                class='form-control'
-                type='number'
-                placeholder='제한 나이를 입력하세요'
-                defaultValue={rating.minAge}
-                aria-invalid={
-                  !isDirty ? undefined : errors.minAge ? 'true' : 'false'
-                }
-                {...register('minAge', {
-                  required: '등급 이름을 입력해주세요.',
-                })}
-              />
-              {errors.minAge && (
-                <small role='alert' className='input-alert'>
-                  {errors.minAge.message}
-                </small>
-              )}
-            </div>
-          </div>
           <div className='bottom-container'>
             <div className='button-container'>
               <button class='btn btn-secondary' onClick={resetData}>
-                초기화
+                되돌리기
               </button>
               &nbsp; &nbsp; &nbsp;
               <button
                 type='submit'
                 class='btn btn-success'
-                onClick={closeRatingModify}
                 disabled={!(isDirty && isValid)}
               >
-                수정
+                {isLoading ? (
+                  <div className='spinner-border' role='status'>
+                    <span className='sr-only' />
+                  </div>
+                ) : (
+                  <span>수정</span>
+                )}
               </button>
             </div>
           </div>

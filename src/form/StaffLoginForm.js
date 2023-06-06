@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from '../services/AuthContext';
@@ -9,6 +9,8 @@ import '../styles/components/modal-container.scss';
 export default function StaffLoginForm(props) {
   const closeLoginModal = props.closeLoginModal;
 
+  const [isLoading, setLoading] = useState(false);
+
   const value = useContext(AuthContext);
   const setIsStaffLogin = value.setIsStaffLogin;
 
@@ -16,7 +18,7 @@ export default function StaffLoginForm(props) {
     register,
     handleSubmit,
     resetField,
-    formState: { isSubmitting, isDirty, errors },
+    formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
@@ -28,20 +30,24 @@ export default function StaffLoginForm(props) {
     const api = '/admin/signin';
 
     try {
+      setLoading(true);
       console.log('data', data);
 
       const response = await serverapi.post(api, data);
       console.log('response', response.data);
+
+      closeLoginModal();
       alert('로그인 되었습니다');
-
       resetData();
+      window.location.replace('/');
       localStorage.setItem('staffToken', response.data);
-
       setIsStaffLogin(true);
       console.log("localStorage['staffToken']", localStorage['staffToken']);
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,10 +110,15 @@ export default function StaffLoginForm(props) {
             <button
               type='submit'
               class='btn btn-success'
-              onClick={closeLoginModal}
-              disabled={isSubmitting}
+              disabled={!(isDirty && isValid)}
             >
-              직원 로그인
+              {isLoading ? (
+                <div className='spinner-border' role='status'>
+                  <span className='sr-only' />
+                </div>
+              ) : (
+                <span>직원 로그인</span>
+              )}
             </button>
           </div>
         </form>

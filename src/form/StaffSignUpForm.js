@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 
@@ -8,11 +8,13 @@ import '../styles/components/modal-container.scss';
 export default function StaffSignUpForm(props) {
   const closeSignUpModal = props.closeSignUpModal;
 
+  const [isLoading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     resetField,
-    formState: { isSubmitting, isDirty, errors },
+    formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
@@ -25,16 +27,21 @@ export default function StaffSignUpForm(props) {
     const api = '/admin/signup';
 
     try {
+      setLoading(true);
       console.log('data', data);
 
       const response = await serverapi.post(api, data);
       console.log('response', response.data);
-      alert('회원가입 되었습니다');
 
+      closeSignUpModal();
+      alert('회원가입 되었습니다');
       resetData();
+      window.location.replace('/');
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,10 +127,15 @@ export default function StaffSignUpForm(props) {
             <button
               type='submit'
               class='btn btn-success'
-              onClick={closeSignUpModal}
-              disabled={isSubmitting}
+              disabled={!(isDirty && isValid)}
             >
-              직원 회원가입
+              {isLoading ? (
+                <div className='spinner-border' role='status'>
+                  <span className='sr-only' />
+                </div>
+              ) : (
+                <span>직원 회원가입</span>
+              )}
             </button>
           </div>
         </form>
