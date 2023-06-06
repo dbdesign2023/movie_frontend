@@ -1,5 +1,12 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useContext } from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from 'react-router-dom';
+import { AuthContext } from '../services/AuthContext';
 
 import MoviePage from './MoviePage';
 import MyPagePage from './MyPagePage';
@@ -23,6 +30,9 @@ import ChooseSeatPage from './ChooseSeatPage';
 import MainPage from './MainPage';
 import CustomerTicketForm from '../form/CustomerTicketForm';
 import CustomerPaymentPage from './CustomerPaymentPage';
+import CustomerTicketListPage from './CustomerTicketListPage';
+import ScheduleWithMoviePage from './ScheduleWithMoviePage';
+
 function Router() {
   return (
     <BrowserRouter>
@@ -59,12 +69,6 @@ function Router() {
             element={<ScheduleWithMoviePage />}
           />
           <Route path='/test' element={<CustomerTicketForm />} />
-
-          <Route
-            path='/customerticketing'
-            element={<CustomerTicketingPage />}
-          />
-          <Route path='/payment' element={<PaymentPage />} />
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
