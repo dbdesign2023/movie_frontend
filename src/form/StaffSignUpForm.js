@@ -23,17 +23,13 @@ export default function StaffSignUpForm(props) {
 
   const onSubmit = async (data) => {
     const api = '/admin/signup';
-    const formData = new FormData();
 
     try {
-      //console.log('data', data);
-      formData.append('name', data.name);
-      formData.append('loginId', data.loginId);
-      formData.append('password', data.password);
-      console.log('Request body', formData);
+      console.log('data', data);
 
-      const response = await serverapi.post(api, formData);
+      const response = await serverapi.post(api, data);
       console.log('response', response.data);
+      alert('회원가입 되었습니다');
 
       resetData();
     } catch (error) {

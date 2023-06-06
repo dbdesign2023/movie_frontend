@@ -7,7 +7,7 @@ import '../styles/components/modal-container.scss';
 
 export default function StaffGenreAddForm(props) {
   const closeGenreModal = props.closeGenreModal;
-  const setGenreList = props.setGenreList;
+  const getGenreList = props.getGenreList;
 
   const {
     register,
@@ -17,7 +17,8 @@ export default function StaffGenreAddForm(props) {
   } = useForm();
 
   const resetData = () => {
-    resetField('genre');
+    resetField('code');
+    resetField('name');
   };
 
   const onSubmit = async (data) => {
@@ -25,20 +26,17 @@ export default function StaffGenreAddForm(props) {
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
-        'Content-type': 'text/plain; charset=UTF-8',
         Authorization: `Bearer ${token}`,
       },
     };
-    let stringData = '';
 
     try {
-      stringData = data.genre;
-      console.log('Request body', stringData);
+      console.log('Request body', data);
 
-      const response = await serverapi.post(api, stringData, options);
+      const response = await serverapi.post(api, data, options);
       console.log('response', response.data);
 
-      setGenreList(response.data);
+      getGenreList();
       resetData();
     } catch (error) {
       console.log(error);
@@ -64,7 +62,31 @@ export default function StaffGenreAddForm(props) {
         >
           <div className='row'>
             <div class='col-sm-3'>
-              <div className='content-text-container'>새로 추가하기</div>
+              <div className='content-text-container'>장르 코드</div>
+            </div>
+            <div class='col-sm-9'>
+              <input
+                class='form-control'
+                type='text'
+                placeholder='GR000'
+                defaultValue=''
+                aria-invalid={
+                  !isDirty ? undefined : errors.code ? 'true' : 'false'
+                }
+                {...register('code', {
+                  required: '장르 코드을 입력해주세요.',
+                })}
+              />
+              {errors.code && (
+                <small role='alert' className='input-alert'>
+                  {errors.code.message}
+                </small>
+              )}
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>장르 이름</div>
             </div>
             <div class='col-sm-9'>
               <input
@@ -73,15 +95,15 @@ export default function StaffGenreAddForm(props) {
                 placeholder='장르 이름을 입력하세요'
                 defaultValue=''
                 aria-invalid={
-                  !isDirty ? undefined : errors.genre ? 'true' : 'false'
+                  !isDirty ? undefined : errors.name ? 'true' : 'false'
                 }
-                {...register('genre', {
+                {...register('name', {
                   required: '장르 이름을 입력해주세요.',
                 })}
               />
-              {errors.genre && (
+              {errors.name && (
                 <small role='alert' className='input-alert'>
-                  {errors.genre.message}
+                  {errors.name.message}
                 </small>
               )}
             </div>

@@ -7,7 +7,7 @@ import '../styles/components/modal-container.scss';
 
 export default function StaffRatingAddForm(props) {
   const closeRatingModal = props.closeRatingModal;
-  const setRatingList = props.setRatingList;
+  const getRatingList = props.getRatingList;
 
   const {
     register,
@@ -39,7 +39,7 @@ export default function StaffRatingAddForm(props) {
       const response = await serverapi.post(api, formData, options);
       console.log('response', response.data);
 
-      setRatingList(response.data);
+      getRatingList();
       resetData();
     } catch (error) {
       console.log(error);

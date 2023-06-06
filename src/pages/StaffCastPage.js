@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
 import StaffCastAddForm from '../form/StaffCastAddForm';
+import CastComponent from '../components/CastComponent';
 
 import '../styles/components/page-container.scss';
 
@@ -11,11 +12,33 @@ export default function StaffCastPage() {
 
   useEffect(() => {
     getCastList();
+    /*setCastList([
+      {
+        castId: 1,
+        name: '영화배우1',
+        birthdate: 12351111,
+        fileName: 'abc.jpg',
+        nationality: '대한민국',
+        info: '설명중1',
+      },
+      {
+        castId: 2,
+        name: '영화배우2',
+        birthdate: 12352222,
+        fileName: 'def.jpg',
+        nationality: '대한민국',
+        info: '설명중2',
+      },
+      {
+        castId: 3,
+        name: '영화배우3',
+        birthdate: 12353333,
+        fileName: 'ghi.jpg',
+        nationality: '대한민국',
+        info: '설명중3',
+      },
+    ])*/
   }, []);
-
-  useEffect(() => {
-    getCastList();
-  }, [castList]);
 
   const getCastList = async () => {
     const api = '/movie/cast/getList';
@@ -67,22 +90,17 @@ export default function StaffCastPage() {
         <table class='table table-striped'>
           <thead>
             <tr>
+              <th scope='col'>인물코드</th>
               <th scope='col'>이름</th>
-              <th scope='col'>제한 나이</th>
+              <th scope='col'>생년월일</th>
+              <th scope='col'>국적</th>
               <th scope='col'>삭제</th>
               <th scope='col'>수정</th>
             </tr>
           </thead>
           <tbody>
             {castList.map((cast) => {
-              return (
-                <tr>
-                  <td>{cast.name}</td>
-                  <td>{cast.minAge}</td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              );
+              return <CastComponent cast={cast} setCastList={setCastList} />;
             })}
           </tbody>
         </table>

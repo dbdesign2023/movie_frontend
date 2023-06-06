@@ -5,7 +5,7 @@ import StaffRatingModifyForm from '../form/StaffRatingModifyForm';
 
 export default function RatingComponent(props) {
   const rating = props.rating;
-  const setRatingList = props.setRatingList;
+  const getRatingList = props.getRatingList;
 
   const [ratingModifyOpen, setRatingModifyOpen] = useState(false);
 
@@ -31,7 +31,7 @@ export default function RatingComponent(props) {
       const response = await serverapi.delete(api, options);
       console.log('response', response.data);
 
-      setRatingList(response.data);
+      getRatingList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -54,7 +54,7 @@ export default function RatingComponent(props) {
         >
           <StaffRatingModifyForm
             closeRatingModify={closeRatingModify}
-            setRatingList={setRatingList}
+            getRatingList={getRatingList}
             rating={rating}
           />
         </Modal>

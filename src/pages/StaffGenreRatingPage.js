@@ -4,21 +4,21 @@ import serverapi from '../services/serverapi';
 import StaffGenreAddForm from '../form/StaffGenreAddForm';
 import StaffRatingAddForm from '../form/StaffRatingAddForm';
 import GenreComponent from '../components/GenreComponent';
+import RatingComponent from '../components/RatingComponent';
 
 import '../styles/components/page-container.scss';
-import RatingComponent from '../components/RatingComponent';
 
 function StaffGenrePage() {
   const [genreModalOpen, setGenreModalOpen] = useState(false);
   const [genreList, setGenreList] = useState([]);
 
   useEffect(() => {
-    //getGenreList();
-    setGenreList([
+    getGenreList();
+    /*setGenreList([
       { genreId: 1, name: '1번 장르' },
       { genreId: 2, name: '2번 장르' },
       { genreId: 3, name: '3번 장르' },
-    ]);
+    ]);*/
   }, []);
 
   const getGenreList = async () => {
@@ -64,7 +64,7 @@ function StaffGenrePage() {
         >
           <StaffGenreAddForm
             closeGenreModal={closeGenreModal}
-            setGenreList={setGenreList}
+            getGenreList={getGenreList}
           />
         </Modal>
       </div>
@@ -72,17 +72,20 @@ function StaffGenrePage() {
         <table class='table table-striped'>
           <thead>
             <tr>
+              <th scope='col'>코드</th>
               <th scope='col'>이름</th>
               <th scope='col'>삭제</th>
               <th scope='col'>수정</th>
             </tr>
           </thead>
           <tbody>
-            {genreList.map((genre) => {
-              return (
-                <GenreComponent genre={genre} setGenreList={setGenreList} />
-              );
-            })}
+            {genreList.map((genre) => (
+              <GenreComponent
+                key={genre.code}
+                genre={genre}
+                getGenreList={getGenreList}
+              />
+            ))}
           </tbody>
         </table>
       </div>
@@ -95,12 +98,12 @@ function StaffRatingPage() {
   const [ratingList, setRatingList] = useState([]);
 
   useEffect(() => {
-    //getRatingList();
-    setRatingList([
+    getRatingList();
+    /*setRatingList([
       { ratingId: 1, name: '11세 미만', minAge: 11 },
       { ratingId: 2, name: '12세 미만', minAge: 12 },
       { ratingId: 3, name: '13세 미만', minAge: 13 },
-    ]);
+    ]);*/
   }, []);
 
   const getRatingList = async () => {
@@ -146,7 +149,7 @@ function StaffRatingPage() {
         >
           <StaffRatingAddForm
             closeRatingModal={closeRatingModal}
-            setRatingList={setRatingList}
+            getRatingList={getRatingList}
           />
         </Modal>
       </div>
@@ -161,14 +164,13 @@ function StaffRatingPage() {
             </tr>
           </thead>
           <tbody>
-            {ratingList.map((rating) => {
-              return (
-                <RatingComponent
-                  rating={rating}
-                  setRatingList={setRatingList}
-                />
-              );
-            })}
+            {ratingList.map((rating) => (
+              <RatingComponent
+                rating={rating}
+                getRatingList={getRatingList}
+                key={rating.ratingId}
+              />
+            ))}
           </tbody>
         </table>
       </div>

@@ -9,6 +9,8 @@ export default function StaffMypageModifyForm(props) {
   const closeMypageModify = props.closeMypageModify;
   const Logout = props.Logout;
   const [info, setInfo] = useState({});
+  const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
 
   const {
     register,
@@ -18,12 +20,12 @@ export default function StaffMypageModifyForm(props) {
   } = useForm();
 
   useEffect(() => {
-    //getInfo();
-    setInfo({ name: 'd', loginId: 'd', password: 'd' });
+    getInfo();
+    //setInfo({ name: 'd', loginId: 'd', password: 'd' });
   }, []);
 
   const getInfo = async () => {
-    const api = '/movie/rating/list';
+    const api = '/admin/detail';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -51,24 +53,32 @@ export default function StaffMypageModifyForm(props) {
   };
 
   const exit = async () => {
-    const api = '/admin/signup'; // 회원탈퇴로 바꾸기
+    const api = '/admin/delete'; // 회원탈퇴로 바꾸기
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
+        'Content-type': 'text/plain; charset=UTF-8',
         Authorization: `Bearer ${token}`,
       },
     };
+    let stringData = '';
 
     try {
-      console.log('staffToken', token);
-      const response = await serverapi.get(api, options);
-      console.log('response', response.data);
+      if (password !== password2) {
+        alert('입력된 비밀번호가 다릅니다.');
+      } else {
+        stringData = password;
+        console.log('Request body', stringData);
 
-      closeMypageModify();
-      alert('회원탈퇴 되었습니다.');
-      // 로그 아웃
-      Logout();
-      window.location.replace('/');
+        const response = await serverapi.delete(api, stringData, options);
+        console.log('response', response.data);
+
+        closeMypageModify();
+        alert('회원탈퇴 되었습니다.');
+        // 로그 아웃
+        Logout();
+        window.location.replace('/');
+      }
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -76,7 +86,13 @@ export default function StaffMypageModifyForm(props) {
   };
 
   const onSubmit = async (data) => {
-    const api = '/admin/signup';
+    const api = '/admin/modify';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     const formData = new FormData();
 
     try {
@@ -86,14 +102,14 @@ export default function StaffMypageModifyForm(props) {
         alert('입력한 비밀번호가 같지 않습니다.');
       } else {
         formData.append('name', data.name);
-        formData.append('loginId', data.loginId);
+        formData.append('loginId', info.loginId);
         formData.append('password', data.password);
         console.log('Request body', formData);
 
-        const response = await serverapi.post(api, formData);
+        const response = await serverapi.post(api, formData, options);
         console.log('response', response.data);
 
-        setInfo(response.data);
+        getInfo();
         resetData();
         closeMypageModify();
       }
@@ -157,6 +173,7 @@ export default function StaffMypageModifyForm(props) {
                 class='form-control'
                 type='password'
                 placeholder='비밀번호를 입력하세요'
+                onChange={(e) => setPassword(e.value)}
                 aria-invalid={
                   !isDirty ? undefined : errors.password ? 'true' : 'false'
                 }
@@ -180,6 +197,7 @@ export default function StaffMypageModifyForm(props) {
                 class='form-control'
                 type='password'
                 placeholder='비밀번호를 다시 한 번 입력하세요'
+                onChange={(e) => setPassword2(e.value)}
                 aria-invalid={
                   !isDirty ? undefined : errors.password2 ? 'true' : 'false'
                 }

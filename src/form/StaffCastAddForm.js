@@ -7,34 +7,46 @@ import '../styles/components/modal-container.scss';
 
 export default function StaffCastAddForm(props) {
   const closeCastModal = props.closeCastModal;
+  const setCastList = props.setCastList;
 
   const {
     register,
     handleSubmit,
     resetField,
-    formState: { isSubmitting, isDirty, errors },
+    setValue,
+    formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
     resetField('name');
     resetField('birthdate');
-    resetField('nationality');
+    resetField('fileName');
+    setValue('nationality', '대한민국');
     resetField('info');
   };
 
   const onSubmit = async (data) => {
     const api = '/movie/cast/add';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     const formData = new FormData();
+
     try {
       formData.append('name', data.name);
       formData.append('birthdate', data.birthdate);
+      formData.append('fileName', data.fileName);
       formData.append('nationality', data.nationality);
       formData.append('info', data.info);
       console.log('Request body', formData);
 
-      const response = await serverapi.post(api, formData);
+      const response = await serverapi.post(api, formData, options);
       console.log('response', response.data);
 
+      setCastList(response.data);
       resetData();
     } catch (error) {
       console.log(error);
@@ -63,14 +75,19 @@ export default function StaffCastAddForm(props) {
               <input
                 class='form-control'
                 type='text'
-                placeholder='등급 이름을 입력하세요'
+                placeholder='인물 이름을 입력하세요'
                 aria-invalid={
                   !isDirty ? undefined : errors.password ? 'true' : 'false'
                 }
                 {...register('name', {
-                  required: '등급 이름을 입력해주세요.',
+                  required: '인물 이름을 입력해주세요.',
                 })}
               />
+              {errors.name && (
+                <small role='alert' className='input-alert'>
+                  {errors.name.message}
+                </small>
+              )}
             </div>
           </div>
           <div className='row'>
@@ -89,42 +106,11 @@ export default function StaffCastAddForm(props) {
                   required: '생년월일을 입력해주세요.',
                 })}
               />
-            </div>
-          </div>
-          <div className='row'>
-            <div class='col-sm-3'>
-              <div className='content-text-container'></div>
-            </div>
-            <div class='col-sm-9'>
-              <input
-                class='form-control'
-                type='text'
-                placeholder='등급 이름을 입력하세요'
-                aria-invalid={
-                  !isDirty ? undefined : errors.password ? 'true' : 'false'
-                }
-                {...register('name', {
-                  required: '등급 이름을 입력해주세요.',
-                })}
-              />
-            </div>
-          </div>
-          <div className='row'>
-            <div class='col-sm-3'>
-              <div className='content-text-container'>이름</div>
-            </div>
-            <div class='col-sm-9'>
-              <input
-                class='form-control'
-                type='text'
-                placeholder='등급 이름을 입력하세요'
-                aria-invalid={
-                  !isDirty ? undefined : errors.password ? 'true' : 'false'
-                }
-                {...register('name', {
-                  required: '등급 이름을 입력해주세요.',
-                })}
-              />
+              {errors.minAge && (
+                <small role='alert' className='input-alert'>
+                  {errors.minAge.message}
+                </small>
+              )}
             </div>
           </div>
           <div className='bottom-container'>
@@ -137,7 +123,7 @@ export default function StaffCastAddForm(props) {
                 type='submit'
                 class='btn btn-success'
                 onClick={closeCastModal}
-                disabled={isSubmitting}
+                disabled={!(isDirty && isValid)}
               >
                 등록
               </button>

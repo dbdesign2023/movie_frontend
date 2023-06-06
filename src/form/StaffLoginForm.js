@@ -26,15 +26,13 @@ export default function StaffLoginForm(props) {
 
   const onSubmit = async (data) => {
     const api = '/admin/signin';
-    const formData = new FormData();
 
     try {
-      formData.append('loginId', data.loginId);
-      formData.append('password', data.password);
-      console.log('Request body', formData);
+      console.log('data', data);
 
-      const response = await serverapi.post(api, formData);
+      const response = await serverapi.post(api, data);
       console.log('response', response.data);
+      alert('로그인 되었습니다');
 
       resetData();
       localStorage.setItem('staffToken', response.data);
