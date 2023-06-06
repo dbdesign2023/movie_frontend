@@ -21,17 +21,21 @@ export default function CustomerLoginForm() {
       try {
         const formData = new FormData();
         await new Promise((r) => setTimeout(r, 100));
-        const url = `http://localhost:8080/customer/signin`;
+        const url = `http://25.14.225.33:8080/customer/signin`;
         formData.append("loginId", login_id);
         formData.append("password", password);
         const response = await axios.post(url, formData);
-        console.log(response.data);
+        localStorage.clear()
         localStorage.setItem("customerToken", response.data);
         setIsCustomerLogin(true)
+        localStorage.setItem("loginId", login_id)
         navigate('/customermovielist')
       } 
       catch (error) {
-        console.log(error);
+        if(error.response.data.message)
+            alert(error.response.data.message)
+        else
+            alert("알수 없는 에러.")
       }
     }
   }

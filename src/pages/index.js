@@ -30,6 +30,8 @@ import ChooseSeatPage from './ChooseSeatPage';
 import MainPage from './MainPage';
 import CustomerTicketForm from '../form/CustomerTicketForm';
 import CustomerPaymentPage from './CustomerPaymentPage';
+import CustomerTicketListPage from './CustomerTicketListPage';
+import ScheduleWithMoviePage from './ScheduleWithMoviePage';
 function PrivateRoute({ staffAuth, customerAuth }) {
   const value = useContext(AuthContext);
   const isStaffLogin = value.isStaffLogin;
@@ -83,6 +85,8 @@ function Router() {
           <Route path='/choosedate' element={<ChooseDatePage />}/>
           <Route path='/chooseseat' element={<ChooseSeatPage />}/>
           <Route path='/payment' element={<CustomerPaymentPage />}/>
+          <Route path='/ticketlist' element={<CustomerTicketListPage />}/>
+          <Route path='/schedulewithmovie' element={<ScheduleWithMoviePage />}/>
           <Route path='/test' element={<CustomerTicketForm />}/>
 
           {/**마음대로 안 돼서 일단 가둬놓음 

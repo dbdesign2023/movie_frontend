@@ -40,7 +40,7 @@ const registerHandler = async () => {
     try {
       const formData = new FormData();
       await new Promise((r) => setTimeout(r, 100));
-      const url = `http://localhost:8080/customer/signup`;
+      const url = `http://25.14.225.33:8080/customer/signup`;
       formData.append("name", name);
       formData.append("loginId", login_id);
       formData.append("password", password);
@@ -51,12 +51,13 @@ const registerHandler = async () => {
       formData.append("email", email);
       console.log('formData', formData);
       const response = await axios.post(url, formData);
-      console.log(response.data);
       openmodal()
       } 
     catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if(error.response.data.message)
+          alert(error.response.data.message)
+      else
+          alert("알수 없는 에러.")
       }
     }
   };

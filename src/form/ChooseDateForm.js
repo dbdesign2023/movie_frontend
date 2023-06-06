@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function ChooseDateForm(date) {
-    const ip = `http://25.14.225.33:8080`;
+    const ip = `http://localhost:8080`;
     const [rundate,setRundate] = useState("")
     const [modalstate,setModalstate] = useState(false)
     const [scheduledata,setScheduledata] = useState();
@@ -31,7 +31,10 @@ export default function ChooseDateForm(date) {
             setData(response.data)
         }
         catch (error) {
-            console.log(error)
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
         }
     }
     useEffect(() => {
