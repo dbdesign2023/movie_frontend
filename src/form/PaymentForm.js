@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import CustomerTicketForm from './CustomerTicketForm';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function PaymentForm() {
-    //const ticket_data = JSON.parse(localStorage.getItem('ticket_data'))
+    /*
     const ticket_data = {
         ticketId: 1,
         ticketTime: "2023-06-05 11:00:00",
@@ -35,8 +37,82 @@ export default function PaymentForm() {
         }],
         discount: "1000KR"
     }
-    const [method, setMethod] = useState()
-    const clickHandler = ()=>{
+    */
+    const ip = `http://25.14.225.33:8080`;
+    const navigate = useNavigate();
+    const [methodlist, setMethodlist] = useState()
+    const [ticket_data, setticketData] = useState()
+    const getmethod = async()=>{
+        try{
+            const url = ip+`/payment/method/list`;
+            const header = {
+                headers: {
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.get(
+                url,
+                header
+            )
+            setMethodlist(response.data)
+        }
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+        }
+    }
+    const setdata = ()=>{
+        const data = JSON.parse(localStorage.getItem('ticket_data'))
+        if(data){
+            let tmp = new Date(data.startTime)
+            data.startTime = tmp.getFullYear()+"-"+(tmp.getMonth()<10?"0"+(tmp.getMonth()+1):(tmp.getMonth()+1))+"-"+(tmp.getDate()<10?"0"+tmp.getDate():tmp.getDate())+" "+(tmp.getHours()<10?"0"+tmp.getHours():tmp.getHours())+":"+(tmp.getMinutes()<10?"0"+tmp.getMinutes():tmp.getMinutes())+":"+"00";
+            tmp = new Date(data.ticketingTime)
+            data.ticketingTime = tmp.getFullYear()+"-"+(tmp.getMonth()<10?"0"+(tmp.getMonth()+1):(tmp.getMonth()+1))+"-"+(tmp.getDate()<10?"0"+tmp.getDate():tmp.getDate())+" "+(tmp.getHours()<10?"0"+tmp.getHours():tmp.getHours())+":"+(tmp.getMinutes()<10?"0"+tmp.getMinutes():tmp.getMinutes())+":"+"00";
+            setticketData(data)
+        }
+        else{
+
+        }
+    }
+    useEffect(()=>{
+        getmethod()
+        setdata()
+    },[])
+    const [method, setMethod] = useState("PM000")
+    const clickHandler = async()=>{
+        try{
+            const formData = new FormData();
+            formData.append("ticketId", ticket_data.ticketId);
+            formData.append("code", method);
+            const datatmp = {
+                ticketId: ticket_data.ticketId,
+                code: method
+            }
+            const url = ip+`/payment/pay`;
+            const token = localStorage.getItem('customerToken')
+            const header = {
+                headers: {
+                "Authorization": `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.post(
+                url,
+                formData,
+                header,
+            )
+            localStorage.setItem('payment_data', JSON.stringify(response.data))
+            alert("결제가 완료되었습니다.")
+            navigate('/customermovielist')
+        }
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+        }
     }
     const loading = ()=>{
         if(ticket_data){
@@ -51,9 +127,9 @@ export default function PaymentForm() {
                 <select class="selectpicker" onChange={e=>{
                     setMethod(e.target.value)
                 }}>
-                    <option value="PM002">신용카드 결제</option>
-                    <option value="PM001">무통장 입금</option>
-                    <option value="PM000">포인트 결제</option>
+                    {methodlist &&(methodlist.map((item,idx)=>(
+                        <option key={idx} value={item.code}>{item.name}</option>
+                    )))}
                 </select>
             </h2>
             <div>

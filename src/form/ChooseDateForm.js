@@ -31,7 +31,10 @@ export default function ChooseDateForm(date) {
             setData(response.data)
         }
         catch (error) {
-            console.log(error)
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
         }
     }
     useEffect(() => {

@@ -4,6 +4,7 @@ import axios from 'axios';
 import CustomerTicketForm from './CustomerTicketForm';
 
 export default function CustomerTicketListForm() {
+    /*
     const ticket_data = {
         ticketId: 1,
         ticketTime: "2023-06-05 11:00:00",
@@ -35,7 +36,15 @@ export default function CustomerTicketListForm() {
         }],
         discount: "1000KR"
     }
-    const ip = `http://localhost:8080`;
+    setTickets([{
+            ticketId:1,
+            ticketingTime:"2023-06-06 06:00:00",
+            movieName:"test",
+            theaterName:"test",
+            startTime:"2023-06-06 09:00:00"
+        }])*/
+    
+    const ip = `http://25.14.225.33:8080`;
     const[tickets, setTickets] = useState()
     const[detail, setDetail] = useState()
     const[modal, setModal] = useState(false)
@@ -43,44 +52,61 @@ export default function CustomerTicketListForm() {
         setModal(false)
     }
     const getTicketList = async()=>{
-        const url = ip+`/ticket/list/member`;
-        const token = localStorage.getItem('customerToken')
-        const header = {
-            headers: {
-            "Authorization": `Bearer ${token}`,
-            "Access-Control-Allow-Origin": "*"
-            },
+        try{
+            const url = ip+`/ticket/member/list`;
+            const token = localStorage.getItem('customerToken')
+            const header = {
+                headers: {
+                "Authorization": `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.get(
+                url,
+                header
+            )
+            let tmpdata = response.data
+            tmpdata.map((data)=>{
+                let tmp = new Date(data.startTime)
+                data.startTime = tmp.getFullYear()+"-"+(tmp.getMonth()<10?"0"+(tmp.getMonth()+1):(tmp.getMonth()+1))+"-"+(tmp.getDate()<10?"0"+tmp.getDate():tmp.getDate())+" "+(tmp.getHours()<10?"0"+tmp.getHours():tmp.getHours())+":"+(tmp.getMinutes()<10?"0"+tmp.getMinutes():tmp.getMinutes())+":"+(tmp.getSeconds()<10?"0"+tmp.getSeconds():tmp.getSeconds());
+                tmp = new Date(data.ticketingTime)
+                data.ticketingTime = tmp.getFullYear()+"-"+(tmp.getMonth()<10?"0"+(tmp.getMonth()+1):(tmp.getMonth()+1))+"-"+(tmp.getDate()<10?"0"+tmp.getDate():tmp.getDate())+" "+(tmp.getHours()<10?"0"+tmp.getHours():tmp.getHours())+":"+(tmp.getMinutes()<10?"0"+tmp.getMinutes():tmp.getMinutes())+":"+(tmp.getSeconds()<10?"0"+tmp.getSeconds():tmp.getSeconds());
+            })
+            setTickets(tmpdata)
         }
-        const response = await axios.get(
-            url,
-            header
-        )
-        setTickets(response.data)
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+        }
     }
     const getTicketDetail = async(ticket)=>{
-        const url = ip+`/ticket/detail/member?ticketId=` + ticket.Id;
-        const token = localStorage.getItem('customerToken')
-        const header = {
-            headers: {
-            "Authorization": `Bearer ${token}`,
-            "Access-Control-Allow-Origin": "*"
-            },
+        try{
+            console.log(ticket)
+            const url = ip+`/ticket/member/detail?ticketId=` + ticket.ticketId;
+            const token = localStorage.getItem('customerToken')
+            const header = {
+                headers: {
+                "Authorization": `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.get(
+                url,
+                header
+            )
+            setDetail(response.data)
         }
-        const response = await axios.get(
-            url,
-            header
-        )
-        setDetail(response.data)
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+        }
     }
     useEffect(()=>{
-        //getTicketList()
-        setTickets([{
-            ticketId:1,
-            ticketingTime:"2023-06-06 06:00:00",
-            movieName:"test",
-            theaterName:"test",
-            startTime:"2023-06-06 09:00:00"
-        }])
+        getTicketList()
     },[])
     const loading = ()=>{
         if(detail){
@@ -88,8 +114,7 @@ export default function CustomerTicketListForm() {
         }
     }
     function clickHandler(){
-        //getTicketDetail(this)
-        setDetail(ticket_data)
+        getTicketDetail(this)
         setModal(true)
     }
     const style ={
@@ -105,6 +130,7 @@ export default function CustomerTicketListForm() {
         if(tickets){
             return(
                 <div className='TicketList'>
+                    예약된 티켓
                     {tickets.map((item)=>(
                         <div key={item.ticketId} style={style}>
                             <div style={{width:"100%", padding:10}}>
@@ -113,7 +139,7 @@ export default function CustomerTicketListForm() {
                                         ticket_no : {item.ticketId}
                                     </h6>
                                     <h6>
-                                        결제시간 : {item.ticketingTime}
+                                        예약시간 : {item.ticketingTime}
                                     </h6>
                                 </div>
                                 <div>
@@ -130,6 +156,9 @@ export default function CustomerTicketListForm() {
                                     </h5>
                                     <button style={button_style} onClick={clickHandler.bind(item)}>자세히 보기</button>
                                 </div>
+                                <div className='text-start'>
+                                    결제 상태 : {item.payed?"결제 완료":"미결제"}
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -144,7 +173,23 @@ export default function CustomerTicketListForm() {
             )
         }
     }
-    
+    const deleteticket = async()=>{
+        const url = ip+`/ticket/delete?ticketId=4`
+        const token = localStorage.getItem('customerToken')
+        const password = "test1234"
+        const header = {
+            headers: {
+            "Authorization": `Bearer ${token}`,
+            "Access-Control-Allow-Origin": "*"
+            },
+            data: "test1234"
+        }
+        const response = await axios.delete(
+            url,
+            header
+        )
+        console.log(response)
+    }
     return (
         <div>
             {ticketform()}

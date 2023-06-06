@@ -4,7 +4,7 @@ import Modal from 'react-awesome-modal';
 import { useNavigate } from 'react-router-dom';
 
 export default function ScheduleWithMovieForm() {
-    //const movie = JSON.parse(localStorage.getItem("movie"));
+    /*
     const movie = {
         movieId: 0,
         title: "testtest",
@@ -75,22 +75,33 @@ export default function ScheduleWithMovieForm() {
             filledSeat: 0
           }
       ]
-    const ip = `http://localhost:8080`;
-    const [schedule, setSchedule] = useState(schedule_data)
+      */
+    const movie = JSON.parse(localStorage.getItem("movie"));
+    const ip = `http://25.14.225.33:8080`;
+    const img = ip+`/api/posters?fileName=`+movie.poster.fileName
+    const [schedule, setSchedule] = useState()
     const [scheduledetail, setScheduledetail] = useState()
     const [modal, setModal] = useState(false)
     const getMovieSchedule = async()=>{
-        const url = ip+`/schedule/moive/`+movie.movieId;
-        const header = {
-            headers: {
-            "Access-Control-Allow-Origin": "*"
-            },
+        try{
+            const url = ip+`/schedule/movie/`+movie.movieId;
+            const header = {
+                headers: {
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.get(
+                url,
+                header
+            )
+            setSchedule(response.data)
         }
-        const response = await axios.get(
-            url,
-            header
-        )
-        setSchedule(response.data)
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+        }
     }
     function clickHandler(){
         setScheduledetail(this)
@@ -104,7 +115,7 @@ export default function ScheduleWithMovieForm() {
         navigate('/chooseseat')
     }
     useEffect(()=>{
-        //getMovieSchedule()
+        getMovieSchedule()
     },[])
     useEffect(()=>{
         if(scheduledetail){
@@ -116,21 +127,21 @@ export default function ScheduleWithMovieForm() {
             <h2>
                 {movie.title} 상영일정
             </h2>
-            <img src={movie.poster.fileUrl}/>
+            <img src={img}/>
             <div>
-                {schedule.map((item,idx)=>(
+                {schedule &&(schedule.map((item,idx)=>(
                     <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
                         <div>
-                            {item.startTime.slice(0,10)}
+                            {item.startTime[0]}-{item.startTime[1]<10?'0'+item.startTime[1]:item.startTime[1]}-{item.startTime[2]<10?'0'+item.startTime[2]:item.startTime[2]}
                         </div>
                         <div>
-                            {item.startTime.slice(-8,)} ~
+                            {item.startTime[3]<10?'0'+item.startTime[3]:item.startTime[3]}:{item.startTime[4]<10?'0'+item.startTime[4]:item.startTime[4]} ~
                         </div>
                         <div>
                             남은 좌석 {item.totalSeat-item.filledSeat}/{item.totalSeat}
                         </div>
                     </button>
-                ))}
+                )))}
             </div>
             {scheduledetail &&(<Modal                
                 visible={modal}

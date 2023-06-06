@@ -4,6 +4,7 @@ import axios from 'axios';
 import Modal from 'react-awesome-modal';
 
 export default function NonmemberTicketForm() {
+    /*
     const ticket_data = {
         ticketId: 1,
         ticketTime: "2023-06-05 11:00:00",
@@ -34,8 +35,8 @@ export default function NonmemberTicketForm() {
             price: 15000
         }],
         discount: "1000KR"
-    }
-    const ip = `http://localhost:8080`;
+    }*/
+    const ip = `http://25.14.225.33:8080`;
     const[ticketId, setId] = useState()
     const[password, setPassword] = useState()
     const[detail, setDetail] = useState()
@@ -44,22 +45,29 @@ export default function NonmemberTicketForm() {
         setModal(false)
     }
     const getTicketDetail = async()=>{
-        const url = ip+`/ticket/detail/nonmember?ticketId=`+ticketId+`&password=`+password;
-        const header = {
-            headers: {
-            "Access-Control-Allow-Origin": "*"
-            },
+        try{
+            const url = ip+`/ticket/nonmember/detail?ticketId=`+ticketId+`&password=`+password;
+            const header = {
+                headers: {
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.get(
+                url,
+                header
+            )
+            setDetail(response.data)
         }
-        const response = await axios.get(
-            url,
-            header
-        )
-        setDetail(response.data)
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+        }
     }
     const clickHandler = ()=>{
         if(ticketId && password){
-        //getTicketDetail()
-        setDetail(ticket_data)
+        getTicketDetail()
         setModal(true)
         }
         else{

@@ -10,29 +10,22 @@ import seat_choose from '../img/seat_choosepng.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 export default function TicketingSeatForm(){
-    const ip = `http://localhost:8080`;
-    function setData(){
-        const data = []
-        for(var i = 1; i < 30; i++){
-            for(var j =1; j<30;j++){
-                if(j%5 === 0){
-                    continue
-                }
-                const random = Math.random()
-                data.push({
-                    seat_id:i,
-                    row_num:i,
-                    col_num:j,
-                    ticketed:random < 0.7? 0:1
-                })
-            }
-        }
-        return data
-    }
+    const ip = `http://25.14.225.33:8080`;
+    const modify = localStorage.getItem('modifyticketid')
+    const modifysc = localStorage.getItem('modifyscheduleid')
     const getdata = async()=>{
         try{
             const token = localStorage.getItem('customerToken')
-            const schedule = localStorage.getItem('schedule_id')
+            let schedule
+            let url
+            if(modifysc && modify){
+                schedule = modifysc
+                url = ip+`/schedule/`+schedule+`/seats/ticket?id=`+modify;
+            }
+            else{
+                schedule = localStorage.getItem('schedule_id')
+                url = ip+`/schedule/`+schedule+`/seats`
+            }
             let header = null
             if(token){
                 header = {
@@ -49,7 +42,6 @@ export default function TicketingSeatForm(){
                         },
                 }
             }
-            const url = ip+`/schedule/`+schedule+`/seats`;
             const response = await axios.get(
                 url,
                 header
@@ -57,7 +49,10 @@ export default function TicketingSeatForm(){
             setSeatData(response.data)
         }
         catch (error) {
-            console.log(error)
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
         }
     }
     const [data, setSeatData] = useState([])
@@ -74,7 +69,6 @@ export default function TicketingSeatForm(){
         let row = 0
         let maxrow = 0
         data.map((tmp,idx)=>{
-            console.log(pdata)
             if(pdata.length === 0){
                 size.push(0)
                 pdata.push({
@@ -106,7 +100,6 @@ export default function TicketingSeatForm(){
                 if(size[row]>maxrow)
                 {
                     maxrow = size[row]
-                    console.log(maxrow)
                 }
                 size.push(0)
                 row++
@@ -116,7 +109,6 @@ export default function TicketingSeatForm(){
         size[row] = parseInt(100/size[row])
         setPdata(pdata)
         setSize(maxrow)
-        console.log('A'.charCodeAt())
     }
     },[data])
     const [choosenseat, setSeat] = useState({})
@@ -130,11 +122,15 @@ export default function TicketingSeatForm(){
     const choosenSeat = ()=>{
       alert("이미 예매/선택된 좌석입니다.")
     }
-
+    function unchooseSeat(){
+        const tmp = this
+        setTimeout(function() {
+            dereservation(tmp)
+          }, 100);
+    }
     const navigate = useNavigate();
     const reservation = (seat) =>{
       if(seat.row){
-        console.log(pdata)
         let seatlist = JSON.parse(localStorage.getItem('SeatList'))
         let string = seat.row.toString() + seat.col.toString()
         if(!seatlist.includes(string)){
@@ -145,27 +141,49 @@ export default function TicketingSeatForm(){
         }
       }
     }
-    const mem_post_ticket = async()=>{
-        const seatlist = JSON.parse(localStorage.getItem('SeatList'))
-        const formData = new FormData();
-        const scid = localStorage.getItem("schedule_id")
-        formData.append("scheduleId", scid)
-        formData.append("seats", seatlist)
-        const url = ip+`/ticket/reservation`;
-        const token = localStorage.getItem('customerToken')
-        const header = {
-            headers: {
-            "Authorization": `Bearer ${token}`,
-            "Access-Control-Allow-Origin": "*"
-            },
+    const dereservation = (seat) =>{
+        if(seat.row){
+          let seatlist = JSON.parse(localStorage.getItem('SeatList'))
+          let string = seat.row.toString() + seat.col.toString()
+          if(seatlist.includes(string)){
+            pdata[seat.row.charCodeAt()-'A'.charCodeAt()].ticketed[seat.col-1] = 0
+            seatlist = seatlist.filter((element) => element !== string)
+            localStorage.setItem('SeatList', JSON.stringify(seatlist));
+            setSeat(seat)
+            console.log(seatlist)
+          }
         }
-        const response = await axios.post(
-            url,
-            header,
-            formData
-        )
-        console.log(response.data)
-        localStorage.setItem('ticket_data', JSON.stringify(response.data))
+      }
+    const mem_post_ticket = async()=>{
+        try{
+            const seatlist = JSON.parse(localStorage.getItem('SeatList'))
+            const scid = localStorage.getItem("schedule_id")
+            const datatmp = {
+                scheduleId: scid,
+                seats: seatlist,
+            }
+            const url = ip+`/ticket/reservation`;
+            const token = localStorage.getItem('customerToken')
+            const header = {
+                headers: {
+                "Authorization": `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.post(
+                url,
+                datatmp,
+                header,
+            )
+            localStorage.setItem('ticket_data', JSON.stringify(response.data))
+            navigate('/payment')
+        }
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+        }
     }
     const [phone, setPhone] = useState()
     const [password, setPassword] = useState()
@@ -178,26 +196,35 @@ export default function TicketingSeatForm(){
         setModal(false)
     }
     const nonmem_post_ticket = async()=>{
-        const seatlist = JSON.parse(localStorage.getItem('SeatList'))
-        const formData = new FormData();
-        const scid = localStorage.getItem("schedule_id")
-        formData.append("scheduleId", scid)
-        formData.append("seats", seatlist)
-        formData.append("phoneNo", phone)
-        formData.append("password", password)
-        const url = ip+`/ticket/reservation`;
-        const header = {
-            headers: {
-            "Access-Control-Allow-Origin": "*"
-            },
+        try{
+            const seatlist = JSON.parse(localStorage.getItem('SeatList'))
+            const scid = localStorage.getItem("schedule_id")
+            const datatmp = {
+                scheduleId: scid,
+                seats: seatlist,
+                phoneNo: phone,
+                password: password
+            }
+            const url = ip+`/ticket/reservation`;
+            const header = {
+                headers: {
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.post(
+                url,
+                datatmp,
+                header
+            )
+            localStorage.setItem('ticket_data', JSON.stringify(response.data))
+            navigate('/payment')
         }
-        const response = await axios.post(
-            url,
-            header,
-            formData
-        )
-        console.log(response.data)
-        localStorage.setItem('ticket_data', JSON.stringify(response.data))
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+        }
     }
     const gotopaymentpage = () =>{
         const seatlist = JSON.parse(localStorage.getItem('SeatList'))
@@ -205,7 +232,6 @@ export default function TicketingSeatForm(){
             const token = localStorage.getItem("customerToken")
             if(token){
                 mem_post_ticket()
-                //navigate('/payment')
             }
             else{
                 openModal()
@@ -219,10 +245,92 @@ export default function TicketingSeatForm(){
     const nonmemgotopaymentpage = () =>{
         if(check_phone_number.test(phone) && password){
             nonmem_post_ticket()
-            //navigate('/payment')
         }
         else{
             alert("휴대폰 번호(-제외 11자리)와 비밀번호를 입력해주세요.")
+        }
+    }
+    const nonmembermodifyhandler = async() =>{
+        try{
+            const seatlist = JSON.parse(localStorage.getItem('SeatList'))
+            const tkid = modify
+            const datatmp = {
+                ticketId: tkid,
+                seats: seatlist,
+                phoneNo: phone,
+                password: password
+            }
+            const url = ip+`/ticket/nonmember/modify`;
+            const header = {
+                headers: {
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.post(
+                url,
+                datatmp,
+                header
+            )
+            localStorage.setItem('ticket_data', JSON.stringify(response.data))
+            navigate('/payment')
+        }
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+            localStorage.removeItem('modifyticketid')
+            localStorage.removeItem('modifyscheduleid')
+            navigate('/customermovielist')
+        }
+    }
+    const membermodify = async() =>{
+        try{
+            const seatlist = JSON.parse(localStorage.getItem('SeatList'))
+            const tkid = modify
+            const datatmp = {
+                ticketId: tkid,
+                seats: seatlist
+            }
+            const url = ip+`/ticket/member/modify`;
+            const token = localStorage.getItem('customerToken')
+            const header = {
+                headers: {
+                "Authorization": `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*"
+                },
+            }
+            const response = await axios.post(
+                url,
+                datatmp,
+                header,
+            )
+            localStorage.setItem('ticket_data', JSON.stringify(response.data))
+            navigate('/payment')
+        }
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+            localStorage.removeItem('modifyticketid')
+            localStorage.removeItem('modifyscheduleid')
+            navigate('/customermovielist')
+        }
+    }
+    const membermodifyhandler = () =>{
+        const seatlist = JSON.parse(localStorage.getItem('SeatList'))
+        if(seatlist.length !==0){
+            const token = localStorage.getItem("customerToken")
+            if(token){
+                membermodify()
+            }
+            else{
+                openModal()
+            }
+        }
+        else{
+            alert("좌석을 선택해 주세요.")
         }
     }
     const image_style = {
@@ -240,7 +348,7 @@ export default function TicketingSeatForm(){
                         <div key={idx1} className='row justify-content-start'>
                         {item.ticketed.map((tmp,idx2)=>(
                             <div key={idx2} style={{width:size.toString()+'%'}} className='p-0'>
-                                <img src={tmp===0?seat: tmp === 1?seat_gray:seat_choose} onClick={tmp===0?chooseSeat.bind({col:item.col_num[idx2],row:item.row_num}):choosenSeat} className={tmp===3?"hidden":""}style={image_style}></img>
+                                <img src={tmp===0?seat: tmp === 1?seat_gray:seat_choose} onClick={tmp===0?chooseSeat.bind({col:item.col_num[idx2],row:item.row_num}):tmp===1?choosenSeat:unchooseSeat.bind({col:item.col_num[idx2],row:item.row_num})} className={tmp===3?"hidden":""}style={image_style}></img>
                             </div>
                         ))}
                         </div>
@@ -248,7 +356,8 @@ export default function TicketingSeatForm(){
                 </div>
             </div>
             <div>
-              <button type="button" className="btn btn-primary m-1" onClick={gotopaymentpage}>결제</button>
+              {!modify&&<button type="button" className="btn btn-primary m-1" onClick={gotopaymentpage}>결제</button>}
+              {modify&&<button type="button" className="btn btn-primary m-1" onClick={membermodifyhandler}>수정</button>}
             </div>
             <Modal          
                 visible={modal}
@@ -280,7 +389,8 @@ export default function TicketingSeatForm(){
                     />
                 </div>
                 <div style={{padding:10}}>
-                    <button type="button" className="btn btn-primary m-1" onClick={nonmemgotopaymentpage}>결제</button>
+                {!modify&&<button type="button" className="btn btn-primary m-1" onClick={nonmemgotopaymentpage}>결제페이지로 이동</button>}
+                {modify&&<button type="button" className="btn btn-primary m-1" onClick={nonmembermodifyhandler}>티켓 수정하기</button>}
                 </div>
             </Modal>
         </div>

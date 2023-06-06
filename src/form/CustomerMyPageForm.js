@@ -20,7 +20,10 @@ export default function CustomerMyPageForm() {
             return response.data
         }
         catch (error) {
-            console.log(error)
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
         }
     }
     const patchdata = async()=>{
@@ -45,10 +48,12 @@ export default function CustomerMyPageForm() {
                 formData,
                 header
             )
-            console.log(response.data)
         }
         catch (error) {
-            console.log(error)
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
         }
     }
     useEffect(()=>{
