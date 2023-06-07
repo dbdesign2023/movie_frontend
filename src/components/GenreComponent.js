@@ -70,7 +70,7 @@ export default function GenreComponent(props) {
         </Modal>
       </td>
       <td>
-        <button class='btn btn-danger' onClick={deleteGenre(genre.code)}>
+        <button class='btn btn-danger' onClick={() => deleteGenre(genre.code)}>
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />

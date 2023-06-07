@@ -48,6 +48,7 @@ function Logined(props) {
     localStorage.clear();
     setIsCustomerLogin(false);
     setIsStaffLogin(false);
+    window.location.replace('/');
   };
 
   return (

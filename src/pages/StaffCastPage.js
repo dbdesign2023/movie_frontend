@@ -31,6 +31,24 @@ export default function StaffCastPage() {
       console.log('response', response.data);
 
       setCastList(response.data);
+      castList.map((cast) => {
+        let tmp = new Date(cast.birthDate);
+        cast.birthDate =
+          tmp.getFullYear() +
+          '-' +
+          (tmp.getMonth() < 10
+            ? '0' + (tmp.getMonth() + 1)
+            : tmp.getMonth() + 1) +
+          '-' +
+          (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate()) +
+          ' ' +
+          (tmp.getHours() < 10 ? '0' + tmp.getHours() : tmp.getHours()) +
+          ':' +
+          (tmp.getMinutes() < 10 ? '0' + tmp.getMinutes() : tmp.getMinutes()) +
+          ':' +
+          (tmp.getSeconds() < 10 ? '0' + tmp.getSeconds() : tmp.getSeconds());
+        console.log('castList', castList);
+      });
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -67,7 +85,7 @@ export default function StaffCastPage() {
         >
           <StaffCastAddForm
             closeCastModal={closeCastModal}
-            setCastList={setCastList}
+            getCastList={getCastList}
           />
         </Modal>
       </div>
@@ -89,7 +107,7 @@ export default function StaffCastPage() {
                 <CastComponent
                   key={cast.castId}
                   cast={cast}
-                  setCastList={setCastList}
+                  getCastList={getCastList}
                 />
               );
             })}

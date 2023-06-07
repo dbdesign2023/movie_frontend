@@ -8,12 +8,12 @@ import '../styles/components/modal-container.scss';
 
 export default function StaffMovieAddForm(props) {
   const closeMovieModal = props.closeMovieModal;
-  const setMovieList = props.setMovieList;
+  const getMovieList = props.getMovieList;
 
   const [castList, setCastList] = useState([]);
   const [ratingList, setRatingList] = useState([]);
   const [genreList, setGenreList] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState(false);
+  const [selectedGenres, setSelectedGenres] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   const {
@@ -89,6 +89,24 @@ export default function StaffMovieAddForm(props) {
     }
   };
 
+  const handleCheckboxChange = (event) => {
+    const genreCode = event.target.value;
+    const isChecked = event.target.checked;
+
+    if (isChecked) {
+      // 선택된 항목을 추가합니다.
+      setSelectedGenres((prevSelectedGenres) => [
+        ...prevSelectedGenres,
+        genreCode,
+      ]);
+    } else {
+      // 선택 해제된 항목을 제외합니다.
+      setSelectedGenres((prevSelectedGenres) =>
+        prevSelectedGenres.filter((code) => code !== genreCode),
+      );
+    }
+  };
+
   const resetData = () => {
     resetField('title');
     resetField('releaseDate');
@@ -103,7 +121,7 @@ export default function StaffMovieAddForm(props) {
   };
 
   const onSubmit = async (data) => {
-    const api = '/movie/movie/register';
+    const api = '/movie/register';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -118,12 +136,7 @@ export default function StaffMovieAddForm(props) {
       const query = 'input[name="genreCodes"]:checked';
       const selectedEls = document.querySelectorAll(query);
 
-      // 선택된 목록에서 value 찾기
-      selectedEls.forEach((el) => {
-        setSelectedGenre([...selectedGenre, el.value]);
-      });
-
-      console.log(selectedGenre);
+      console.log(selectedGenres);
 
       console.log('Request body', data);
       formData.append('title', data.title);
@@ -132,10 +145,10 @@ export default function StaffMovieAddForm(props) {
       formData.append('info', data.info);
       formData.append('countryCode', data.countryCode);
       formData.append('language', data.language);
-      formData.append('poster', data.poster);
+      formData.append('poster', data.poster[0]);
       formData.append('directorId', data.directorId);
       formData.append('ratingCode', data.ratingCode);
-      formData.append('genreCodes', selectedGenre);
+      formData.append('genreCodes', selectedGenres);
       console.log('Request body', formData);
 
       const response = await serverapi.post(api, formData, options);
@@ -143,7 +156,7 @@ export default function StaffMovieAddForm(props) {
 
       closeMovieModal();
       alert('영화가 등록되었습니다');
-      setMovieList(response.data);
+      getMovieList();
       resetData();
     } catch (error) {
       console.log(error);
@@ -247,7 +260,7 @@ export default function StaffMovieAddForm(props) {
                 class='form-control'
                 rows='3'
                 aria-invalid={
-                  !isDirty ? undefined : errors.nationality ? 'true' : 'false'
+                  !isDirty ? undefined : errors.info ? 'true' : 'false'
                 }
                 {...register('info', {
                   required: '인물 설명을 입력해주세요',
@@ -269,9 +282,9 @@ export default function StaffMovieAddForm(props) {
                 class='form-select'
                 aria-label='Default select example'
                 aria-invalid={
-                  !isDirty ? undefined : errors.nationality ? 'true' : 'false'
+                  !isDirty ? undefined : errors.countryCode ? 'true' : 'false'
                 }
-                {...register('nationality', {
+                {...register('countryCode', {
                   required: '나라를 선택해주세요.',
                 })}
               >
@@ -363,7 +376,7 @@ export default function StaffMovieAddForm(props) {
                 })}
               >
                 {ratingList.map((rating) => {
-                  return <option value={rating.ratingId}>{rating.name}</option>;
+                  return <option value={rating.code}>{rating.name}</option>;
                 })}
               </select>
             </div>
@@ -375,15 +388,17 @@ export default function StaffMovieAddForm(props) {
             <div class='col-sm-9'>
               {genreList.map((genre) => {
                 return (
-                  <div class='form-check'>
+                  <div key={genre.code} className='form-check'>
                     <input
-                      class='form-check-input'
+                      className='form-check-input'
                       type='checkbox'
-                      value={genre.genreId}
-                      id={genre.genreId}
+                      value={genre.code}
+                      id={genre.code}
                       name='genreCodes'
+                      onChange={handleCheckboxChange}
+                      checked={selectedGenres.includes(genre.code)}
                     />
-                    <label class='form-check-label' for={genre.genreId}>
+                    <label className='form-check-label' htmlFor={genre.code}>
                       {genre.name}
                     </label>
                   </div>

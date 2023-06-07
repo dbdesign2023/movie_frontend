@@ -8,9 +8,8 @@ import '../styles/components/modal-container.scss';
 
 export default function StaffCastModifyForm(props) {
   const closeCastModify = props.closeCastModify;
-  const setCastList = props.setCastList;
+  const getCastList = props.getCastList;
   const castId = props.castId;
-  const cast = props.cast;
 
   const [info, setInfo] = useState({});
   const [isLoading, setLoading] = useState(false);
@@ -27,7 +26,7 @@ export default function StaffCastModifyForm(props) {
   }, []);
 
   const getInfo = async () => {
-    const api = '/movie/cast/detail';
+    const api = `/movie/cast/detail?castId=${castId}`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -41,6 +40,22 @@ export default function StaffCastModifyForm(props) {
       console.log('response', response.data);
 
       setInfo(response.data);
+
+      let tmp = new Date(info.birthDate);
+      info.birthDate =
+        tmp.getFullYear() +
+        '-' +
+        (tmp.getMonth() < 10
+          ? '0' + (tmp.getMonth() + 1)
+          : tmp.getMonth() + 1) +
+        '-' +
+        (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate()) +
+        ' ' +
+        (tmp.getHours() < 10 ? '0' + tmp.getHours() : tmp.getHours()) +
+        ':' +
+        (tmp.getMinutes() < 10 ? '0' + tmp.getMinutes() : tmp.getMinutes()) +
+        ':' +
+        (tmp.getSeconds() < 10 ? '0' + tmp.getSeconds() : tmp.getSeconds());
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -61,6 +76,7 @@ export default function StaffCastModifyForm(props) {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
     };
     const formData = new FormData();
@@ -68,19 +84,20 @@ export default function StaffCastModifyForm(props) {
     try {
       setLoading(true);
       console.log('Request body', data);
+      formData.append('castId', info.castId);
       formData.append('name', data.name);
       formData.append('birthDate', data.birthDate);
-      formData.append('profileImage', data.profileImage);
+      if (data.profileImage !== null)
+        formData.append('profileImage', data.profileImage[0]);
       formData.append('nationality', data.nationality);
       formData.append('info', data.info);
-      console.log('Request body', formData);
 
       const response = await serverapi.post(api, formData, options);
       console.log('response', response.data);
 
       closeCastModify();
       alert('인물이 수정되었습니다');
-      setCastList(response.data);
+      getCastList();
       resetData();
     } catch (error) {
       console.log(error);
@@ -159,13 +176,8 @@ export default function StaffCastModifyForm(props) {
               <input
                 class='form-control'
                 type='file'
-                defaultValue={null}
-                aria-invalid={
-                  !isDirty ? undefined : errors.profileImage ? 'true' : 'false'
-                }
-                {...register('profileImage', {
-                  required: '이미지 파일을 업로드해주세요.',
-                })}
+                placeholder={info.fileName}
+                {...register('profileImage')}
               />
               {errors.profileImage && (
                 <small role='alert' className='input-alert'>
@@ -187,11 +199,18 @@ export default function StaffCastModifyForm(props) {
                   !isDirty ? undefined : errors.nationality ? 'true' : 'false'
                 }
                 {...register('nationality', {
-                  required: '이미지 파일을 업로드해주세요.',
+                  required: '국적을 선택해주세요.',
                 })}
               >
                 {Object.entries(countries).map(([key, country]) => {
-                  return <option value={key}>{country.CountryNameKR}</option>;
+                  if (key === info.nationality)
+                    return (
+                      <option value={key} selected>
+                        {country.CountryNameKR}
+                      </option>
+                    );
+                  else
+                    return <option value={key}>{country.CountryNameKR}</option>;
                 })}
               </select>
             </div>

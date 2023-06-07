@@ -70,7 +70,10 @@ export default function RatingComponent(props) {
         </Modal>
       </td>
       <td>
-        <button class='btn btn-danger' onClick={deleteRating(rating.code)}>
+        <button
+          class='btn btn-danger'
+          onClick={() => deleteRating(rating.code)}
+        >
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />

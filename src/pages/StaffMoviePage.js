@@ -67,7 +67,7 @@ export default function StaffMoviePage() {
         >
           <StaffMovieAddForm
             closeMovieModal={closeMovieModal}
-            setMovieList={setMovieList}
+            getMovieList={getMovieList}
           />
         </Modal>
       </div>
@@ -89,7 +89,7 @@ export default function StaffMoviePage() {
                 <MovieComponent
                   key={movie.movieId}
                   movie={movie}
-                  setMovieList={setMovieList}
+                  getMovieList={getMovieList}
                 />
               );
             })}

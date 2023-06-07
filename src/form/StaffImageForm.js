@@ -5,7 +5,7 @@ import '../styles/components/modal-container.scss';
 
 export default function StaffImageForm(props) {
   const closeImageModal = props.closeImageModal;
-  const image = props.image;
+  const fileName = props.fileName;
 
   return (
     <div className='modal-container'>
@@ -22,8 +22,8 @@ export default function StaffImageForm(props) {
         <img
           src={
             process.env.REACT_APP_API_ORIGIN +
-            `/api/cast?fileName=` +
-            image.fileName
+            `/api/posters?fileName=` +
+            fileName
           }
           className='w-100'
           alt='poster_image'

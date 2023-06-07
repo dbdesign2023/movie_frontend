@@ -6,7 +6,7 @@ import StaffCastModifyForm from '../form/StaffCastModifyForm';
 
 export default function CastComponent(props) {
   const cast = props.cast;
-  const setCastList = props.setCastList;
+  const getCastList = props.getCastList;
 
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [castModifyOpen, setCastModifyOpen] = useState(false);
@@ -29,7 +29,7 @@ export default function CastComponent(props) {
   };
 
   const deleteCast = async (id) => {
-    const api = `/movie/cast/delete?id=${id}`;
+    const api = `/movie/cast/delete?castId=${id}`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -49,7 +49,7 @@ export default function CastComponent(props) {
       console.log('response', response.data);
 
       alert('삭제되었습니다');
-      setCastList(response.data);
+      getCastList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -61,7 +61,7 @@ export default function CastComponent(props) {
   return (
     <tr key={cast.castId}>
       <td>{cast.name}</td>
-      <td>{cast.birthdate}</td>
+      <td>{cast.birthDate}</td>
       <td>{cast.nationality}</td>
       <td>
         <button class='btn btn-warning' onClick={showImageModal}>
@@ -75,7 +75,7 @@ export default function CastComponent(props) {
         >
           <StaffImageForm
             closeImageModal={closeImageModal}
-            image={cast.profileImage}
+            fileName={cast.fileName}
           />
         </Modal>
       </td>
@@ -91,13 +91,13 @@ export default function CastComponent(props) {
         >
           <StaffCastModifyForm
             closeCastModify={closeCastModify}
-            setCastList={setCastList}
+            getCastList={getCastList}
             castId={cast.castId}
           />
         </Modal>
       </td>
       <td>
-        <button class='btn btn-danger' onClick={deleteCast(cast.castId)}>
+        <button class='btn btn-danger' onClick={() => deleteCast(cast.castId)}>
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />

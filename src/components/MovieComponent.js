@@ -6,7 +6,7 @@ import StaffMovieModifyForm from '../form/StaffMovieModifyForm';
 
 export default function MovieComponent(props) {
   const movie = props.movie;
-  const setMovieList = props.setMovieList;
+  const getMovieList = props.getMovieList;
 
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [movieModifyOpen, setMovieModifyOpen] = useState(false);
@@ -29,7 +29,7 @@ export default function MovieComponent(props) {
   };
 
   const deleteMovie = async (id) => {
-    const api = `/movie/movie/delete?id=${id}`;
+    const api = `/movie/delete?id=${id}`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -37,7 +37,7 @@ export default function MovieComponent(props) {
       },
     };
 
-    const yesOrNo = window.confirm('인물을 삭제하시겠습니까?');
+    const yesOrNo = window.confirm('영화를 삭제하시겠습니까?');
     if (yesOrNo === false) {
       return;
     }
@@ -49,7 +49,7 @@ export default function MovieComponent(props) {
       console.log('response', response.data);
 
       alert('삭제되었습니다');
-      setMovieList(response.data);
+      getMovieList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -60,8 +60,8 @@ export default function MovieComponent(props) {
 
   return (
     <tr key={movie.movieId}>
-      <td>{movie.name}</td>
-      <td>{movie.director.name}</td>
+      <td>{movie.title}</td>
+      <td>{movie.directorName}</td>
       <td>{movie.releaseDate}</td>
       <td>
         <button class='btn btn-warning' onClick={showImageModal}>
@@ -75,7 +75,7 @@ export default function MovieComponent(props) {
         >
           <StaffImageForm
             closeImageModal={closeImageModal}
-            image={movie.profileImage}
+            fileName={movie.fileName}
           />
         </Modal>
       </td>
@@ -91,13 +91,16 @@ export default function MovieComponent(props) {
         >
           <StaffMovieModifyForm
             closeMovieModify={closeMovieModify}
-            setMovieList={setMovieList}
+            getMovieList={getMovieList}
             movieId={movie.movieId}
           />
         </Modal>
       </td>
       <td>
-        <button class='btn btn-danger' onClick={deleteMovie(movie.movieId)}>
+        <button
+          class='btn btn-danger'
+          onClick={() => deleteMovie(movie.movieId)}
+        >
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />

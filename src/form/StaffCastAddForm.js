@@ -8,14 +8,13 @@ import '../styles/components/modal-container.scss';
 
 export default function StaffCastAddForm(props) {
   const closeCastModal = props.closeCastModal;
-  const setCastList = props.setCastList;
+  const getCastList = props.getCastList;
 
   const [isLoading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
-    setValue,
     resetField,
     formState: { isValid, isDirty, errors },
   } = useForm();
@@ -34,6 +33,7 @@ export default function StaffCastAddForm(props) {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
     };
     const formData = new FormData();
@@ -43,17 +43,16 @@ export default function StaffCastAddForm(props) {
       console.log('Request body', data);
       formData.append('name', data.name);
       formData.append('birthDate', data.birthDate);
-      formData.append('profileImage', data.profileImage);
+      formData.append('profileImage', data.profileImage[0]);
       formData.append('nationality', data.nationality);
       formData.append('info', data.info);
-      console.log('Request body', formData);
 
       const response = await serverapi.post(api, formData, options);
       console.log('response', response.data);
 
       closeCastModal();
       alert('인물이 등록되었습니다');
-      setCastList(response.data);
+      getCastList();
       resetData();
     } catch (error) {
       console.log(error);
@@ -156,7 +155,7 @@ export default function StaffCastAddForm(props) {
                   !isDirty ? undefined : errors.nationality ? 'true' : 'false'
                 }
                 {...register('nationality', {
-                  required: '이미지 파일을 업로드해주세요.',
+                  required: '국적을 선택해주세요.',
                 })}
               >
                 {Object.entries(countries).map(([key, country]) => {
