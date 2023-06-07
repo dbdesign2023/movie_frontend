@@ -1,454 +1,419 @@
+import React, { useEffect, useState } from 'react';
+import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
-import Modal from 'react-awesome-modal';
-import { useState } from 'react';
-import axios from 'axios';
+import countries from '../constants/country.json';
 
-import StaffOfficialAddForm from '../form/StaffOfficialAddForm.js';
-import StaffGenreAddForm from '../form/StaffGenreAddForm.js';
-import StaffRatingAddForm from '../form/StaffRatingAddForm.js';
+import '../styles/components/form-container.scss';
+import '../styles/components/modal-container.scss';
 
 export default function StaffMovieAddForm(props) {
+  const closeMovieModal = props.closeMovieModal;
+  const setMovieList = props.setMovieList;
 
-  const [officialModalOpen, setOfficialModalOpen] = useState(false);
-  const [genreModalOpen, setGenreModalOpen] = useState(false);
-  const [ratingModalOpen, setRatingModalOpen] = useState(false);
-  const [officialDate, setOfficialDate] = useState('');
-  const [officialMainImg, setOfficialMainImg] = useState('');
+  const [castList, setCastList] = useState([]);
+  const [ratingList, setRatingList] = useState([]);
+  const [genreList, setGenreList] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
-  const showOfficialModal = () => {
-    setOfficialModalOpen(true);
-  };
+  const {
+    register,
+    handleSubmit,
+    resetField,
+    formState: { isValid, isDirty, errors },
+  } = useForm();
 
-  const closeOfficialModal = () => {
-    setOfficialModalOpen(false);
-    setOfficialReset();
-  };
+  useEffect(() => {
+    getCastList();
+    getRatingList();
+    getGenreList();
+  }, []);
 
-  const showGenreModal = () => {
-    setGenreModalOpen(true);
-  };
-
-  const closeGenreModal = () => {
-    setGenreModalOpen(false);
-    setGenre('');
-  };
-
-  const showRatingModal = () => {
-    setRatingModalOpen(true);
-  };
-
-  const closeRatingModal = () => {
-    setRatingModalOpen(false);
-    setRating('');
-  };
-
-  const [officialName, setOfficialName] = useState('');
-  const [nation, setNation] = useState('');
-  const [officialInfo, setOfficialInfo] = useState('');
-
-  const setOfficialReset = () => {
-    setOfficialName('');
-    setOfficialDate('');
-    setNation('');
-    setOfficialInfo('');
-    setOfficialMainImg('');
-  };
-
-  const [genre, setGenre] = useState('');
-  const [rating, setRating] = useState('');
-
-  const setPreviewImg = (event) => {
-    var reader = new FileReader();
-
-    reader.onload = function (event) {
-      setOfficialMainImg(event.target.result);
+  const getCastList = async () => {
+    const api = '/movie/cast/getList';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
+
     try {
-      reader.readAsDataURL(event.target.files[0]);
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      setCastList(response.data);
     } catch (error) {
       console.log(error);
+      alert(error.response.data.message);
     }
   };
-    return (
-        <div className='movie-register-form-container'>
-      <div className='title-text-container'>영화 등록</div>
+
+  const getRatingList = async () => {
+    const api = '/movie/rating/list';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      setRatingList(response.data);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  };
+
+  const getGenreList = async () => {
+    const api = '/movie/genre/list';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      setGenreList(response.data);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  };
+
+  const resetData = () => {
+    resetField('title');
+    resetField('releaseDate');
+    resetField('runningTime');
+    resetField('info');
+    resetField('countryCode');
+    resetField('language');
+    resetField('poster');
+    resetField('directorId');
+    resetField('ratingCode');
+    resetField('genreCodes');
+  };
+
+  const onSubmit = async (data) => {
+    const api = '/movie/movie/register';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const formData = new FormData();
+
+    try {
+      setLoading(true);
+
+      const query = 'input[name="genreCodes"]:checked';
+      const selectedEls = document.querySelectorAll(query);
+
+      // 선택된 목록에서 value 찾기
+      selectedEls.forEach((el) => {
+        setSelectedGenre([...selectedGenre, el.value]);
+      });
+
+      console.log(selectedGenre);
+
+      console.log('Request body', data);
+      formData.append('title', data.title);
+      formData.append('releaseDate', data.releaseDate);
+      formData.append('runngingTime', data.runngingTime);
+      formData.append('info', data.info);
+      formData.append('countryCode', data.countryCode);
+      formData.append('language', data.language);
+      formData.append('poster', data.poster);
+      formData.append('directorId', data.directorId);
+      formData.append('ratingCode', data.ratingCode);
+      formData.append('genreCodes', selectedGenre);
+      console.log('Request body', formData);
+
+      const response = await serverapi.post(api, formData, options);
+      console.log('response', response.data);
+
+      closeMovieModal();
+      alert('영화가 등록되었습니다');
+      setMovieList(response.data);
+      resetData();
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className='modal-container'>
+      <div className='btn-close'>
+        <button
+          type='button'
+          class='btn-close'
+          aria-label='Close'
+          onClick={closeMovieModal}
+        ></button>
+      </div>
+      <div className='title-text-center-container'>영화 추가</div>
       <div className='form-container'>
-        <div className='row'>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>이름</div>
-          </div>
-          <div class='col-sm-4'>
-            <input
-              type='text'
-              class='form-control'
-            />
-          </div>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>등급</div>
-          </div>
-          <div class='col-4'>
-            <div className='inner-form-container'>
-              <div class='btn-group'>
-                <button type='button' class='btn btn-secondary'>
-                  {rating}
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-secondary dropdown-toggle dropdown-toggle-split'
-                  data-bs-toggle='dropdown'
-                  aria-expanded='false'
-                >
-                  <span class='visually-hidden'>Toggle Dropdown</span>
-                </button>
-                <ul class='dropdown-menu'>
-                  <li>
-                    <a class='dropdown-item' href='#'>
-                      //등급 불러오기 API
-                    </a>
-                  </li>
-                  <li>
-                    <a class='dropdown-item' href='#'>
-                      //등급 불러오기 API
-                    </a>
-                  </li>
-                  <li>
-                    <a class='dropdown-item' href='#'>
-                      //등급 불러오기 API
-                    </a>
-                  </li>
-                  <li>
-                    <a class='dropdown-item' href='#'>
-                      //등급 불러오기 API
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className='content-text-container'></div>
-              <button
-                type='button'
-                class='btn btn-outline-secondary'
-                onClick={showRatingModal}
-              >
-                수정
-              </button>
-              <Modal
-                visible={ratingModalOpen}
-                effect='fadeInDown'
-                onClickAway={closeRatingModal}
-              >
-                <StaffRatingAddForm />
-              </Modal>
+        <form
+          className='staff-movie-add-form'
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>제목</div>
+            </div>
+            <div class='col-sm-9'>
+              <input
+                class='form-control'
+                type='text'
+                placeholder='영화 제목을 입력하세요'
+                aria-invalid={
+                  !isDirty ? undefined : errors.title ? 'true' : 'false'
+                }
+                {...register('title', {
+                  required: '영화 제목을 입력해주세요.',
+                })}
+              />
+              {errors.title && (
+                <small role='alert' className='input-alert'>
+                  {errors.title.message}
+                </small>
+              )}
             </div>
           </div>
-        </div>
-        <div class='row'>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>개봉일자</div>
-          </div>
-          <div class='col-sm-4'>
-            <input
-              type='date'
-              class='inputField'
-            />
-          </div>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>상영시간</div>
-          </div>
-          <div class='col-sm-2'>
-            <input
-              type='number'
-              class='form-control'
-            />
-          </div>
-          <div class='col-2'>
-            <div className='content-text-container'>분</div>
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>국가</div>
-          </div>
-          <div class='col-sm-4'>
-            <input
-              type='text'
-              class='form-control'
-            />
-          </div>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>언어</div>
-          </div>
-          <div class='col-3'>
-            <input
-              type='text'
-              class='form-control'
-            />
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>장르</div>
-          </div>
-          <div class='col-4'>
-            <div class='btn-group'>
-              <button type='button' class='btn btn-secondary'>
-                선택된 장르
-              </button>
-              <button
-                type='button'
-                class='btn btn-secondary dropdown-toggle dropdown-toggle-split'
-                data-bs-toggle='dropdown'
-                aria-expanded='false'
-              >
-                <span class='visually-hidden'>Toggle Dropdown</span>
-              </button>
-              <ul class='dropdown-menu'>
-                <li>
-                  <a class='dropdown-item' href='#'>
-                    //장르 불러오기 API
-                  </a>
-                </li>
-                <li>
-                  <a class='dropdown-item' href='#'>
-                    //장르 불러오기 API
-                  </a>
-                </li>
-                <li>
-                  <a class='dropdown-item' href='#'>
-                    //장르 불러오기 API
-                  </a>
-                </li>
-                <li>
-                  <a class='dropdown-item' href='#'>
-                    //장르 불러오기 API
-                  </a>
-                </li>
-              </ul>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>개봉일</div>
             </div>
-            <div className='content-text-container'></div>
-            <button
-              type='button'
-              class='btn btn-outline-secondary'
-              onClick={showGenreModal}
-            >
-              수정
-            </button>
-            <Modal
-              visible={genreModalOpen}
-              effect='fadeInDown'
-              onClickAway={closeGenreModal}
-            >
-              <StaffGenreAddForm />
-            </Modal>
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-2' />
-          <div className='col-10'>//선택한 장르 보여주는 곳</div>
-        </div>
-        <div className='row'>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>감독</div>
-          </div>
-          <div class='col-4'>
-            <div class='btn-group'>
-              <button type='button' class='btn btn-secondary'>
-                선택된 감독
-              </button>
-              <button
-                type='button'
-                class='btn btn-secondary dropdown-toggle dropdown-toggle-split'
-                data-bs-toggle='dropdown'
-                aria-expanded='false'
-              >
-                <span class='visually-hidden'>Toggle Dropdown</span>
-              </button>
-              <ul class='dropdown-menu'>
-                <li>
-                  <a class='dropdown-item' href='#'>
-                    //인물 불러오기 API
-                  </a>
-                </li>
-                <li>
-                  <a class='dropdown-item' href='#'>
-                    //인물 불러오기 API
-                  </a>
-                </li>
-                <li>
-                  <a class='dropdown-item' href='#'>
-                    //인물 불러오기 API
-                  </a>
-                </li>
-                <li>
-                  <a class='dropdown-item' href='#'>
-                    //인물 불러오기 API
-                  </a>
-                </li>
-              </ul>
+            <div class='col-sm-9'>
+              <input
+                class='form-control'
+                type='text'
+                placeholder='1970-01-01'
+                aria-invalid={
+                  !isDirty ? undefined : errors.releaseDate ? 'true' : 'false'
+                }
+                {...register('releaseDate', {
+                  required: '개봉일을 입력해주세요.',
+                })}
+              />
+              {errors.releaseDate && (
+                <small role='alert' className='input-alert'>
+                  {errors.releaseDate.message}
+                </small>
+              )}
             </div>
-            <div className='content-text-container'></div>
-            <button
-              type='button'
-              class='btn btn-outline-secondary'
-              onClick={showOfficialModal}
-            >
-              추가
-            </button>
-            <Modal
-              visible={officialModalOpen}
-              effect='fadeInDown'
-              onClickAway={closeOfficialModal}
-            >
-              <StaffOfficialAddForm />
-            </Modal>
           </div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-2'>
-            <div className='content-text-container'>배우</div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>상영 시간</div>
+            </div>
+            <div class='col-sm-9'>
+              <input
+                class='form-control'
+                type='number'
+                placeholder='상영 시간을 입력하세요'
+                aria-invalid={
+                  !isDirty ? undefined : errors.runngingTime ? 'true' : 'false'
+                }
+                {...register('runngingTime', {
+                  required: '상영 시간을 입력하세요.',
+                })}
+              />
+              {errors.runngingTime && (
+                <small role='alert' className='input-alert'>
+                  {errors.runngingTime.message}
+                </small>
+              )}
+            </div>
           </div>
-          <div className='col-8'>
-            <div className='actor-form-container'>
-              <div class='row'>
-                <div class='col-6'>
-                  <div class='btn-group'>
-                    <button type='button' class='btn btn-secondary'>
-                      선택된 감독
-                    </button>
-                    <button
-                      type='button'
-                      class='btn btn-secondary dropdown-toggle dropdown-toggle-split'
-                      data-bs-toggle='dropdown'
-                      aria-expanded='false'
-                    >
-                      <span class='visually-hidden'>Toggle Dropdown</span>
-                    </button>
-                    <ul class='dropdown-menu'>
-                      <li>
-                        <a class='dropdown-item' href='#'>
-                          //인물 불러오기 API
-                        </a>
-                      </li>
-                      <li>
-                        <a class='dropdown-item' href='#'>
-                          //인물 불러오기 API
-                        </a>
-                      </li>
-                      <li>
-                        <a class='dropdown-item' href='#'>
-                          //인물 불러오기 API
-                        </a>
-                      </li>
-                      <li>
-                        <a class='dropdown-item' href='#'>
-                          //인물 불러오기 API
-                        </a>
-                      </li>
-                    </ul>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>설명</div>
+            </div>
+            <div class='col-sm-9'>
+              <textarea
+                class='form-control'
+                rows='3'
+                aria-invalid={
+                  !isDirty ? undefined : errors.nationality ? 'true' : 'false'
+                }
+                {...register('info', {
+                  required: '인물 설명을 입력해주세요',
+                })}
+              />
+              {errors.info && (
+                <small role='alert' className='input-alert'>
+                  {errors.info.message}
+                </small>
+              )}
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>배급사 국가</div>
+            </div>
+            <div class='col-sm-9'>
+              <select
+                class='form-select'
+                aria-label='Default select example'
+                aria-invalid={
+                  !isDirty ? undefined : errors.nationality ? 'true' : 'false'
+                }
+                {...register('nationality', {
+                  required: '나라를 선택해주세요.',
+                })}
+              >
+                {Object.entries(countries).map(([key, country]) => {
+                  return <option value={key}>{country.CountryNameKR}</option>;
+                })}
+              </select>
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>언어</div>
+            </div>
+            <div class='col-sm-9'>
+              <input
+                class='form-control'
+                type='text'
+                placeholder='언어를 입력하세요'
+                aria-invalid={
+                  !isDirty ? undefined : errors.language ? 'true' : 'false'
+                }
+                {...register('language', {
+                  required: '언어를 입력하세요.',
+                })}
+              />
+              {errors.language && (
+                <small role='alert' className='input-alert'>
+                  {errors.language.message}
+                </small>
+              )}
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>포스터</div>
+            </div>
+            <div class='col-sm-9'>
+              <input
+                class='form-control'
+                type='file'
+                aria-invalid={
+                  !isDirty ? undefined : errors.poster ? 'true' : 'false'
+                }
+                {...register('poster', {
+                  required: '이미지 파일을 업로드해주세요.',
+                })}
+              />
+              {errors.poster && (
+                <small role='alert' className='input-alert'>
+                  {errors.poster.message}
+                </small>
+              )}
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>감독</div>
+            </div>
+            <div class='col-sm-9'>
+              <select
+                class='form-select'
+                aria-label='Default select example'
+                aria-invalid={
+                  !isDirty ? undefined : errors.directorId ? 'true' : 'false'
+                }
+                {...register('directorId', {
+                  required: '감독을 선택해주세요.',
+                })}
+              >
+                {castList.map((cast) => {
+                  return <option value={cast.castId}>{cast.name}</option>;
+                })}
+              </select>
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>등급</div>
+            </div>
+            <div class='col-sm-9'>
+              <select
+                class='form-select'
+                aria-label='Default select example'
+                aria-invalid={
+                  !isDirty ? undefined : errors.ratingCode ? 'true' : 'false'
+                }
+                {...register('ratingCode', {
+                  required: '상영 등급을 선택해주세요.',
+                })}
+              >
+                {ratingList.map((rating) => {
+                  return <option value={rating.ratingId}>{rating.name}</option>;
+                })}
+              </select>
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>장르</div>
+            </div>
+            <div class='col-sm-9'>
+              {genreList.map((genre) => {
+                return (
+                  <div class='form-check'>
+                    <input
+                      class='form-check-input'
+                      type='checkbox'
+                      value={genre.genreId}
+                      id={genre.genreId}
+                      name='genreCodes'
+                    />
+                    <label class='form-check-label' for={genre.genreId}>
+                      {genre.name}
+                    </label>
                   </div>
-                  <div className='content-text-container'></div>
-                  <button
-                    type='button'
-                    class='btn btn-outline-secondary'
-                    onClick={showOfficialModal}
-                  >
-                    추가
-                  </button>
-                  <Modal
-                    visible={officialModalOpen}
-                    effect='fadeInDown'
-                    onClickAway={closeOfficialModal}
-                  >
-                    <StaffOfficialAddForm />
-                  </Modal>
-                </div>
-                <div className='col-3'>
-                  <input
-                    type='text'
-                    class='form-control'
-                    placeholder='극중 이름 입력'
-                    onChange={(event) => setOfficialInfo(event.target.value)}
-                  />
-                </div>
-                <div className='col-3'>
-                  <button type='button' class='btn btn-secondary'>
-                    주연
-                  </button>
-                  <button
-                    type='button'
-                    class='btn btn-secondary dropdown-toggle dropdown-toggle-split'
-                    data-bs-toggle='dropdown'
-                    aria-expanded='false'
-                  >
-                    <span class='visually-hidden'>Toggle Dropdown</span>
-                  </button>
-                  <ul class='dropdown-menu'>
-                    <li>
-                      <a class='dropdown-item' href='#'>
-                        주연
-                      </a>
-                    </li>
-                    <li>
-                      <a class='dropdown-item' href='#'>
-                        조연
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
-          <div className='col-1'>
-            <button type='button' class='btn btn-secondary'>
-              추가
-            </button>
+          <div className='bottom-container'>
+            <div className='button-container'>
+              <button class='btn btn-secondary' onClick={resetData}>
+                초기화
+              </button>
+              &nbsp; &nbsp; &nbsp;
+              <button
+                type='submit'
+                class='btn btn-success'
+                disabled={!(isDirty && isValid)}
+              >
+                {isLoading ? (
+                  <div className='spinner-border' role='status'>
+                    <span className='sr-only' />
+                  </div>
+                ) : (
+                  <span>등록</span>
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-2' />
-          <div className='col-10'>//선택한 배우 보여주는 곳</div>
-        </div>
-        <div class='row'>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>줄거리</div>
-          </div>
-          <div class='col-sm-9'>
-            <input
-              type='text'
-              class='form-control'
-              value={officialInfo}
-              onChange={(event) => setOfficialInfo(event.target.value)}
-            />
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-sm-2'>
-            <div className='content-text-container'>사진</div>
-          </div>
-          <div class='col-10'>
-            <img src={officialMainImg} style={{ maxWidth: '110px' }}></img>
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-sm-2'></div>
-          <div class='col-9'>
-            <input
-              class='form-control'
-              type='file'
-              id='formFile'
-              placeholder=''
-              onChange={setPreviewImg}
-            />
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-sm-2'></div>
-          <div class='col-sm-9'>
-            <button type='button' class='btn btn-secondary btn-lg'>
-              추가
-            </button>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
-    );
+  );
 }

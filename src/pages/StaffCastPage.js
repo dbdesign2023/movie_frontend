@@ -75,12 +75,12 @@ export default function StaffCastPage() {
         <table class='table table-striped'>
           <thead>
             <tr>
-              <th scope='col'>인물코드</th>
               <th scope='col'>이름</th>
               <th scope='col'>생년월일</th>
               <th scope='col'>국적</th>
-              <th scope='col'>삭제</th>
+              <th scope='col'>사진 보기</th>
               <th scope='col'>수정</th>
+              <th scope='col'>삭제</th>
             </tr>
           </thead>
           <tbody>

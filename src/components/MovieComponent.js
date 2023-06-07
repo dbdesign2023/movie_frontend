@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
 import StaffImageForm from '../form/StaffImageForm';
-import StaffCastModifyForm from '../form/StaffCastModifyForm';
+import StaffMovieModifyForm from '../form/StaffMovieModifyForm';
 
-export default function CastComponent(props) {
-  const cast = props.cast;
-  const setCastList = props.setCastList;
+export default function MovieComponent(props) {
+  const movie = props.movie;
+  const setMovieList = props.setMovieList;
 
   const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [castModifyOpen, setCastModifyOpen] = useState(false);
+  const [movieModifyOpen, setMovieModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
   const showImageModal = () => {
@@ -20,16 +20,16 @@ export default function CastComponent(props) {
     setImageModalOpen(false);
   };
 
-  const showCastModify = () => {
-    setCastModifyOpen(true);
+  const showMovieModify = () => {
+    setMovieModifyOpen(true);
   };
 
-  const closeCastModify = () => {
-    setCastModifyOpen(false);
+  const closeMovieModify = () => {
+    setMovieModifyOpen(false);
   };
 
-  const deleteCast = async (id) => {
-    const api = `/movie/cast/delete?id=${id}`;
+  const deleteMovie = async (id) => {
+    const api = `/movie/movie/delete?id=${id}`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -49,7 +49,7 @@ export default function CastComponent(props) {
       console.log('response', response.data);
 
       alert('삭제되었습니다');
-      setCastList(response.data);
+      setMovieList(response.data);
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -59,13 +59,13 @@ export default function CastComponent(props) {
   };
 
   return (
-    <tr key={cast.castId}>
-      <td>{cast.name}</td>
-      <td>{cast.birthdate}</td>
-      <td>{cast.nationality}</td>
+    <tr key={movie.movieId}>
+      <td>{movie.name}</td>
+      <td>{movie.director.name}</td>
+      <td>{movie.releaseDate}</td>
       <td>
         <button class='btn btn-warning' onClick={showImageModal}>
-          사진
+          포스터
         </button>
         {imageModalOpen && <Modal setImageModalOpen={showImageModal} />}
         <Modal
@@ -75,29 +75,29 @@ export default function CastComponent(props) {
         >
           <StaffImageForm
             closeImageModal={closeImageModal}
-            image={cast.profileImage}
+            image={movie.profileImage}
           />
         </Modal>
       </td>
       <td>
-        <button class='btn btn-warning' onClick={showCastModify}>
+        <button class='btn btn-warning' onClick={showMovieModify}>
           수정
         </button>
-        {castModifyOpen && <Modal setCastModifyOpen={showCastModify} />}
+        {movieModifyOpen && <Modal setMovieModifyOpen={showMovieModify} />}
         <Modal
-          visible={castModifyOpen}
+          visible={movieModifyOpen}
           effect='fadeInDown'
-          onClickAway={closeCastModify}
+          onClickAway={closeMovieModify}
         >
-          <StaffCastModifyForm
-            closeCastModify={closeCastModify}
-            setCastList={setCastList}
-            castId={cast.castId}
+          <StaffMovieModifyForm
+            closeMovieModify={closeMovieModify}
+            setMovieList={setMovieList}
+            movieId={movie.movieId}
           />
         </Modal>
       </td>
       <td>
-        <button class='btn btn-danger' onClick={deleteCast(cast.castId)}>
+        <button class='btn btn-danger' onClick={deleteMovie(movie.movieId)}>
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />

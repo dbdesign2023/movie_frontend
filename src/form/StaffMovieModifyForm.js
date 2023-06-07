@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 import countries from '../constants/country.json';
@@ -6,57 +6,30 @@ import countries from '../constants/country.json';
 import '../styles/components/form-container.scss';
 import '../styles/components/modal-container.scss';
 
-export default function StaffCastModifyForm(props) {
-  const closeCastModify = props.closeCastModify;
-  const setCastList = props.setCastList;
-  const castId = props.castId;
-  const cast = props.cast;
+export default function StaffMovieModifyForm(props) {
+  const closeMovieModal = props.closeMovieModal;
+  const setMovieList = props.setMovieList;
 
-  const [info, setInfo] = useState({});
   const [isLoading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     setValue,
+    resetField,
     formState: { isValid, isDirty, errors },
   } = useForm();
 
-  useEffect(() => {
-    getInfo();
-  }, []);
-
-  const getInfo = async () => {
-    const api = '/movie/cast/detail';
-    const token = localStorage.getItem('staffToken');
-    const options = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    try {
-      console.log('staffToken', token);
-      const response = await serverapi.get(api, options);
-      console.log('response', response.data);
-
-      setInfo(response.data);
-    } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
-    }
-  };
-
   const resetData = () => {
-    setValue('name', info.name);
-    setValue('birthDate', info.birthDate);
-    setValue('nationality', info.nationality);
-    setValue('info', info.info);
-    setValue('profileImage', null);
+    resetField('name');
+    resetField('birthdate');
+    setValue('nationality', 'KR');
+    resetField('info');
+    resetField('profileImage');
   };
 
   const onSubmit = async (data) => {
-    const api = '/movie/cast/modify';
+    const api = '/movie/movie/register';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -78,9 +51,9 @@ export default function StaffCastModifyForm(props) {
       const response = await serverapi.post(api, formData, options);
       console.log('response', response.data);
 
-      closeCastModify();
-      alert('인물이 수정되었습니다');
-      setCastList(response.data);
+      closeMovieModal();
+      alert('인물이 등록되었습니다');
+      setMovieList(response.data);
       resetData();
     } catch (error) {
       console.log(error);
@@ -97,12 +70,15 @@ export default function StaffCastModifyForm(props) {
           type='button'
           class='btn-close'
           aria-label='Close'
-          onClick={closeCastModify}
+          onClick={closeMovieModal}
         ></button>
       </div>
-      <div className='title-text-center-container'>인물 수정</div>
+      <div className='title-text-center-container'>인물 추가</div>
       <div className='form-container'>
-        <form className='staff-cast-add-form' onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className='staff-movie-add-form'
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className='row'>
             <div class='col-sm-3'>
               <div className='content-text-container'>이름</div>
@@ -112,7 +88,6 @@ export default function StaffCastModifyForm(props) {
                 class='form-control'
                 type='text'
                 placeholder='인물 이름을 입력하세요'
-                defaultValue={info.name}
                 aria-invalid={
                   !isDirty ? undefined : errors.name ? 'true' : 'false'
                 }
@@ -136,7 +111,6 @@ export default function StaffCastModifyForm(props) {
                 class='form-control'
                 type='text'
                 placeholder='1970-01-01'
-                defaultValue={info.birthDate}
                 aria-invalid={
                   !isDirty ? undefined : errors.birthDate ? 'true' : 'false'
                 }
@@ -159,7 +133,6 @@ export default function StaffCastModifyForm(props) {
               <input
                 class='form-control'
                 type='file'
-                defaultValue={null}
                 aria-invalid={
                   !isDirty ? undefined : errors.profileImage ? 'true' : 'false'
                 }
@@ -182,12 +155,11 @@ export default function StaffCastModifyForm(props) {
               <select
                 class='form-select'
                 aria-label='Default select example'
-                defaultValue={info.nationality}
                 aria-invalid={
                   !isDirty ? undefined : errors.nationality ? 'true' : 'false'
                 }
                 {...register('nationality', {
-                  required: '이미지 파일을 업로드해주세요.',
+                  required: '국적을 선택해주세요.',
                 })}
               >
                 {Object.entries(countries).map(([key, country]) => {
@@ -204,7 +176,6 @@ export default function StaffCastModifyForm(props) {
               <textarea
                 class='form-control'
                 rows='3'
-                defaultValue={info.info}
                 aria-invalid={
                   !isDirty ? undefined : errors.nationality ? 'true' : 'false'
                 }
