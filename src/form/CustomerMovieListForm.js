@@ -6,9 +6,10 @@ import '../styles/components/form-container.scss';
 import '../styles/components/page-container.scss';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { baseUrl } from './axios';
 
 export default function CustomerMovieListForm() {
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const posterurl = ip+`/api/posters?fileName=`;
     const [allmovie, setAllmovie] = useState();
     const [ticketing, setTicketingOpen] = useState(false);

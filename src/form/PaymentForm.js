@@ -3,6 +3,7 @@ import Modal from 'react-awesome-modal';
 import CustomerTicketForm from './CustomerTicketForm';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from './axios';
 
 export default function PaymentForm() {
     /*
@@ -38,7 +39,7 @@ export default function PaymentForm() {
         discount: "1000KR"
     }
     */
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const navigate = useNavigate();
     const [methodlist, setMethodlist] = useState()
     const [ticket_data, setticketData] = useState()

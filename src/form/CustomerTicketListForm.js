@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import axios from 'axios';
 import CustomerTicketForm from './CustomerTicketForm';
+import { baseUrl } from './axios';
 
 export default function CustomerTicketListForm() {
     /*
@@ -44,7 +45,7 @@ export default function CustomerTicketListForm() {
             startTime:"2023-06-06 09:00:00"
         }])*/
     
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const[tickets, setTickets] = useState()
     const[detail, setDetail] = useState()
     const[modal, setModal] = useState(false)

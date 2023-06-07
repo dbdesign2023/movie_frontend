@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
+import { baseUrl } from './axios';
 
 export default function CustomerRegisterForm() {
+  const ip = baseUrl
   const [name, setName] = useState('');
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -40,7 +42,7 @@ const registerHandler = async () => {
     try {
       const formData = new FormData();
       await new Promise((r) => setTimeout(r, 100));
-      const url = `http://25.14.225.33:8080/customer/signup`;
+      const url = ip+`/customer/signup`;
       formData.append("name", name);
       formData.append("loginId", login_id);
       formData.append("password", password);

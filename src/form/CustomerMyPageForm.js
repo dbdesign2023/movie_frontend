@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import axios from 'axios';
+import { baseUrl } from './axios';
 
 export default function CustomerMyPageForm() {
+    const ip = baseUrl
     const getdata = async()=>{
         try{
             const token = localStorage.getItem('customerToken')
@@ -35,7 +37,7 @@ export default function CustomerMyPageForm() {
                 "Access-Control-Allow-Origin": "*"
                 },
             }
-            const url = `http://localhost:8080/customer/modify`;
+            const url = ip+`/customer/modify`;
             const formData = new FormData();
             formData.append("name", name)
             formData.append("loginId",login_id)

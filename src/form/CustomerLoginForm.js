@@ -7,8 +7,10 @@ import '../styles/components/page-container.scss';
 import axios from 'axios';
 import { AuthContext } from '../services/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from './axios';
 
 export default function CustomerLoginForm() {
+  const ip = baseUrl
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [clickcheck, setClickcheck] = useState(false);
@@ -21,7 +23,7 @@ export default function CustomerLoginForm() {
       try {
         const formData = new FormData();
         await new Promise((r) => setTimeout(r, 100));
-        const url = `http://25.14.225.33:8080/customer/signin`;
+        const url = ip+`/customer/signin`;
         formData.append("loginId", login_id);
         formData.append("password", password);
         const response = await axios.post(url, formData);

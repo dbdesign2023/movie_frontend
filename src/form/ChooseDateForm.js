@@ -6,9 +6,10 @@ import '../styles/components/form-container.scss';
 import '../styles/components/page-container.scss';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { baseUrl } from './axios';
 
 export default function ChooseDateForm(date) {
-    const ip = `http://localhost:8080`;
+    const ip = baseUrl
     const [rundate,setRundate] = useState("")
     const [modalstate,setModalstate] = useState(false)
     const [scheduledata,setScheduledata] = useState();

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Modal from 'react-awesome-modal';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from './axios';
 
 export default function ScheduleWithMovieForm() {
     /*
@@ -77,7 +78,7 @@ export default function ScheduleWithMovieForm() {
       ]
       */
     const movie = JSON.parse(localStorage.getItem("movie"));
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const img = ip+`/api/posters?fileName=`+movie.poster.fileName
     const [schedule, setSchedule] = useState()
     const [scheduledetail, setScheduledetail] = useState()

@@ -9,8 +9,9 @@ import seat_gray from '../img/seat_gray.png'
 import seat_choose from '../img/seat_choosepng.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { baseUrl } from './axios';
 export default function TicketingSeatForm(){
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const modify = localStorage.getItem('modifyticketid')
     const modifysc = localStorage.getItem('modifyscheduleid')
     const getdata = async()=>{

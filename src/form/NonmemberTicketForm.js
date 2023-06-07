@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CustomerTicketForm from './CustomerTicketForm';
 import axios from 'axios';
 import Modal from 'react-awesome-modal';
+import { baseUrl } from './axios';
 
 export default function NonmemberTicketForm() {
     /*
@@ -36,7 +37,7 @@ export default function NonmemberTicketForm() {
         }],
         discount: "1000KR"
     }*/
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const[ticketId, setId] = useState()
     const[password, setPassword] = useState()
     const[detail, setDetail] = useState()
