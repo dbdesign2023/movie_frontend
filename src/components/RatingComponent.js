@@ -53,17 +53,6 @@ export default function RatingComponent(props) {
       <td>{rating.code}</td>
       <td>{rating.name}</td>
       <td>
-        <button class='btn btn-danger' onClick={deleteRating(rating.code)}>
-          {isLoading ? (
-            <div className='spinner-border' role='status'>
-              <span className='sr-only' />
-            </div>
-          ) : (
-            <span>삭제</span>
-          )}
-        </button>
-      </td>
-      <td>
         <button class='btn btn-warning' onClick={showRatingModify}>
           수정
         </button>
@@ -79,6 +68,17 @@ export default function RatingComponent(props) {
             rating={rating}
           />
         </Modal>
+      </td>
+      <td>
+        <button class='btn btn-danger' onClick={deleteRating(rating.code)}>
+          {isLoading ? (
+            <div className='spinner-border' role='status'>
+              <span className='sr-only' />
+            </div>
+          ) : (
+            <span>삭제</span>
+          )}
+        </button>
       </td>
     </tr>
   );

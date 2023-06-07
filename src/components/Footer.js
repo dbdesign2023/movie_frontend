@@ -97,6 +97,15 @@ function StaffLogined() {
         <li class='nav-item'>
           <a
             class='nav-link link-dark px-2 active'
+            href='/staff/image'
+            aria-current='page'
+          >
+            이미지 관리
+          </a>
+        </li>
+        <li class='nav-item'>
+          <a
+            class='nav-link link-dark px-2 active'
             href='/staff/genrerating'
             aria-current='page'
           >

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 
@@ -10,11 +10,12 @@ export default function StaffCastModifyForm(props) {
   const setCastList = props.setCastList;
   const cast = props.cast;
 
+  const [isLoading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     resetField,
-    setValue,
     formState: { isValid, isDirty, errors },
   } = useForm();
 

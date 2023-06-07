@@ -18,6 +18,7 @@ import TicketingPage from './TicketingPage';
 import StaffCastPage from './StaffCastPage';
 import StaffCustomerPage from './StaffCustomerPage';
 import StaffGenreRatingPage from './StaffGenreRatingPage';
+import StaffImagePage from './StaffImagePage';
 import StaffMoviePage from './StaffMoviePage';
 import StaffSchedulePage from './StaffSchedulePage';
 import StaffTheaterPage from './StaffTheaterPage';
@@ -52,6 +53,7 @@ function Router() {
           <Route path='/staff/genrerating' element={<StaffGenreRatingPage />} />
           <Route path='/staff/theater' element={<StaffTheaterPage />} />
           <Route path='/staff/customer' element={<StaffCustomerPage />} />
+          <Route path='/staff/image' element={<StaffImagePage />} />
 
           <Route path='/main' element={<MainPage />} />
           <Route path='/login' element={<CustomerLoginPage />} />

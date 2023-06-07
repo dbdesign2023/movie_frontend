@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
-import StaffCastAddForm from '../form/StaffCastAddForm';
-import CastComponent from '../components/CastComponent';
+import StaffImageAddForm from '../form/StaffImageAddForm';
+import ImageComponent from '../components/ImageComponent';
 
 import '../styles/components/page-container.scss';
 
-export default function StaffCastPage() {
-  const [castModalOpen, setCastModalOpen] = useState(false);
-  const [castList, setCastList] = useState([]);
+export default function StaffImagePage() {
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [imageList, setImageList] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    getCastList();
+    getImageList();
   }, []);
 
-  const getCastList = async () => {
-    const api = '/movie/cast/getList';
+  const getImageList = async () => {
+    const api = '/movie/image/getList';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -30,7 +30,7 @@ export default function StaffCastPage() {
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
-      setCastList(response.data);
+      setImageList(response.data);
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -39,35 +39,35 @@ export default function StaffCastPage() {
     }
   };
 
-  const showCastModal = () => {
-    setCastModalOpen(true);
+  const showImageModal = () => {
+    setImageModalOpen(true);
   };
 
-  const closeCastModal = () => {
-    setCastModalOpen(false);
+  const closeImageModal = () => {
+    setImageModalOpen(false);
   };
 
   return (
     <>
       <div className='add-button-container'>
-        <button class='btn btn-success' onClick={showCastModal}>
+        <button class='btn btn-success' onClick={showImageModal}>
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />
             </div>
           ) : (
-            <span>인물 추가</span>
+            <span>사진 추가</span>
           )}
         </button>
-        {castModalOpen && <Modal setCastModalOpen={showCastModal} />}
+        {imageModalOpen && <Modal setImageModalOpen={showImageModal} />}
         <Modal
-          visible={castModalOpen}
+          visible={imageModalOpen}
           effect='fadeInDown'
-          onClickAway={closeCastModal}
+          onClickAway={closeImageModal}
         >
-          <StaffCastAddForm
-            closeCastModal={closeCastModal}
-            setCastList={setCastList}
+          <StaffImageAddForm
+            closeImageModal={closeImageModal}
+            setImageList={setImageList}
           />
         </Modal>
       </div>
@@ -75,21 +75,20 @@ export default function StaffCastPage() {
         <table class='table table-striped'>
           <thead>
             <tr>
-              <th scope='col'>인물코드</th>
-              <th scope='col'>이름</th>
-              <th scope='col'>생년월일</th>
-              <th scope='col'>국적</th>
+              <th scope='col'>사진코드</th>
+              <th scope='col'>파일 이름</th>
+              <th scope='col'>보기</th>
               <th scope='col'>삭제</th>
               <th scope='col'>수정</th>
             </tr>
           </thead>
           <tbody>
-            {castList.map((cast) => {
+            {imageList.map((image) => {
               return (
-                <CastComponent
-                  key={cast.castId}
-                  cast={cast}
-                  setCastList={setCastList}
+                <ImageComponent
+                  key={image.imageId}
+                  image={image}
+                  setImageList={setImageList}
                 />
               );
             })}

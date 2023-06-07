@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 
@@ -8,21 +8,21 @@ import '../styles/components/modal-container.scss';
 export default function StaffCastAddForm(props) {
   const closeCastModal = props.closeCastModal;
   const setCastList = props.setCastList;
+  const [isLoading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     resetField,
-    setValue,
     formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
     resetField('name');
     resetField('birthdate');
-    resetField('fileName');
-    setValue('nationality', '대한민국');
+    resetField('nationality');
     resetField('info');
+    resetField('profileImage');
   };
 
   const onSubmit = async (data) => {

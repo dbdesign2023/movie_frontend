@@ -3,7 +3,7 @@ import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
 import StaffGenreModifyForm from '../form/StaffGenreModifyForm';
 
-export default function GenreComponent(props) {
+export default function ImageComponent(props) {
   const genre = props.genre;
   const getGenreList = props.getGenreList;
 
