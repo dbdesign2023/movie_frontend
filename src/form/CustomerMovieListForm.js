@@ -65,7 +65,6 @@ export default function CustomerMovieListForm() {
             }
         },200)
     };
-    console.log(movie)
     const getMoviedetail = async(movie)=>{
         try{
             const url = ip+`/movie/detail?id=`+movie.movieId;

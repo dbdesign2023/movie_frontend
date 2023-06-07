@@ -151,7 +151,6 @@ export default function TicketingSeatForm(){
             seatlist = seatlist.filter((element) => element !== string)
             localStorage.setItem('SeatList', JSON.stringify(seatlist));
             setSeat(seat)
-            console.log(seatlist)
           }
         }
       }
@@ -218,6 +217,7 @@ export default function TicketingSeatForm(){
                 header
             )
             localStorage.setItem('ticket_data', JSON.stringify(response.data))
+            localStorage.setItem('nonmempassword', password)
             navigate('/payment')
         }
         catch(error){
@@ -282,7 +282,7 @@ export default function TicketingSeatForm(){
                 alert("알수 없는 에러.")
             localStorage.removeItem('modifyticketid')
             localStorage.removeItem('modifyscheduleid')
-            navigate('/customermovielist')
+            navigate('/')
         }
     }
     const membermodify = async() =>{
@@ -316,7 +316,7 @@ export default function TicketingSeatForm(){
                 alert("알수 없는 에러.")
             localStorage.removeItem('modifyticketid')
             localStorage.removeItem('modifyscheduleid')
-            navigate('/customermovielist')
+            navigate('/')
         }
     }
     const membermodifyhandler = () =>{

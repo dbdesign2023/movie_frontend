@@ -106,7 +106,7 @@ export default function PaymentForm() {
             )
             localStorage.setItem('payment_data', JSON.stringify(response.data))
             alert("결제가 완료되었습니다.")
-            navigate('/customermovielist')
+            navigate('/')
         }
         catch(error){
             if(error.response.data.message)

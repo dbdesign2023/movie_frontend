@@ -54,11 +54,11 @@ export default function ChooseDateForm(date) {
         const pdata = []
         data.map((tmp)=>{
             const schedule_id = tmp.scheduleId
-            const movie_title = tmp.movieDTO.title
+            const movie_title = tmp.movieName
             const theater_name = tmp.theaterDTO.name
             const time = tmp.startTime
             const start_time = time[0].toString()+"-"+time[1].toString()+"-"+time[2].toString()+" "+time[3].toString()+":"+time[4].toString()+":00"
-            const running_time = tmp.movieDTO.runningTime
+            const running_time = tmp.runningTime
             const total_seat = tmp.totalSeat
             const filled_seat = tmp.filledSeat
             pdata.push({

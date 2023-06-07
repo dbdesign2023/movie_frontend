@@ -36,7 +36,6 @@ export default function CustomerRegisterForm() {
 var check_phone_number = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/
 var check_email = /^[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*\.[a-zA-Z]{2,}$/i
 const registerHandler = async () => {
-  console.log(check_phone_number.test(phone_number))
   setClickcheck(true)
   if(name && login_id && password && nickname && birthdate && gender && check_phone_number.test(phone_number) && check_email.test(email)){
     try {
@@ -51,7 +50,6 @@ const registerHandler = async () => {
       formData.append("gender", gender);
       formData.append("phoneNo", phone_number);
       formData.append("email", email);
-      console.log('formData', formData);
       const response = await axios.post(url, formData);
       openmodal()
       } 

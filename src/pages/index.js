@@ -39,9 +39,9 @@ function Router() {
       <Routes>
         {/**any logined or unlogined */}
         <Route>
-          <Route path='/' element={<MoviePage />} />
+          <Route path='/' element={<CustomerMovieListPage />} />
           {/** MoviePage가 메인화면 */}
-          <Route path='/schedule' element={<SchedulePage />} />
+          <Route path='/schedule' element={<ChooseDatePage />} />
           <Route path='/nonmember' element={<NonmemberPage />} />
           <Route path='/mypage' element={<MyPagePage />} />
           <Route path='/ticketing' element={<TicketingPage />} />

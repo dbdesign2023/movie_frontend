@@ -31,7 +31,7 @@ export default function CustomerLoginForm() {
         localStorage.setItem("customerToken", response.data);
         setIsCustomerLogin(true)
         localStorage.setItem("loginId", login_id)
-        navigate('/customermovielist')
+        navigate('/')
       } 
       catch (error) {
         if(error.response.data.message)

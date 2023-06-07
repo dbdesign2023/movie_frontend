@@ -58,6 +58,7 @@ export default function NonmemberTicketForm() {
                 header
             )
             setDetail(response.data)
+            localStorage.setItem("nonmempassword",password)
         }
         catch(error){
             if(error.response.data.message)

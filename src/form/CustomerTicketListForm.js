@@ -84,7 +84,6 @@ export default function CustomerTicketListForm() {
     }
     const getTicketDetail = async(ticket)=>{
         try{
-            console.log(ticket)
             const url = ip+`/ticket/member/detail?ticketId=` + ticket.ticketId;
             const token = localStorage.getItem('customerToken')
             const header = {
@@ -131,7 +130,7 @@ export default function CustomerTicketListForm() {
         if(tickets){
             return(
                 <div className='TicketList'>
-                    예약된 티켓
+                    {tickets.length ? "":"예매된 티켓이 존재하지 않습니다."}
                     {tickets.map((item)=>(
                         <div key={item.ticketId} style={style}>
                             <div style={{width:"100%", padding:10}}>
@@ -168,28 +167,11 @@ export default function CustomerTicketListForm() {
         }
         else{
             return(
-                <div>
+                <h2>
                     로딩 중
-                </div>
+                </h2>
             )
         }
-    }
-    const deleteticket = async()=>{
-        const url = ip+`/ticket/delete?ticketId=4`
-        const token = localStorage.getItem('customerToken')
-        const password = "test1234"
-        const header = {
-            headers: {
-            "Authorization": `Bearer ${token}`,
-            "Access-Control-Allow-Origin": "*"
-            },
-            data: "test1234"
-        }
-        const response = await axios.delete(
-            url,
-            header
-        )
-        console.log(response)
     }
     return (
         <div>
