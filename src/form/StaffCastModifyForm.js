@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 import countries from '../constants/country.json';
@@ -9,74 +9,30 @@ import '../styles/components/modal-container.scss';
 export default function StaffCastModifyForm(props) {
   const closeCastModify = props.closeCastModify;
   const getCastList = props.getCastList;
-  const castId = props.castId;
+  const info = props.info;
 
-  const [info, setInfo] = useState({});
   const [isLoading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { isValid, isDirty, errors },
-  } = useForm();
-
-  useEffect(() => {
-    getInfo();
-  }, []);
-
-  const getInfo = async () => {
-    const api = `/movie/cast/detail?castId=${castId}`;
-    const token = localStorage.getItem('staffToken');
-    const options = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    try {
-      console.log('staffToken', token);
-      const response = await serverapi.get(api, options);
-      console.log('response', response.data);
-
-      setInfo(response.data);
-
-      let tmp = new Date(info.birthDate);
-      info.birthDate =
-        tmp.getFullYear() +
-        '-' +
-        (tmp.getMonth() < 10
-          ? '0' + (tmp.getMonth() + 1)
-          : tmp.getMonth() + 1) +
-        '-' +
-        (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate()) +
-        ' ' +
-        (tmp.getHours() < 10 ? '0' + tmp.getHours() : tmp.getHours()) +
-        ':' +
-        (tmp.getMinutes() < 10 ? '0' + tmp.getMinutes() : tmp.getMinutes()) +
-        ':' +
-        (tmp.getSeconds() < 10 ? '0' + tmp.getSeconds() : tmp.getSeconds());
-    } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
-    }
-  };
-
-  const resetData = () => {
-    setValue('name', info.name);
-    setValue('birthDate', info.birthDate);
-    setValue('nationality', info.nationality);
-    setValue('info', info.info);
-    setValue('profileImage', null);
-  };
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      name: info.name,
+      birthDate: info.birthDate,
+      profileImage: null,
+      nationality: info.nationality,
+      info: info.info,
+    },
+  });
 
   const onSubmit = async (data) => {
+    if (!data.name || !data.birthDate || !data.info) {
+      return;
+    }
+
     const api = '/movie/cast/modify';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
       },
     };
     const formData = new FormData();
@@ -98,7 +54,6 @@ export default function StaffCastModifyForm(props) {
       closeCastModify();
       alert('인물이 수정되었습니다');
       getCastList();
-      resetData();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -130,18 +85,10 @@ export default function StaffCastModifyForm(props) {
                 type='text'
                 placeholder='인물 이름을 입력하세요'
                 defaultValue={info.name}
-                aria-invalid={
-                  !isDirty ? undefined : errors.name ? 'true' : 'false'
-                }
                 {...register('name', {
                   required: '인물 이름을 입력해주세요.',
                 })}
               />
-              {errors.name && (
-                <small role='alert' className='input-alert'>
-                  {errors.name.message}
-                </small>
-              )}
             </div>
           </div>
           <div className='row'>
@@ -154,18 +101,10 @@ export default function StaffCastModifyForm(props) {
                 type='text'
                 placeholder='1970-01-01'
                 defaultValue={info.birthDate}
-                aria-invalid={
-                  !isDirty ? undefined : errors.birthDate ? 'true' : 'false'
-                }
                 {...register('birthDate', {
                   required: '생년월일을 입력해주세요.',
                 })}
               />
-              {errors.birthDate && (
-                <small role='alert' className='input-alert'>
-                  {errors.birthDate.message}
-                </small>
-              )}
             </div>
           </div>
           <div className='row'>
@@ -176,14 +115,8 @@ export default function StaffCastModifyForm(props) {
               <input
                 class='form-control'
                 type='file'
-                placeholder={info.fileName}
                 {...register('profileImage')}
               />
-              {errors.profileImage && (
-                <small role='alert' className='input-alert'>
-                  {errors.profileImage.message}
-                </small>
-              )}
             </div>
           </div>
           <div className='row'>
@@ -195,9 +128,6 @@ export default function StaffCastModifyForm(props) {
                 class='form-select'
                 aria-label='Default select example'
                 defaultValue={info.nationality}
-                aria-invalid={
-                  !isDirty ? undefined : errors.nationality ? 'true' : 'false'
-                }
                 {...register('nationality', {
                   required: '국적을 선택해주세요.',
                 })}
@@ -224,37 +154,21 @@ export default function StaffCastModifyForm(props) {
                 class='form-control'
                 rows='3'
                 defaultValue={info.info}
-                aria-invalid={
-                  !isDirty ? undefined : errors.nationality ? 'true' : 'false'
-                }
                 {...register('info', {
                   required: '인물 설명을 입력해주세요',
                 })}
               />
-              {errors.info && (
-                <small role='alert' className='input-alert'>
-                  {errors.info.message}
-                </small>
-              )}
             </div>
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button class='btn btn-secondary' onClick={resetData}>
-                초기화
-              </button>
-              &nbsp; &nbsp; &nbsp;
-              <button
-                type='submit'
-                class='btn btn-success'
-                disabled={!(isDirty && isValid)}
-              >
+              <button type='submit' class='btn btn-success'>
                 {isLoading ? (
                   <div className='spinner-border' role='status'>
                     <span className='sr-only' />
                   </div>
                 ) : (
-                  <span>등록</span>
+                  <span>수정</span>
                 )}
               </button>
             </div>

@@ -133,9 +133,6 @@ export default function StaffMovieAddForm(props) {
     try {
       setLoading(true);
 
-      const query = 'input[name="genreCodes"]:checked';
-      const selectedEls = document.querySelectorAll(query);
-
       console.log(selectedGenres);
 
       console.log('Request body', data);

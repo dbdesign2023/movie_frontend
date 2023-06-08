@@ -11,9 +11,41 @@ export default function MovieComponent(props) {
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [movieModifyOpen, setMovieModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [info, setInfo] = useState({});
+
+  const getInfo = async () => {
+    const api = `/movie/detail?id=${parseInt(movie.movieId, 10)}`;
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      console.log('staffToken', token);
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      const modifiedData = { ...response.data };
+      let tmp = new Date(modifiedData.releaseDate);
+      modifiedData.releaseDate =
+        tmp.getFullYear() +
+        '-' +
+        (tmp.getMonth() < 9 ? '0' + (tmp.getMonth() + 1) : tmp.getMonth() + 1) +
+        '-' +
+        (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate());
+
+      setInfo(modifiedData);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  };
 
   const showImageModal = () => {
     setImageModalOpen(true);
+    getInfo();
   };
 
   const closeImageModal = () => {
@@ -22,6 +54,7 @@ export default function MovieComponent(props) {
 
   const showMovieModify = () => {
     setMovieModifyOpen(true);
+    getInfo();
   };
 
   const closeMovieModify = () => {
@@ -75,7 +108,8 @@ export default function MovieComponent(props) {
         >
           <StaffImageForm
             closeImageModal={closeImageModal}
-            fileName={movie.fileName}
+            fileURL='/api/posters?fileName='
+            info={info}
           />
         </Modal>
       </td>
@@ -92,7 +126,7 @@ export default function MovieComponent(props) {
           <StaffMovieModifyForm
             closeMovieModify={closeMovieModify}
             getMovieList={getMovieList}
-            movieId={movie.movieId}
+            info={info}
           />
         </Modal>
       </td>

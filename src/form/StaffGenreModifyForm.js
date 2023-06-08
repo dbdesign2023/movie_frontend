@@ -35,15 +35,18 @@ export default function StaffGenreModifyForm(props) {
 
     try {
       setLoading(true);
-      console.log('Request body', data);
+      const updatedData = {
+        ...data,
+        code: genre.code,
+      };
+      console.log('Request body', updatedData);
 
-      const response = await serverapi.post(api, data, options);
+      const response = await serverapi.post(api, updatedData, options);
       console.log('response', response.data);
 
       closeGenreModify();
       alert('수정되었습니다');
       getGenreList();
-      resetData();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -102,7 +105,11 @@ export default function StaffGenreModifyForm(props) {
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button class='btn btn-secondary' onClick={resetData}>
+              <button
+                type='button'
+                class='btn btn-secondary'
+                onClick={resetData}
+              >
                 되돌리기
               </button>
               &nbsp; &nbsp; &nbsp;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 import countries from '../constants/country.json';
@@ -7,29 +7,117 @@ import '../styles/components/form-container.scss';
 import '../styles/components/modal-container.scss';
 
 export default function StaffMovieModifyForm(props) {
-  const closeMovieModal = props.closeMovieModal;
-  const setMovieList = props.setMovieList;
+  const closeMovieModify = props.closeMovieModify;
+  const getMovieList = props.getMovieList;
+  const info = props.info;
 
+  const [castList, setCastList] = useState([]);
+  const [ratingList, setRatingList] = useState([]);
+  const [genreList, setGenreList] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    resetField,
-    formState: { isValid, isDirty, errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      title: info.title,
+      releaseDate: info.releaseDate,
+      runningTime: info.runningTime,
+      info: info.info,
+      poster: null,
+      countryCode: info.countryCode,
+      language: info.language,
+      directorId: info.directorId,
+      ratingCode: info.ratingCode,
+      genreCodes: info.genreCodes,
+    },
+  });
 
-  const resetData = () => {
-    resetField('name');
-    resetField('birthdate');
-    setValue('nationality', 'KR');
-    resetField('info');
-    resetField('profileImage');
+  useEffect(() => {
+    getCastList();
+    getRatingList();
+    getGenreList();
+  }, []);
+
+  const getCastList = async () => {
+    const api = '/movie/cast/getList';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      setCastList(response.data);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  };
+
+  const getRatingList = async () => {
+    const api = '/movie/rating/list';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      setRatingList(response.data);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  };
+
+  const getGenreList = async () => {
+    const api = '/movie/genre/list';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      setGenreList(response.data);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  };
+
+  const handleCheckboxChange = (event) => {
+    const genreCode = event.target.value;
+    const isChecked = event.target.checked;
+
+    if (isChecked) {
+      // 선택된 항목을 추가합니다.
+      setSelectedGenres((prevSelectedGenres) => [
+        ...prevSelectedGenres,
+        genreCode,
+      ]);
+    } else {
+      // 선택 해제된 항목을 제외합니다.
+      setSelectedGenres((prevSelectedGenres) =>
+        prevSelectedGenres.filter((code) => code !== genreCode),
+      );
+    }
   };
 
   const onSubmit = async (data) => {
-    const api = '/movie/movie/register';
+    const api = '/movie/modify';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -40,21 +128,27 @@ export default function StaffMovieModifyForm(props) {
 
     try {
       setLoading(true);
+
+      console.log(selectedGenres);
+
       console.log('Request body', data);
-      formData.append('name', data.name);
-      formData.append('birthDate', data.birthDate);
-      formData.append('profileImage', data.profileImage);
-      formData.append('nationality', data.nationality);
+      formData.append('title', data.title);
+      formData.append('releaseDate', data.releaseDate);
+      formData.append('runngingTime', data.runngingTime);
       formData.append('info', data.info);
-      console.log('Request body', formData);
+      formData.append('countryCode', data.countryCode);
+      formData.append('language', data.language);
+      if (data.poster !== null) formData.append('poster', data.poster[0]);
+      formData.append('directorId', data.directorId);
+      formData.append('ratingCode', data.ratingCode);
+      formData.append('genreCodes', selectedGenres);
 
       const response = await serverapi.post(api, formData, options);
       console.log('response', response.data);
 
-      closeMovieModal();
-      alert('인물이 등록되었습니다');
-      setMovieList(response.data);
-      resetData();
+      closeMovieModify();
+      alert('영화가 수정되었습니다');
+      getMovieList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -70,10 +164,10 @@ export default function StaffMovieModifyForm(props) {
           type='button'
           class='btn-close'
           aria-label='Close'
-          onClick={closeMovieModal}
+          onClick={closeMovieModify}
         ></button>
       </div>
-      <div className='title-text-center-container'>인물 추가</div>
+      <div className='title-text-center-container'>영화 수정</div>
       <div className='form-container'>
         <form
           className='staff-movie-add-form'
@@ -81,91 +175,50 @@ export default function StaffMovieModifyForm(props) {
         >
           <div className='row'>
             <div class='col-sm-3'>
-              <div className='content-text-container'>이름</div>
+              <div className='content-text-container'>제목</div>
             </div>
             <div class='col-sm-9'>
               <input
                 class='form-control'
                 type='text'
-                placeholder='인물 이름을 입력하세요'
-                aria-invalid={
-                  !isDirty ? undefined : errors.name ? 'true' : 'false'
-                }
-                {...register('name', {
-                  required: '인물 이름을 입력해주세요.',
+                placeholder='영화 제목을 입력하세요'
+                defaultValue={info.title}
+                {...register('title', {
+                  required: '영화 제목을 입력해주세요.',
                 })}
               />
-              {errors.name && (
-                <small role='alert' className='input-alert'>
-                  {errors.name.message}
-                </small>
-              )}
             </div>
           </div>
           <div className='row'>
             <div class='col-sm-3'>
-              <div className='content-text-container'>생년월일</div>
+              <div className='content-text-container'>개봉일</div>
             </div>
             <div class='col-sm-9'>
               <input
                 class='form-control'
                 type='text'
                 placeholder='1970-01-01'
-                aria-invalid={
-                  !isDirty ? undefined : errors.birthDate ? 'true' : 'false'
-                }
-                {...register('birthDate', {
-                  required: '생년월일을 입력해주세요.',
+                defaultValue={info.releaseDate}
+                {...register('releaseDate', {
+                  required: '개봉일을 입력해주세요.',
                 })}
               />
-              {errors.birthDate && (
-                <small role='alert' className='input-alert'>
-                  {errors.birthDate.message}
-                </small>
-              )}
             </div>
           </div>
           <div className='row'>
             <div class='col-sm-3'>
-              <div className='content-text-container'>사진</div>
+              <div className='content-text-container'>상영 시간</div>
             </div>
             <div class='col-sm-9'>
               <input
                 class='form-control'
-                type='file'
-                aria-invalid={
-                  !isDirty ? undefined : errors.profileImage ? 'true' : 'false'
-                }
-                {...register('profileImage', {
-                  required: '이미지 파일을 업로드해주세요.',
+                type='number'
+                placeholder='상영 시간을 입력하세요'
+                defaultValue={info.runningTime}
+                {...register('runngingTime', {
+                  required: '상영 시간을 입력하세요.',
                 })}
               />
-              {errors.profileImage && (
-                <small role='alert' className='input-alert'>
-                  {errors.profileImage.message}
-                </small>
-              )}
-            </div>
-          </div>
-          <div className='row'>
-            <div class='col-sm-3'>
-              <div className='content-text-container'>국적</div>
-            </div>
-            <div class='col-sm-9'>
-              <select
-                class='form-select'
-                aria-label='Default select example'
-                aria-invalid={
-                  !isDirty ? undefined : errors.nationality ? 'true' : 'false'
-                }
-                {...register('nationality', {
-                  required: '국적을 선택해주세요.',
-                })}
-              >
-                {Object.entries(countries).map(([key, country]) => {
-                  return <option value={key}>{country.CountryNameKR}</option>;
-                })}
-              </select>
             </div>
           </div>
           <div className='row'>
@@ -176,37 +229,144 @@ export default function StaffMovieModifyForm(props) {
               <textarea
                 class='form-control'
                 rows='3'
-                aria-invalid={
-                  !isDirty ? undefined : errors.nationality ? 'true' : 'false'
-                }
+                defaultValue={info.info}
                 {...register('info', {
                   required: '인물 설명을 입력해주세요',
                 })}
               />
-              {errors.info && (
-                <small role='alert' className='input-alert'>
-                  {errors.info.message}
-                </small>
-              )}
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>배급사 국가</div>
+            </div>
+            <div class='col-sm-9'>
+              <select
+                class='form-select'
+                aria-label='Default select example'
+                {...register('countryCode', {
+                  required: '나라를 선택해주세요.',
+                })}
+              >
+                {Object.entries(countries).map(([key, country]) => {
+                  if (key === info.countryCode)
+                    return (
+                      <option value={key} selected>
+                        {country.CountryNameKR}
+                      </option>
+                    );
+                  else
+                    return <option value={key}>{country.CountryNameKR}</option>;
+                })}
+              </select>
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>언어</div>
+            </div>
+            <div class='col-sm-9'>
+              <input
+                class='form-control'
+                type='text'
+                defaultValue={info.language}
+                placeholder='언어를 입력하세요'
+                {...register('language', {
+                  required: '언어를 입력하세요.',
+                })}
+              />
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>포스터</div>
+            </div>
+            <div class='col-sm-9'>
+              <input class='form-control' type='file' {...register('poster')} />
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>감독</div>
+            </div>
+            <div class='col-sm-9'>
+              <select
+                class='form-select'
+                aria-label='Default select example'
+                {...register('directorId', {
+                  required: '감독을 선택해주세요.',
+                })}
+              >
+                {castList.map((cast) => {
+                  if (cast.castId === info.directorId)
+                    return (
+                      <option value={cast.castId} selected>
+                        {cast.name}
+                      </option>
+                    );
+                  else return <option value={cast.castId}>{cast.name}</option>;
+                })}
+              </select>
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>등급</div>
+            </div>
+            <div class='col-sm-9'>
+              <select
+                class='form-select'
+                aria-label='Default select example'
+                {...register('ratingCode', {
+                  required: '상영 등급을 선택해주세요.',
+                })}
+              >
+                {ratingList.map((rating) => {
+                  if (rating.code === info.ratingCode)
+                    return (
+                      <option value={rating.code} selected>
+                        {rating.name}
+                      </option>
+                    );
+                  return <option value={rating.code}>{rating.name}</option>;
+                })}
+              </select>
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>장르</div>
+            </div>
+            <div class='col-sm-9'>
+              {genreList.map((genre) => {
+                return (
+                  <div key={genre.code} className='form-check'>
+                    <input
+                      className='form-check-input'
+                      type='checkbox'
+                      value={genre.code}
+                      id={genre.code}
+                      name='genreCodes'
+                      onChange={handleCheckboxChange}
+                      checked={selectedGenres.includes(genre.code)}
+                    />
+                    <label className='form-check-label' htmlFor={genre.code}>
+                      {genre.name}
+                    </label>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button class='btn btn-secondary' onClick={resetData}>
-                초기화
-              </button>
-              &nbsp; &nbsp; &nbsp;
-              <button
-                type='submit'
-                class='btn btn-success'
-                disabled={!(isDirty && isValid)}
-              >
+              <button type='submit' class='btn btn-success'>
                 {isLoading ? (
                   <div className='spinner-border' role='status'>
                     <span className='sr-only' />
                   </div>
                 ) : (
-                  <span>등록</span>
+                  <span>수정</span>
                 )}
               </button>
             </div>

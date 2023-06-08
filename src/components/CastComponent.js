@@ -11,9 +11,41 @@ export default function CastComponent(props) {
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [castModifyOpen, setCastModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [info, setInfo] = useState({});
+
+  const getInfo = async () => {
+    const api = `/movie/cast/detail?castId=${parseInt(cast.castId, 10)}`;
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      console.log('staffToken', token);
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      const modifiedData = { ...response.data };
+      let tmp = new Date(modifiedData.birthDate);
+      modifiedData.birthDate =
+        tmp.getFullYear() +
+        '-' +
+        (tmp.getMonth() < 9 ? '0' + (tmp.getMonth() + 1) : tmp.getMonth() + 1) +
+        '-' +
+        (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate());
+
+      setInfo(modifiedData);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  };
 
   const showImageModal = () => {
     setImageModalOpen(true);
+    getInfo();
   };
 
   const closeImageModal = () => {
@@ -22,6 +54,7 @@ export default function CastComponent(props) {
 
   const showCastModify = () => {
     setCastModifyOpen(true);
+    getInfo();
   };
 
   const closeCastModify = () => {
@@ -29,6 +62,7 @@ export default function CastComponent(props) {
   };
 
   const deleteCast = async (id) => {
+    console.log('id', id);
     const api = `/movie/cast/delete?castId=${id}`;
     const token = localStorage.getItem('staffToken');
     const options = {
@@ -75,7 +109,8 @@ export default function CastComponent(props) {
         >
           <StaffImageForm
             closeImageModal={closeImageModal}
-            fileName={cast.fileName}
+            fileURL='/api/profileImage?fileName='
+            info={info}
           />
         </Modal>
       </td>
@@ -92,7 +127,7 @@ export default function CastComponent(props) {
           <StaffCastModifyForm
             closeCastModify={closeCastModify}
             getCastList={getCastList}
-            castId={cast.castId}
+            info={info}
           />
         </Modal>
       </td>

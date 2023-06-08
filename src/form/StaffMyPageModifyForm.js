@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 
@@ -8,10 +8,10 @@ import '../styles/components/modal-container.scss';
 export default function StaffMypageModifyForm(props) {
   const closeMypageModify = props.closeMypageModify;
   const Logout = props.Logout;
-  const [info, setInfo] = useState({});
+  const info = props.info;
+
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
-
   const [isLoading, setLoading] = useState(false);
   const [isLoading2, setLoading2] = useState(false);
 
@@ -22,31 +22,9 @@ export default function StaffMypageModifyForm(props) {
     formState: { isValid, isDirty, errors },
   } = useForm();
 
-  useEffect(() => {
-    getInfo();
-    //setInfo({ name: 'd', loginId: 'd', password: 'd' });
-  }, []);
-
-  const getInfo = async () => {
-    const api = '/admin/detail';
-    const token = localStorage.getItem('staffToken');
-    const options = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    try {
-      console.log('staffToken', token);
-      const response = await serverapi.get(api, options);
-      console.log('response', response.data);
-
-      setInfo(response.data);
-    } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
-    }
-  };
+  if (!info) {
+    return null;
+  }
 
   const resetData = () => {
     setValue('name', info.name);
@@ -118,7 +96,6 @@ export default function StaffMypageModifyForm(props) {
         const response = await serverapi.post(api, data, options);
         console.log('response', response.data);
 
-        getInfo();
         closeMypageModify();
         alert('회원 정보가 수정되었습니다');
         resetData();
@@ -154,9 +131,6 @@ export default function StaffMypageModifyForm(props) {
                 type='text'
                 placeholder='이름을 입력하세요'
                 defaultValue={info.name}
-                aria-invalid={
-                  !isDirty ? undefined : errors.name ? 'true' : 'false'
-                }
                 {...register('name', {
                   required: '이름을 입력해주세요.',
                 })}

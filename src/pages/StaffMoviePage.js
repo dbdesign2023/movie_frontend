@@ -8,14 +8,19 @@ import '../styles/components/page-container.scss';
 
 export default function StaffMoviePage() {
   const [movieModalOpen, setMovieModalOpen] = useState(false);
+  const [preMovieList, setPreMovieList] = useState([]);
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    getMovieList();
+    getPreMovieList();
   }, []);
 
-  const getMovieList = async () => {
+  useEffect(() => {
+    console.log('movieList', movieList);
+  }, [movieList]);
+
+  const getPreMovieList = async () => {
     const api = '/movie/all';
     const token = localStorage.getItem('staffToken');
     const options = {
@@ -30,7 +35,21 @@ export default function StaffMoviePage() {
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
-      setMovieList(response.data);
+      const updatedMovieList = response.data.map((movie) => {
+        let tmp = new Date(movie.releaseDate);
+        movie.releaseDate =
+          tmp.getFullYear() +
+          '-' +
+          (tmp.getMonth() < 9
+            ? '0' + (tmp.getMonth() + 1)
+            : tmp.getMonth() + 1) +
+          '-' +
+          (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate());
+        return movie;
+      });
+
+      setPreMovieList(response.data);
+      setMovieList(updatedMovieList);
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -67,7 +86,7 @@ export default function StaffMoviePage() {
         >
           <StaffMovieAddForm
             closeMovieModal={closeMovieModal}
-            getMovieList={getMovieList}
+            getMovieList={getPreMovieList}
           />
         </Modal>
       </div>
@@ -89,7 +108,7 @@ export default function StaffMoviePage() {
                 <MovieComponent
                   key={movie.movieId}
                   movie={movie}
-                  getMovieList={getMovieList}
+                  getMovieList={getPreMovieList}
                 />
               );
             })}

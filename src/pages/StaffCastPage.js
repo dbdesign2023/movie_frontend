@@ -8,14 +8,19 @@ import '../styles/components/page-container.scss';
 
 export default function StaffCastPage() {
   const [castModalOpen, setCastModalOpen] = useState(false);
+  const [preCastList, setPreCastList] = useState([]);
   const [castList, setCastList] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    getCastList();
+    getPreCastList();
   }, []);
 
-  const getCastList = async () => {
+  useEffect(() => {
+    console.log('castList', castList);
+  }, [castList]);
+
+  const getPreCastList = async () => {
     const api = '/movie/cast/getList';
     const token = localStorage.getItem('staffToken');
     const options = {
@@ -30,25 +35,21 @@ export default function StaffCastPage() {
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
-      setCastList(response.data);
-      castList.map((cast) => {
+      const updatedCastList = response.data.map((cast) => {
         let tmp = new Date(cast.birthDate);
         cast.birthDate =
           tmp.getFullYear() +
           '-' +
-          (tmp.getMonth() < 10
+          (tmp.getMonth() < 9
             ? '0' + (tmp.getMonth() + 1)
             : tmp.getMonth() + 1) +
           '-' +
-          (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate()) +
-          ' ' +
-          (tmp.getHours() < 10 ? '0' + tmp.getHours() : tmp.getHours()) +
-          ':' +
-          (tmp.getMinutes() < 10 ? '0' + tmp.getMinutes() : tmp.getMinutes()) +
-          ':' +
-          (tmp.getSeconds() < 10 ? '0' + tmp.getSeconds() : tmp.getSeconds());
-        console.log('castList', castList);
+          (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate());
+        return cast;
       });
+
+      setPreCastList(response.data);
+      setCastList(updatedCastList);
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -85,7 +86,7 @@ export default function StaffCastPage() {
         >
           <StaffCastAddForm
             closeCastModal={closeCastModal}
-            getCastList={getCastList}
+            getCastList={getPreCastList}
           />
         </Modal>
       </div>
@@ -107,7 +108,7 @@ export default function StaffCastPage() {
                 <CastComponent
                   key={cast.castId}
                   cast={cast}
-                  getCastList={getCastList}
+                  getCastList={getPreCastList}
                 />
               );
             })}
