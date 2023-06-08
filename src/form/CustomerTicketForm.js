@@ -75,7 +75,8 @@ export default function CustomerTicketForm(props) {
                 const header = {
                     headers: {
                     "Authorization": `Bearer ${token}`,
-                    "Access-Control-Allow-Origin": "*"
+                    "Access-Control-Allow-Origin": "*",
+                    "ngrok-skip-browser-warning": true
                     },
                     data: password
                 }
@@ -89,7 +90,8 @@ export default function CustomerTicketForm(props) {
             else{
                 const header = {
                     headers: {
-                    "Access-Control-Allow-Origin": "*"
+                    "Access-Control-Allow-Origin": "*",
+                    "ngrok-skip-browser-warning": true
                     },
                     data: password
                 }

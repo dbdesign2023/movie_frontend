@@ -22,7 +22,8 @@ export default function CustomerMovieListForm() {
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.get(
@@ -43,7 +44,7 @@ export default function CustomerMovieListForm() {
     },[])
     useEffect(()=>{
         if(movie){
-            getMoviedetail(movie).then((tmp)=>{setMoviedetail(tmp)})
+            getMoviedetail(movie)
         }
     },[movie])
     useEffect(()=>{
@@ -72,14 +73,30 @@ export default function CustomerMovieListForm() {
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.get(
                 url,
                 header
             )
-            return response.data
+            let data = response.data
+            let tmp = new Date(data.releaseDate)
+            data.releaseDate = tmp.getFullYear()+"-"+(tmp.getMonth()<10?"0"+(tmp.getMonth()+1):(tmp.getMonth()+1))+"-"+(tmp.getDate()<10?"0"+tmp.getDate():tmp.getDate());
+            tmp = new Date(data.director.birthDate)
+            data.director.birthDate = tmp.getFullYear()+"-"+(tmp.getMonth()<10?"0"+(tmp.getMonth()+1):(tmp.getMonth()+1))+"-"+(tmp.getDate()<10?"0"+tmp.getDate():tmp.getDate());
+            let genrestring = ""
+            data.genreList.map((item)=>{
+                if(genrestring===""){
+                    genrestring += item
+                }
+                else{
+                    genrestring += ", "+item
+                }
+            })
+            data.genrestring = genrestring
+            setMoviedetail(data)
         }
         catch (error) {
             if(error.response.data.message)
@@ -93,6 +110,10 @@ export default function CustomerMovieListForm() {
         localStorage.setItem("movie", JSON.stringify(moviedetail))
         navigate('/schedulewithmovie')
     };
+    const gotodetailpage = ()=>{
+        localStorage.setItem("detailmovie",JSON.stringify(moviedetail))
+        navigate('/moviedetail')
+    }
     const moviedetailpage = () =>{
         if(moviedetail){
             return(            
@@ -121,12 +142,13 @@ export default function CustomerMovieListForm() {
                                 </div>
                             </div>
                         </div>
-                        <img src={posterurl+moviedetail.poster.fileName} className='w-100' alt='poster_image'/>
+                        <img src={posterurl+moviedetail.poster.fileName} style={{width:400}} alt='poster_image'/>
                         <h4>
                             {moviedetail.info}
                         </h4>
                         <div className='bottom-container'>
                             <div className='button-container'>
+                                <button type="button" className="btn btn-primary m-1" onClick={gotodetailpage}>영화 상세정보 보기</button>
                                 <button type="button" className="btn btn-primary m-1" onClick={gototicketingpage}>예매하러 가기</button>
                                 <button type="button" className="btn btn-secondary m-1" onClick={closeModal}>닫기</button>
                             </div>

@@ -24,9 +24,15 @@ export default function CustomerLoginForm() {
         const formData = new FormData();
         await new Promise((r) => setTimeout(r, 100));
         const url = ip+`/customer/signin`;
+        const header = {
+          headers: {
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": true
+          },
+      }
         formData.append("loginId", login_id);
         formData.append("password", password);
-        const response = await axios.post(url, formData);
+        const response = await axios.post(url, formData, header);
         localStorage.clear()
         localStorage.setItem("customerToken", response.data);
         setIsCustomerLogin(true)

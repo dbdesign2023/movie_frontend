@@ -21,7 +21,8 @@ export default function ChooseDateForm(date) {
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const url = ip+`/schedule/date/`+date;
@@ -201,6 +202,7 @@ export default function ChooseDateForm(date) {
                 </div>
                 <div className='row justify-content-evenly'>
                     {rundate === "" && <div>날짜를 선택해주세요</div>}
+                    {rundate === "" || pdata && pdata.length ? "":<div>해당 일자에 상영 예정인 영화가 없습니다.</div>}
                     {pdata && rundate !== "" && pdata.map((item, idx)=>(
                         <div key={idx} className='row'>
                             <h3>

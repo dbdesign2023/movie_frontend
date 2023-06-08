@@ -50,7 +50,8 @@ export default function NonmemberTicketForm() {
             const url = ip+`/ticket/nonmember/detail?ticketId=`+ticketId+`&password=`+password;
             const header = {
                 headers: {
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.get(

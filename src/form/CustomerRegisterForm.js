@@ -42,6 +42,12 @@ const registerHandler = async () => {
       const formData = new FormData();
       await new Promise((r) => setTimeout(r, 100));
       const url = ip+`/customer/signup`;
+      const header = {
+        headers: {
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": true
+        },
+    }
       formData.append("name", name);
       formData.append("loginId", login_id);
       formData.append("password", password);
@@ -50,7 +56,7 @@ const registerHandler = async () => {
       formData.append("gender", gender);
       formData.append("phoneNo", phone_number);
       formData.append("email", email);
-      const response = await axios.post(url, formData);
+      const response = await axios.post(url, formData, header);
       openmodal()
       } 
     catch (error) {

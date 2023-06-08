@@ -88,7 +88,8 @@ export default function ScheduleWithMovieForm() {
             const url = ip+`/schedule/movie/`+movie.movieId;
             const header = {
                 headers: {
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.get(

@@ -32,14 +32,16 @@ export default function TicketingSeatForm(){
                 header = {
                     headers: {
                     "Authorization": `Bearer ${token}`,
-                    "Access-Control-Allow-Origin": "*"
+                    "Access-Control-Allow-Origin": "*",
+                    "ngrok-skip-browser-warning": true
                     },
                 }
             }
             else{
                 header = {
                     headers: {
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "ngrok-skip-browser-warning": true
                         },
                 }
             }
@@ -167,7 +169,8 @@ export default function TicketingSeatForm(){
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.post(
@@ -208,7 +211,8 @@ export default function TicketingSeatForm(){
             const url = ip+`/ticket/reservation`;
             const header = {
                 headers: {
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.post(
@@ -264,7 +268,8 @@ export default function TicketingSeatForm(){
             const url = ip+`/ticket/nonmember/modify`;
             const header = {
                 headers: {
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.post(
@@ -298,7 +303,8 @@ export default function TicketingSeatForm(){
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.post(

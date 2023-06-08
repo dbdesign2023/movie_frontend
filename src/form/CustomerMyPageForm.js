@@ -2,19 +2,22 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import axios from 'axios';
 import { baseUrl } from './axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function CustomerMyPageForm() {
     const ip = baseUrl
+    const [deletemodal,setDeleteModal] = useState(false)
     const getdata = async()=>{
         try{
             const token = localStorage.getItem('customerToken')
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
-            const url = `http://localhost:8080/customer/getCustomerData`;
+            const url = ip+`/customer/getCustomerData`;
             const response = await axios.get(
                 url,
                 header
@@ -34,7 +37,8 @@ export default function CustomerMyPageForm() {
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const url = ip+`/customer/modify`;
@@ -80,6 +84,7 @@ export default function CustomerMyPageForm() {
     const [point, setPoint] = useState();
     const [modalstate, setModalstate] = useState(false)
     const [checkstate, setCheckstate] = useState(false)
+    const [password, setPassword] = useState()
         const clickHandler = ()=>{
         setModalstate(true)
     }
@@ -97,6 +102,48 @@ export default function CustomerMyPageForm() {
         else{
             setCheckstate(true)
             closeModal()
+        }
+    }
+    const navigate = useNavigate();
+    const deletemember = async()=>{
+        try{
+            const url = ip+`/customer/delete`
+            const token = localStorage.getItem('customerToken')
+            let response
+            const header = {
+                headers: {
+                "Authorization": `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
+                },
+                data: password
+            }
+            response = await axios.delete(
+                url,
+                header
+            )
+            alert("탈퇴가 완료되었습니다.")
+            navigate('/login')
+        }
+        catch(error){
+            if(error.response.data.message)
+                alert(error.response.data.message)
+            else
+                alert("알수 없는 에러.")
+        }
+    }
+    const closeDeleteModal = ()=>{
+        setDeleteModal(false)
+    }
+    const deleteclickHandler = ()=>{
+        setDeleteModal(true)
+    }
+    const deletehandler = ()=>{
+        if(password){
+            deletemember()
+        }
+        else{
+            alert("비밀번호를 입력해야합니다.")
         }
     }
     return (
@@ -176,7 +223,32 @@ export default function CustomerMyPageForm() {
                     <button className="btn btn-secondary m-1" onClick={closeModal}>닫기</button>
                 </div>
         </Modal>
+        <Modal
+                    visible={deletemodal}
+                    effect='fadeInDown'
+                    onClickAway={closeDeleteModal}
+                    width="600">
+                    <div>
+                        <div className='content-text-container'>비밀번호를 입력하세요.</div>
+                    </div>
+                    <div style={{padding:10}}>
+                        <input
+                        type='password'
+                        className='form-control'
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        />
+                    </div>
+                    <button
+                        type='button'
+                        className='btn btn-danger m-1'
+                        onClick={deletehandler}
+                    >
+                        회원 탈퇴하기
+                    </button>
+                </Modal>
         <button className="btn btn-primary m-1" onClick={clickHandler}>수정하기</button>
+        <button className="btn btn-danger m-1" onClick={deleteclickHandler}>회원 탈퇴</button>
     </div>
   );
 }
