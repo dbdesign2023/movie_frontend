@@ -32,6 +32,7 @@ import CustomerTicketForm from '../form/CustomerTicketForm';
 import CustomerPaymentPage from './CustomerPaymentPage';
 import CustomerTicketListPage from './CustomerTicketListPage';
 import ScheduleWithMoviePage from './ScheduleWithMoviePage';
+import MovieDetailPage from './MovieDetailPage';
 
 function Router() {
   return (
@@ -39,9 +40,9 @@ function Router() {
       <Routes>
         {/**any logined or unlogined */}
         <Route>
-          <Route path='/' element={<MoviePage />} />
+          <Route path='/' element={<CustomerMovieListPage />} />
           {/** MoviePage가 메인화면 */}
-          <Route path='/schedule' element={<SchedulePage />} />
+          <Route path='/schedule' element={<ChooseDatePage />} />
           <Route path='/nonmember' element={<NonmemberPage />} />
           <Route path='/mypage' element={<MyPagePage />} />
           <Route path='/ticketing' element={<TicketingPage />} />
@@ -56,11 +57,6 @@ function Router() {
           <Route path='/main' element={<MainPage />} />
           <Route path='/login' element={<CustomerLoginPage />} />
           <Route path='/signup' element={<CustomerRegisterPage />} />
-          <Route
-            path='/customermovielist'
-            element={<CustomerMovieListPage />}
-          />
-          <Route path='/choosedate' element={<ChooseDatePage />} />
           <Route path='/chooseseat' element={<ChooseSeatPage />} />
           <Route path='/payment' element={<CustomerPaymentPage />} />
           <Route path='/ticketlist' element={<CustomerTicketListPage />} />
@@ -68,7 +64,7 @@ function Router() {
             path='/schedulewithmovie'
             element={<ScheduleWithMoviePage />}
           />
-          <Route path='/test' element={<CustomerTicketForm />} />
+          <Route path='/moviedetail' element={<MovieDetailPage />}/>
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>

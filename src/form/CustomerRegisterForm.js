@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
+import { baseUrl } from './axios';
 
 export default function CustomerRegisterForm() {
+  const ip = baseUrl
   const [name, setName] = useState('');
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -34,13 +36,18 @@ export default function CustomerRegisterForm() {
 var check_phone_number = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/
 var check_email = /^[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*\.[a-zA-Z]{2,}$/i
 const registerHandler = async () => {
-  console.log(check_phone_number.test(phone_number))
   setClickcheck(true)
   if(name && login_id && password && nickname && birthdate && gender && check_phone_number.test(phone_number) && check_email.test(email)){
     try {
       const formData = new FormData();
       await new Promise((r) => setTimeout(r, 100));
-      const url = `http://25.14.225.33:8080/customer/signup`;
+      const url = ip+`/customer/signup`;
+      const header = {
+        headers: {
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": true
+        },
+    }
       formData.append("name", name);
       formData.append("loginId", login_id);
       formData.append("password", password);
@@ -49,8 +56,7 @@ const registerHandler = async () => {
       formData.append("gender", gender);
       formData.append("phoneNo", phone_number);
       formData.append("email", email);
-      console.log('formData', formData);
-      const response = await axios.post(url, formData);
+      const response = await axios.post(url, formData, header);
       openmodal()
       } 
     catch (error) {

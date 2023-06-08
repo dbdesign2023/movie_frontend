@@ -7,8 +7,10 @@ import '../styles/components/page-container.scss';
 import axios from 'axios';
 import { AuthContext } from '../services/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from './axios';
 
 export default function CustomerLoginForm() {
+  const ip = baseUrl
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [clickcheck, setClickcheck] = useState(false);
@@ -21,15 +23,21 @@ export default function CustomerLoginForm() {
       try {
         const formData = new FormData();
         await new Promise((r) => setTimeout(r, 100));
-        const url = `http://25.14.225.33:8080/customer/signin`;
+        const url = ip+`/customer/signin`;
+        const header = {
+          headers: {
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": true
+          },
+      }
         formData.append("loginId", login_id);
         formData.append("password", password);
-        const response = await axios.post(url, formData);
+        const response = await axios.post(url, formData, header);
         localStorage.clear()
         localStorage.setItem("customerToken", response.data);
         setIsCustomerLogin(true)
         localStorage.setItem("loginId", login_id)
-        navigate('/customermovielist')
+        navigate('/')
       } 
       catch (error) {
         if(error.response.data.message)

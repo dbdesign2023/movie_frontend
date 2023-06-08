@@ -6,9 +6,10 @@ import '../styles/components/form-container.scss';
 import '../styles/components/page-container.scss';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { baseUrl } from './axios';
 
 export default function ChooseDateForm(date) {
-    const ip = `http://localhost:8080`;
+    const ip = baseUrl
     const [rundate,setRundate] = useState("")
     const [modalstate,setModalstate] = useState(false)
     const [scheduledata,setScheduledata] = useState();
@@ -20,7 +21,8 @@ export default function ChooseDateForm(date) {
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const url = ip+`/schedule/date/`+date;
@@ -53,11 +55,11 @@ export default function ChooseDateForm(date) {
         const pdata = []
         data.map((tmp)=>{
             const schedule_id = tmp.scheduleId
-            const movie_title = tmp.movieDTO.title
+            const movie_title = tmp.movieName
             const theater_name = tmp.theaterDTO.name
             const time = tmp.startTime
             const start_time = time[0].toString()+"-"+time[1].toString()+"-"+time[2].toString()+" "+time[3].toString()+":"+time[4].toString()+":00"
-            const running_time = tmp.movieDTO.runningTime
+            const running_time = tmp.runningTime
             const total_seat = tmp.totalSeat
             const filled_seat = tmp.filledSeat
             pdata.push({
@@ -200,6 +202,7 @@ export default function ChooseDateForm(date) {
                 </div>
                 <div className='row justify-content-evenly'>
                     {rundate === "" && <div>날짜를 선택해주세요</div>}
+                    {rundate === "" || pdata && pdata.length ? "":<div>해당 일자에 상영 예정인 영화가 없습니다.</div>}
                     {pdata && rundate !== "" && pdata.map((item, idx)=>(
                         <div key={idx} className='row'>
                             <h3>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CustomerTicketForm from './CustomerTicketForm';
 import axios from 'axios';
 import Modal from 'react-awesome-modal';
+import { baseUrl } from './axios';
 
 export default function NonmemberTicketForm() {
     /*
@@ -36,7 +37,7 @@ export default function NonmemberTicketForm() {
         }],
         discount: "1000KR"
     }*/
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const[ticketId, setId] = useState()
     const[password, setPassword] = useState()
     const[detail, setDetail] = useState()
@@ -49,7 +50,8 @@ export default function NonmemberTicketForm() {
             const url = ip+`/ticket/nonmember/detail?ticketId=`+ticketId+`&password=`+password;
             const header = {
                 headers: {
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.get(
@@ -57,6 +59,7 @@ export default function NonmemberTicketForm() {
                 header
             )
             setDetail(response.data)
+            localStorage.setItem("nonmempassword",password)
         }
         catch(error){
             if(error.response.data.message)

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import axios from 'axios';
 import CustomerTicketForm from './CustomerTicketForm';
+import { baseUrl } from './axios';
 
 export default function CustomerTicketListForm() {
     /*
@@ -44,7 +45,7 @@ export default function CustomerTicketListForm() {
             startTime:"2023-06-06 09:00:00"
         }])*/
     
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const[tickets, setTickets] = useState()
     const[detail, setDetail] = useState()
     const[modal, setModal] = useState(false)
@@ -58,7 +59,8 @@ export default function CustomerTicketListForm() {
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.get(
@@ -83,13 +85,13 @@ export default function CustomerTicketListForm() {
     }
     const getTicketDetail = async(ticket)=>{
         try{
-            console.log(ticket)
             const url = ip+`/ticket/member/detail?ticketId=` + ticket.ticketId;
             const token = localStorage.getItem('customerToken')
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.get(
@@ -130,7 +132,7 @@ export default function CustomerTicketListForm() {
         if(tickets){
             return(
                 <div className='TicketList'>
-                    예약된 티켓
+                    {tickets.length ? "":"예매된 티켓이 존재하지 않습니다."}
                     {tickets.map((item)=>(
                         <div key={item.ticketId} style={style}>
                             <div style={{width:"100%", padding:10}}>
@@ -167,28 +169,11 @@ export default function CustomerTicketListForm() {
         }
         else{
             return(
-                <div>
+                <h2>
                     로딩 중
-                </div>
+                </h2>
             )
         }
-    }
-    const deleteticket = async()=>{
-        const url = ip+`/ticket/delete?ticketId=4`
-        const token = localStorage.getItem('customerToken')
-        const password = "test1234"
-        const header = {
-            headers: {
-            "Authorization": `Bearer ${token}`,
-            "Access-Control-Allow-Origin": "*"
-            },
-            data: "test1234"
-        }
-        const response = await axios.delete(
-            url,
-            header
-        )
-        console.log(response)
     }
     return (
         <div>

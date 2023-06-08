@@ -9,8 +9,9 @@ import seat_gray from '../img/seat_gray.png'
 import seat_choose from '../img/seat_choosepng.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { baseUrl } from './axios';
 export default function TicketingSeatForm(){
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const modify = localStorage.getItem('modifyticketid')
     const modifysc = localStorage.getItem('modifyscheduleid')
     const getdata = async()=>{
@@ -31,14 +32,16 @@ export default function TicketingSeatForm(){
                 header = {
                     headers: {
                     "Authorization": `Bearer ${token}`,
-                    "Access-Control-Allow-Origin": "*"
+                    "Access-Control-Allow-Origin": "*",
+                    "ngrok-skip-browser-warning": true
                     },
                 }
             }
             else{
                 header = {
                     headers: {
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "ngrok-skip-browser-warning": true
                         },
                 }
             }
@@ -150,7 +153,6 @@ export default function TicketingSeatForm(){
             seatlist = seatlist.filter((element) => element !== string)
             localStorage.setItem('SeatList', JSON.stringify(seatlist));
             setSeat(seat)
-            console.log(seatlist)
           }
         }
       }
@@ -167,7 +169,8 @@ export default function TicketingSeatForm(){
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.post(
@@ -208,7 +211,8 @@ export default function TicketingSeatForm(){
             const url = ip+`/ticket/reservation`;
             const header = {
                 headers: {
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.post(
@@ -217,6 +221,7 @@ export default function TicketingSeatForm(){
                 header
             )
             localStorage.setItem('ticket_data', JSON.stringify(response.data))
+            localStorage.setItem('nonmempassword', password)
             navigate('/payment')
         }
         catch(error){
@@ -263,7 +268,8 @@ export default function TicketingSeatForm(){
             const url = ip+`/ticket/nonmember/modify`;
             const header = {
                 headers: {
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.post(
@@ -281,7 +287,7 @@ export default function TicketingSeatForm(){
                 alert("알수 없는 에러.")
             localStorage.removeItem('modifyticketid')
             localStorage.removeItem('modifyscheduleid')
-            navigate('/customermovielist')
+            navigate('/')
         }
     }
     const membermodify = async() =>{
@@ -297,7 +303,8 @@ export default function TicketingSeatForm(){
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.post(
@@ -315,7 +322,7 @@ export default function TicketingSeatForm(){
                 alert("알수 없는 에러.")
             localStorage.removeItem('modifyticketid')
             localStorage.removeItem('modifyscheduleid')
-            navigate('/customermovielist')
+            navigate('/')
         }
     }
     const membermodifyhandler = () =>{

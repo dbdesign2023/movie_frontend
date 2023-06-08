@@ -3,6 +3,7 @@ import Modal from 'react-awesome-modal';
 import CustomerTicketForm from './CustomerTicketForm';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from './axios';
 
 export default function PaymentForm() {
     /*
@@ -38,7 +39,7 @@ export default function PaymentForm() {
         discount: "1000KR"
     }
     */
-    const ip = `http://25.14.225.33:8080`;
+    const ip = baseUrl;
     const navigate = useNavigate();
     const [methodlist, setMethodlist] = useState()
     const [ticket_data, setticketData] = useState()
@@ -47,7 +48,8 @@ export default function PaymentForm() {
             const url = ip+`/payment/method/list`;
             const header = {
                 headers: {
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.get(
@@ -95,7 +97,8 @@ export default function PaymentForm() {
             const header = {
                 headers: {
                 "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": true
                 },
             }
             const response = await axios.post(
@@ -105,7 +108,7 @@ export default function PaymentForm() {
             )
             localStorage.setItem('payment_data', JSON.stringify(response.data))
             alert("결제가 완료되었습니다.")
-            navigate('/customermovielist')
+            navigate('/')
         }
         catch(error){
             if(error.response.data.message)
