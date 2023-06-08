@@ -32,35 +32,7 @@ import CustomerTicketForm from '../form/CustomerTicketForm';
 import CustomerPaymentPage from './CustomerPaymentPage';
 import CustomerTicketListPage from './CustomerTicketListPage';
 import ScheduleWithMoviePage from './ScheduleWithMoviePage';
-<<<<<<< HEAD
-=======
 import MovieDetailPage from './MovieDetailPage';
-function PrivateRoute({ staffAuth, customerAuth }) {
-  const value = useContext(AuthContext);
-  const isStaffLogin = value.isStaffLogin;
-  const isCustomerLogin = value.isCustomerLogin;
-
-  console.log('isStaffLogin', isStaffLogin);
-  console.log('isCustomerLogin', isCustomerLogin);
-
-  if (!staffAuth && !customerAuth) {
-    //로그인, 회원가입 페이지
-    return isStaffLogin ? (
-      <Navigate replace to='/staff' />
-    ) : isCustomerLogin ? (
-      <Navigate replace to='/' />
-    ) : (
-      <Outlet />
-    );
-  } else if (staffAuth) {
-    //직원페이지
-    return !isStaffLogin ? <Navigate replace to='/' /> : <Outlet />;
-  } else {
-    //고객페이지
-    return !isCustomerLogin ? <Navigate replace to='/' /> : <Outlet />;
-  }
-}
->>>>>>> 2141477 (commit)
 
 function Router() {
   return (
@@ -83,26 +55,8 @@ function Router() {
           <Route path='/staff/customer' element={<StaffCustomerPage />} />
 
           <Route path='/main' element={<MainPage />} />
-<<<<<<< HEAD
           <Route path='/login' element={<CustomerLoginPage />} />
           <Route path='/signup' element={<CustomerRegisterPage />} />
-=======
-          <Route path='/login' element={<CustomerLoginPage />}/>
-          <Route path='/signup' element={<CustomerRegisterPage />}/>
-          <Route path='/chooseseat' element={<ChooseSeatPage />}/>
-          <Route path='/payment' element={<CustomerPaymentPage />}/>
-          <Route path='/ticketlist' element={<CustomerTicketListPage />}/>
-          <Route path='/schedulewithmovie' element={<ScheduleWithMoviePage />}/>
-          <Route path='/moviedetail' element={<MovieDetailPage />}/>
-
-
-          {/**마음대로 안 돼서 일단 가둬놓음 
->>>>>>> 2141477 (commit)
-          <Route
-            path='/customermovielist'
-            element={<CustomerMovieListPage />}
-          />
-          <Route path='/choosedate' element={<ChooseDatePage />} />
           <Route path='/chooseseat' element={<ChooseSeatPage />} />
           <Route path='/payment' element={<CustomerPaymentPage />} />
           <Route path='/ticketlist' element={<CustomerTicketListPage />} />
@@ -110,7 +64,7 @@ function Router() {
             path='/schedulewithmovie'
             element={<ScheduleWithMoviePage />}
           />
-          <Route path='/test' element={<CustomerTicketForm />} />
+          <Route path='/moviedetail' element={<MovieDetailPage />}/>
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
