@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 
@@ -10,6 +10,8 @@ export default function StaffGenreModifyForm(props) {
   const getGenreList = props.getGenreList;
   const genre = props.genre;
 
+  const [isLoading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -20,7 +22,6 @@ export default function StaffGenreModifyForm(props) {
   const resetData = () => {
     setValue('code', genre.code);
     setValue('name', genre.name);
-    console.log('되돌리기');
   };
 
   const onSubmit = async (data) => {
@@ -33,16 +34,24 @@ export default function StaffGenreModifyForm(props) {
     };
 
     try {
-      console.log('Request body', data);
+      setLoading(true);
+      const updatedData = {
+        ...data,
+        code: genre.code,
+      };
+      console.log('Request body', updatedData);
 
-      const response = await serverapi.post(api, data, options);
+      const response = await serverapi.post(api, updatedData, options);
       console.log('response', response.data);
 
+      closeGenreModify();
+      alert('수정되었습니다');
       getGenreList();
-      resetData();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,24 +76,7 @@ export default function StaffGenreModifyForm(props) {
               <div className='content-text-container'>장르 코드</div>
             </div>
             <div class='col-sm-9'>
-              <input
-                class='form-control'
-                type='text'
-                placeholder='GR000'
-                defaultValue={genre.code}
-                value={genre.code}
-                aria-invalid={
-                  !isDirty ? undefined : errors.code ? 'true' : 'false'
-                }
-                {...register('code', {
-                  required: '장르 이름을 입력해주세요.',
-                })}
-              />
-              {errors.code && (
-                <small role='alert' className='input-alert'>
-                  {errors.code.message}
-                </small>
-              )}
+              <span>{genre.code}</span>
             </div>
           </div>
           <div className='row'>
@@ -113,17 +105,26 @@ export default function StaffGenreModifyForm(props) {
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button class='btn btn-secondary' onClick={resetData}>
+              <button
+                type='button'
+                class='btn btn-secondary'
+                onClick={resetData}
+              >
                 되돌리기
               </button>
               &nbsp; &nbsp; &nbsp;
               <button
                 type='submit'
                 class='btn btn-success'
-                onClick={closeGenreModify}
                 disabled={!(isDirty && isValid)}
               >
-                수정
+                {isLoading ? (
+                  <div className='spinner-border' role='status'>
+                    <span className='sr-only' />
+                  </div>
+                ) : (
+                  <span>수정</span>
+                )}
               </button>
             </div>
           </div>

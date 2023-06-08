@@ -8,6 +8,7 @@ export default function GenreComponent(props) {
   const getGenreList = props.getGenreList;
 
   const [genreModifyOpen, setGenreModifyOpen] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const showGenreModify = () => {
     setGenreModifyOpen(true);
@@ -26,15 +27,24 @@ export default function GenreComponent(props) {
       },
     };
 
+    const yesOrNo = window.confirm('장르를 삭제하시겠습니까?');
+    if (yesOrNo === false) {
+      return;
+    }
+
     try {
-      console.log('staffToken', token);
+      setLoading(true);
+
       const response = await serverapi.delete(api, options);
       console.log('response', response.data);
 
+      alert('삭제되었습니다');
       getGenreList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,7 +71,13 @@ export default function GenreComponent(props) {
       </td>
       <td>
         <button class='btn btn-danger' onClick={() => deleteGenre(genre.code)}>
-          삭제
+          {isLoading ? (
+            <div className='spinner-border' role='status'>
+              <span className='sr-only' />
+            </div>
+          ) : (
+            <span>삭제</span>
+          )}
         </button>
       </td>
     </tr>

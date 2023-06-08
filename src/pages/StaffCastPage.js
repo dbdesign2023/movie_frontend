@@ -8,39 +8,19 @@ import '../styles/components/page-container.scss';
 
 export default function StaffCastPage() {
   const [castModalOpen, setCastModalOpen] = useState(false);
+  const [preCastList, setPreCastList] = useState([]);
   const [castList, setCastList] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    getCastList();
-    /*setCastList([
-      {
-        castId: 1,
-        name: '영화배우1',
-        birthdate: 12351111,
-        fileName: 'abc.jpg',
-        nationality: '대한민국',
-        info: '설명중1',
-      },
-      {
-        castId: 2,
-        name: '영화배우2',
-        birthdate: 12352222,
-        fileName: 'def.jpg',
-        nationality: '대한민국',
-        info: '설명중2',
-      },
-      {
-        castId: 3,
-        name: '영화배우3',
-        birthdate: 12353333,
-        fileName: 'ghi.jpg',
-        nationality: '대한민국',
-        info: '설명중3',
-      },
-    ])*/
+    getPreCastList();
   }, []);
 
-  const getCastList = async () => {
+  useEffect(() => {
+    console.log('castList', castList);
+  }, [castList]);
+
+  const getPreCastList = async () => {
     const api = '/movie/cast/getList';
     const token = localStorage.getItem('staffToken');
     const options = {
@@ -50,14 +30,31 @@ export default function StaffCastPage() {
     };
 
     try {
-      console.log('staffToken', token);
+      setLoading(true);
+
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
-      setCastList(response.data);
+      const updatedCastList = response.data.map((cast) => {
+        let tmp = new Date(cast.birthDate);
+        cast.birthDate =
+          tmp.getFullYear() +
+          '-' +
+          (tmp.getMonth() < 9
+            ? '0' + (tmp.getMonth() + 1)
+            : tmp.getMonth() + 1) +
+          '-' +
+          (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate());
+        return cast;
+      });
+
+      setPreCastList(response.data);
+      setCastList(updatedCastList);
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,11 +65,18 @@ export default function StaffCastPage() {
   const closeCastModal = () => {
     setCastModalOpen(false);
   };
+
   return (
     <>
       <div className='add-button-container'>
         <button class='btn btn-success' onClick={showCastModal}>
-          인물 추가
+          {isLoading ? (
+            <div className='spinner-border' role='status'>
+              <span className='sr-only' />
+            </div>
+          ) : (
+            <span>인물 추가</span>
+          )}
         </button>
         {castModalOpen && <Modal setCastModalOpen={showCastModal} />}
         <Modal
@@ -82,7 +86,7 @@ export default function StaffCastPage() {
         >
           <StaffCastAddForm
             closeCastModal={closeCastModal}
-            setCastList={setCastList}
+            getCastList={getPreCastList}
           />
         </Modal>
       </div>
@@ -90,17 +94,23 @@ export default function StaffCastPage() {
         <table class='table table-striped'>
           <thead>
             <tr>
-              <th scope='col'>인물코드</th>
               <th scope='col'>이름</th>
               <th scope='col'>생년월일</th>
               <th scope='col'>국적</th>
-              <th scope='col'>삭제</th>
+              <th scope='col'>사진 보기</th>
               <th scope='col'>수정</th>
+              <th scope='col'>삭제</th>
             </tr>
           </thead>
           <tbody>
             {castList.map((cast) => {
-              return <CastComponent cast={cast} setCastList={setCastList} />;
+              return (
+                <CastComponent
+                  key={cast.castId}
+                  cast={cast}
+                  getCastList={getPreCastList}
+                />
+              );
             })}
           </tbody>
         </table>

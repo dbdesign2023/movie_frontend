@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import { AuthContext } from '../services/AuthContext';
+import serverapi from '../services/serverapi';
 import StaffMypageModifyForm from '../form/StaffMyPageModifyForm';
 
 import '../styles/components/_header.scss';
@@ -36,7 +37,31 @@ function Logined(props) {
   const setIsStaffLogin = value.setIsStaffLogin;
 
   const [mypageModifyOpen, setMypageModifyOpen] = useState(false);
+  const [info, setInfo] = useState({});
+
+  const getInfo = async () => {
+    const api = '/admin/detail';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      console.log('staffToken', token);
+      const response = await serverapi.get(api, options);
+      console.log('response', response.data);
+
+      setInfo(response.data);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  };
+
   const showMypageModify = () => {
+    getInfo();
     setMypageModifyOpen(true);
   };
 
@@ -48,6 +73,7 @@ function Logined(props) {
     localStorage.clear();
     setIsCustomerLogin(false);
     setIsStaffLogin(false);
+    window.location.replace('/');
   };
 
   return (

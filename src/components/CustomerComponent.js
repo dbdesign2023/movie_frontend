@@ -21,7 +21,6 @@ export default function CustomerComponent(props) {
       <td>{customer.name}</td>
       <td>{customer.loginId}</td>
       <td>{customer.birthdate}</td>
-      <td>{customer.gender}</td>
       <td>
         <button class='btn btn-primary' onClick={showCustomerModal}>
           자세히 보기

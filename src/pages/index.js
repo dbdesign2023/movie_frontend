@@ -1,12 +1,5 @@
-import React, { useContext } from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-} from 'react-router-dom';
-import { AuthContext } from '../services/AuthContext';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import MoviePage from './MoviePage';
 import MyPagePage from './MyPagePage';

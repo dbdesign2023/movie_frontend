@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 
@@ -8,6 +8,7 @@ import '../styles/components/modal-container.scss';
 export default function StaffGenreAddForm(props) {
   const closeGenreModal = props.closeGenreModal;
   const getGenreList = props.getGenreList;
+  const [isLoading, setLoading] = useState(false);
 
   const {
     register,
@@ -31,16 +32,21 @@ export default function StaffGenreAddForm(props) {
     };
 
     try {
+      setLoading(true);
       console.log('Request body', data);
 
       const response = await serverapi.post(api, data, options);
       console.log('response', response.data);
 
+      closeGenreModal();
+      alert('장르가 등록되었습니다');
       getGenreList();
       resetData();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,10 +123,15 @@ export default function StaffGenreAddForm(props) {
               <button
                 type='submit'
                 class='btn btn-success'
-                onClick={closeGenreModal}
                 disabled={!(isDirty && isValid)}
               >
-                등록
+                {isLoading ? (
+                  <div className='spinner-border' role='status'>
+                    <span className='sr-only' />
+                  </div>
+                ) : (
+                  <span>등록</span>
+                )}
               </button>
             </div>
           </div>

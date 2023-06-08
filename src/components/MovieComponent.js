@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
 import StaffImageForm from '../form/StaffImageForm';
-import StaffCastModifyForm from '../form/StaffCastModifyForm';
+import StaffMovieModifyForm from '../form/StaffMovieModifyForm';
 
-export default function CastComponent(props) {
-  const cast = props.cast;
-  const getCastList = props.getCastList;
+export default function MovieComponent(props) {
+  const movie = props.movie;
+  const getMovieList = props.getMovieList;
 
   const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [castModifyOpen, setCastModifyOpen] = useState(false);
+  const [movieModifyOpen, setMovieModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [info, setInfo] = useState({});
 
   const getInfo = async () => {
-    const api = `/movie/cast/detail?castId=${parseInt(cast.castId, 10)}`;
+    const api = `/movie/detail?id=${parseInt(movie.movieId, 10)}`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -28,8 +28,8 @@ export default function CastComponent(props) {
       console.log('response', response.data);
 
       const modifiedData = { ...response.data };
-      let tmp = new Date(modifiedData.birthDate);
-      modifiedData.birthDate =
+      let tmp = new Date(modifiedData.releaseDate);
+      modifiedData.releaseDate =
         tmp.getFullYear() +
         '-' +
         (tmp.getMonth() < 9 ? '0' + (tmp.getMonth() + 1) : tmp.getMonth() + 1) +
@@ -52,18 +52,17 @@ export default function CastComponent(props) {
     setImageModalOpen(false);
   };
 
-  const showCastModify = () => {
-    setCastModifyOpen(true);
+  const showMovieModify = () => {
+    setMovieModifyOpen(true);
     getInfo();
   };
 
-  const closeCastModify = () => {
-    setCastModifyOpen(false);
+  const closeMovieModify = () => {
+    setMovieModifyOpen(false);
   };
 
-  const deleteCast = async (id) => {
-    console.log('id', id);
-    const api = `/movie/cast/delete?castId=${id}`;
+  const deleteMovie = async (id) => {
+    const api = `/movie/delete?id=${id}`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -71,7 +70,7 @@ export default function CastComponent(props) {
       },
     };
 
-    const yesOrNo = window.confirm('인물을 삭제하시겠습니까?');
+    const yesOrNo = window.confirm('영화를 삭제하시겠습니까?');
     if (yesOrNo === false) {
       return;
     }
@@ -83,7 +82,7 @@ export default function CastComponent(props) {
       console.log('response', response.data);
 
       alert('삭제되었습니다');
-      getCastList();
+      getMovieList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -93,13 +92,13 @@ export default function CastComponent(props) {
   };
 
   return (
-    <tr key={cast.castId}>
-      <td>{cast.name}</td>
-      <td>{cast.birthDate}</td>
-      <td>{cast.nationality}</td>
+    <tr key={movie.movieId}>
+      <td>{movie.title}</td>
+      <td>{movie.directorName}</td>
+      <td>{movie.releaseDate}</td>
       <td>
         <button class='btn btn-warning' onClick={showImageModal}>
-          사진
+          포스터
         </button>
         {imageModalOpen && <Modal setImageModalOpen={showImageModal} />}
         <Modal
@@ -109,30 +108,33 @@ export default function CastComponent(props) {
         >
           <StaffImageForm
             closeImageModal={closeImageModal}
-            fileURL='/api/profileImage?fileName='
+            fileURL='/api/posters?fileName='
             info={info}
           />
         </Modal>
       </td>
       <td>
-        <button class='btn btn-warning' onClick={showCastModify}>
+        <button class='btn btn-warning' onClick={showMovieModify}>
           수정
         </button>
-        {castModifyOpen && <Modal setCastModifyOpen={showCastModify} />}
+        {movieModifyOpen && <Modal setMovieModifyOpen={showMovieModify} />}
         <Modal
-          visible={castModifyOpen}
+          visible={movieModifyOpen}
           effect='fadeInDown'
-          onClickAway={closeCastModify}
+          onClickAway={closeMovieModify}
         >
-          <StaffCastModifyForm
-            closeCastModify={closeCastModify}
-            getCastList={getCastList}
+          <StaffMovieModifyForm
+            closeMovieModify={closeMovieModify}
+            getMovieList={getMovieList}
             info={info}
           />
         </Modal>
       </td>
       <td>
-        <button class='btn btn-danger' onClick={() => deleteCast(cast.castId)}>
+        <button
+          class='btn btn-danger'
+          onClick={() => deleteMovie(movie.movieId)}
+        >
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />

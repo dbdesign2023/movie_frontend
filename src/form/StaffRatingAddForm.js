@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
 
@@ -8,6 +8,7 @@ import '../styles/components/modal-container.scss';
 export default function StaffRatingAddForm(props) {
   const closeRatingModal = props.closeRatingModal;
   const getRatingList = props.getRatingList;
+  const [isLoading, setLoading] = useState(false);
 
   const {
     register,
@@ -17,8 +18,8 @@ export default function StaffRatingAddForm(props) {
   } = useForm();
 
   const resetData = () => {
+    resetField('code');
     resetField('name');
-    resetField('minAge');
   };
 
   const onSubmit = async (data) => {
@@ -29,21 +30,23 @@ export default function StaffRatingAddForm(props) {
         Authorization: `Bearer ${token}`,
       },
     };
-    const formData = new FormData();
 
     try {
-      formData.append('name', data.name);
-      formData.append('minAge', data.minAge);
-      console.log('Request body', formData);
+      setLoading(true);
+      console.log('Request body', data);
 
-      const response = await serverapi.post(api, formData, options);
+      const response = await serverapi.post(api, data, options);
       console.log('response', response.data);
 
+      closeRatingModal();
+      alert('장르가 등록되었습니다');
       getRatingList();
       resetData();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,7 +68,31 @@ export default function StaffRatingAddForm(props) {
         >
           <div className='row'>
             <div class='col-sm-3'>
-              <div className='content-text-container'>이름</div>
+              <div className='content-text-container'>등급 코드</div>
+            </div>
+            <div class='col-sm-9'>
+              <input
+                class='form-control'
+                type='text'
+                placeholder='RT000'
+                defaultValue=''
+                aria-invalid={
+                  !isDirty ? undefined : errors.code ? 'true' : 'false'
+                }
+                {...register('code', {
+                  required: '등급 코드를 입력해주세요.',
+                })}
+              />
+              {errors.code && (
+                <small role='alert' className='input-alert'>
+                  {errors.code.message}
+                </small>
+              )}
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>등급 이름</div>
             </div>
             <div class='col-sm-9'>
               <input
@@ -87,30 +114,6 @@ export default function StaffRatingAddForm(props) {
               )}
             </div>
           </div>
-          <div className='row'>
-            <div class='col-sm-3'>
-              <div className='content-text-container'>제한 나이</div>
-            </div>
-            <div class='col-sm-9'>
-              <input
-                class='form-control'
-                type='number'
-                placeholder='제한 나이를 입력하세요'
-                defaultValue=''
-                aria-invalid={
-                  !isDirty ? undefined : errors.minAge ? 'true' : 'false'
-                }
-                {...register('minAge', {
-                  required: '제한 나이를 입력해주세요.',
-                })}
-              />
-              {errors.minAge && (
-                <small role='alert' className='input-alert'>
-                  {errors.minAge.message}
-                </small>
-              )}
-            </div>
-          </div>
           <div className='bottom-container'>
             <div className='button-container'>
               <button class='btn btn-secondary' onClick={resetData}>
@@ -120,10 +123,15 @@ export default function StaffRatingAddForm(props) {
               <button
                 type='submit'
                 class='btn btn-success'
-                onClick={closeRatingModal}
                 disabled={!(isDirty && isValid)}
               >
-                등록
+                {isLoading ? (
+                  <div className='spinner-border' role='status'>
+                    <span className='sr-only' />
+                  </div>
+                ) : (
+                  <span>등록</span>
+                )}
               </button>
             </div>
           </div>

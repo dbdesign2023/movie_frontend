@@ -1,47 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 import serverapi from '../services/serverapi';
 import { useForm } from 'react-hook-form';
+import countries from '../constants/country.json';
 
 import '../styles/components/form-container.scss';
 import '../styles/components/modal-container.scss';
 
 export default function StaffCastModifyForm(props) {
   const closeCastModify = props.closeCastModify;
-  const setCastList = props.setCastList;
-  const cast = props.cast;
+  const getCastList = props.getCastList;
+  const info = props.info;
 
-  const {
-    register,
-    handleSubmit,
-    resetField,
-    setValue,
-    formState: { isValid, isDirty, errors },
-  } = useForm();
+  const [isLoading, setLoading] = useState(false);
 
-  const resetData = () => {
-    resetField('name');
-    resetField('birthdate');
-    resetField('nationality');
-    resetField('info');
-  };
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      name: info.name,
+      birthDate: info.birthDate,
+      profileImage: null,
+      nationality: info.nationality,
+      info: info.info,
+    },
+  });
 
   const onSubmit = async (data) => {
-    const api = '/movie/cast/add';
+    if (!data.name || !data.birthDate || !data.info) {
+      return;
+    }
+
+    const api = '/movie/cast/modify';
+    const token = localStorage.getItem('staffToken');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     const formData = new FormData();
+
     try {
+      setLoading(true);
+      console.log('Request body', data);
+      formData.append('castId', info.castId);
       formData.append('name', data.name);
-      formData.append('birthdate', data.birthdate);
+      formData.append('birthDate', data.birthDate);
+      if (data.profileImage !== null)
+        formData.append('profileImage', data.profileImage[0]);
       formData.append('nationality', data.nationality);
       formData.append('info', data.info);
-      console.log('Request body', formData);
 
-      const response = await serverapi.post(api, formData);
+      const response = await serverapi.post(api, formData, options);
       console.log('response', response.data);
 
-      resetData();
+      closeCastModify();
+      alert('인물이 수정되었습니다');
+      getCastList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,7 +72,7 @@ export default function StaffCastModifyForm(props) {
           onClick={closeCastModify}
         ></button>
       </div>
-      <div className='title-text-center-container'>인물 추가</div>
+      <div className='title-text-center-container'>인물 수정</div>
       <div className='form-container'>
         <form className='staff-cast-add-form' onSubmit={handleSubmit(onSubmit)}>
           <div className='row'>
@@ -66,12 +83,10 @@ export default function StaffCastModifyForm(props) {
               <input
                 class='form-control'
                 type='text'
-                placeholder='등급 이름을 입력하세요'
-                aria-invalid={
-                  !isDirty ? undefined : errors.password ? 'true' : 'false'
-                }
+                placeholder='인물 이름을 입력하세요'
+                defaultValue={info.name}
                 {...register('name', {
-                  required: '등급 이름을 입력해주세요.',
+                  required: '인물 이름을 입력해주세요.',
                 })}
               />
             </div>
@@ -83,12 +98,10 @@ export default function StaffCastModifyForm(props) {
             <div class='col-sm-9'>
               <input
                 class='form-control'
-                type='number'
-                placeholder='생년월일을 입력하세요'
-                aria-invalid={
-                  !isDirty ? undefined : errors.password ? 'true' : 'false'
-                }
-                {...register('birthdate', {
+                type='text'
+                placeholder='1970-01-01'
+                defaultValue={info.birthDate}
+                {...register('birthDate', {
                   required: '생년월일을 입력해주세요.',
                 })}
               />
@@ -96,53 +109,67 @@ export default function StaffCastModifyForm(props) {
           </div>
           <div className='row'>
             <div class='col-sm-3'>
-              <div className='content-text-container'></div>
+              <div className='content-text-container'>사진</div>
             </div>
             <div class='col-sm-9'>
               <input
                 class='form-control'
-                type='text'
-                placeholder='등급 이름을 입력하세요'
-                aria-invalid={
-                  !isDirty ? undefined : errors.password ? 'true' : 'false'
-                }
-                {...register('name', {
-                  required: '등급 이름을 입력해주세요.',
-                })}
+                type='file'
+                {...register('profileImage')}
               />
             </div>
           </div>
           <div className='row'>
             <div class='col-sm-3'>
-              <div className='content-text-container'>이름</div>
+              <div className='content-text-container'>국적</div>
             </div>
             <div class='col-sm-9'>
-              <input
+              <select
+                class='form-select'
+                aria-label='Default select example'
+                defaultValue={info.nationality}
+                {...register('nationality', {
+                  required: '국적을 선택해주세요.',
+                })}
+              >
+                {Object.entries(countries).map(([key, country]) => {
+                  if (key === info.nationality)
+                    return (
+                      <option value={key} selected>
+                        {country.CountryNameKR}
+                      </option>
+                    );
+                  else
+                    return <option value={key}>{country.CountryNameKR}</option>;
+                })}
+              </select>
+            </div>
+          </div>
+          <div className='row'>
+            <div class='col-sm-3'>
+              <div className='content-text-container'>설명</div>
+            </div>
+            <div class='col-sm-9'>
+              <textarea
                 class='form-control'
-                type='text'
-                placeholder='등급 이름을 입력하세요'
-                aria-invalid={
-                  !isDirty ? undefined : errors.password ? 'true' : 'false'
-                }
-                {...register('name', {
-                  required: '등급 이름을 입력해주세요.',
+                rows='3'
+                defaultValue={info.info}
+                {...register('info', {
+                  required: '인물 설명을 입력해주세요',
                 })}
               />
             </div>
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button class='btn btn-secondary' onClick={resetData}>
-                초기화
-              </button>
-              &nbsp; &nbsp; &nbsp;
-              <button
-                type='submit'
-                class='btn btn-success'
-                onClick={closeCastModify}
-                disabled={!(isDirty && isValid)}
-              >
-                등록
+              <button type='submit' class='btn btn-success'>
+                {isLoading ? (
+                  <div className='spinner-border' role='status'>
+                    <span className='sr-only' />
+                  </div>
+                ) : (
+                  <span>수정</span>
+                )}
               </button>
             </div>
           </div>
