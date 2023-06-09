@@ -73,6 +73,10 @@ export default function StaffTheaterPage() {
     }
   };
 
+  const goToTypePage = () => {
+    window.location.replace('/staff/theater/type');
+  };
+
   return (
     <>
       <div className='add-button-container'>
@@ -97,6 +101,16 @@ export default function StaffTheaterPage() {
             typeList={typeList}
           />
         </Modal>
+        &nbsp;&nbsp;&nbsp;
+        <button className='btn btn-success' onClick={goToTypePage}>
+          {isLoading ? (
+            <div className='spinner-border' role='status'>
+              <span className='sr-only' />
+            </div>
+          ) : (
+            <span>상영관 종류 수정</span>
+          )}
+        </button>
       </div>
       <div className='list-container'>
         <table className='table table-striped'>

@@ -66,6 +66,10 @@ export default function StaffMoviePage() {
     setMovieModalOpen(false);
   };
 
+  const goToGenreRatingPage = () => {
+    window.location.replace('/staff/movie/genrerating');
+  };
+
   return (
     <>
       <div className='add-button-container'>
@@ -89,6 +93,16 @@ export default function StaffMoviePage() {
             getMovieList={getPreMovieList}
           />
         </Modal>
+        &nbsp;&nbsp;&nbsp;
+        <button className='btn btn-success' onClick={goToGenreRatingPage}>
+          {isLoading ? (
+            <div className='spinner-border' role='status'>
+              <span className='sr-only' />
+            </div>
+          ) : (
+            <span>장르&등급 수정</span>
+          )}
+        </button>
       </div>
       <div className='list-container'>
         <table className='table table-striped'>

@@ -7,51 +7,9 @@ export default function TheaterComponent(props) {
   const theater = props.theater;
   const getTheaterList = props.getTheaterList;
 
-  const [seatModalOpen, setSeatModalOpen] = useState(false);
   const [theaterModifyOpen, setTheaterModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [info, setInfo] = useState({});
   const [typeList, setTypeList] = useState([]);
-
-  const getInfo = async () => {
-    const api = `movie/theater/detail?theaterId=${parseInt(
-      theater.theaterId,
-      10,
-    )}`;
-    const token = localStorage.getItem('staffToken');
-    const options = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    try {
-      const response = await serverapi.get(api, options);
-      console.log('response', response.data);
-
-      const modifiedData = { ...response.data };
-      let tmp = new Date(modifiedData.birthDate);
-      modifiedData.birthDate =
-        tmp.getFullYear() +
-        '-' +
-        (tmp.getMonth() < 9 ? '0' + (tmp.getMonth() + 1) : tmp.getMonth() + 1) +
-        '-' +
-        (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate());
-
-      setInfo(modifiedData);
-    } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
-    }
-  };
-
-  const showSeatModal = () => {
-    setSeatModalOpen(true);
-  };
-
-  const closeSeatModal = () => {
-    setSeatModalOpen(false);
-  };
 
   const showTheaterModify = () => {
     setTheaterModifyOpen(true);
@@ -60,6 +18,10 @@ export default function TheaterComponent(props) {
 
   const closeTheaterModify = () => {
     setTheaterModifyOpen(false);
+  };
+
+  const goToSeatPage = (id) => {
+    window.location.replace(`/staff/theater/${id}`);
   };
 
   const getTypeList = async () => {
@@ -125,35 +87,17 @@ export default function TheaterComponent(props) {
         <span>{theater.floor}층</span>
       </td>
       <td>
-        <button className='btn btn-warning' onClick={showSeatModal}>
+        <button
+          className='btn btn-warning'
+          onClick={() => goToSeatPage(theater.theaterId)}
+        >
           좌석 관리
         </button>
-        {seatModalOpen && <Modal setSeatModalOpen={showSeatModal} />}
-        <Modal
-          visible={seatModalOpen}
-          effect='fadeInDown'
-          onClickAway={closeSeatModal}
-        ></Modal>
       </td>
       <td>
         <button className='btn btn-warning' onClick={showTheaterModify}>
           수정
         </button>
-        {theaterModifyOpen && (
-          <Modal setTheaterModifyOpen={showTheaterModify} />
-        )}
-        <Modal
-          visible={theaterModifyOpen}
-          effect='fadeInDown'
-          onClickAway={closeTheaterModify}
-        >
-          <StaffTheaterModifyForm
-            closeTheaterModify={closeTheaterModify}
-            getTheaterList={getTheaterList}
-            typeList={typeList}
-            theater={theater}
-          />
-        </Modal>
       </td>
       <td>
         <button

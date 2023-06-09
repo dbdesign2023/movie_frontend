@@ -14,6 +14,7 @@ import StaffMoviePage from './Staff/StaffMoviePage';
 import StaffSchedulePage from './Staff/StaffSchedulePage';
 import StaffTheaterPage from './Staff/StaffTheaterPage';
 import StaffSeatPage from './Staff/StaffSeatPage';
+import StaffTypePage from './Staff/StaffTypePage';
 import StaffRolePage from './Staff/StaffRolePage';
 
 import CustomerLoginPage from './CustomerLoginPage';
@@ -40,13 +41,18 @@ function Router() {
           <Route path='/nonmember' element={<NonmemberPage />} />
           <Route path='/mypage' element={<MyPagePage />} />
           <Route path='/ticketing' element={<TicketingPage />} />
+
           <Route path='/staff/*' element={<StaffMoviePage />} />
           <Route path='/staff/movie' element={<StaffMoviePage />} />
+          <Route
+            path='/staff/movie/genrerating'
+            element={<StaffGenreRatingPage />}
+          />
           <Route path='/staff/schedule' element={<StaffSchedulePage />} />
           <Route path='/staff/cast' element={<StaffCastPage />} />
-          <Route path='/staff/genrerating' element={<StaffGenreRatingPage />} />
           <Route path='/staff/theater' element={<StaffTheaterPage />} />
           <Route path='/staff/theater/:theaterId' element={<StaffSeatPage />} />
+          <Route path='/staff/theater/type' element={<StaffTypePage />} />
           <Route path='/staff/role' element={<StaffRolePage />} />
 
           <Route path='/main' element={<MainPage />} />
