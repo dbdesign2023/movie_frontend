@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
-import serverapi from '../services/serverapi';
-import StaffCastAddForm from '../form/StaffCastAddForm';
-import CastComponent from '../components/CastComponent';
+import serverapi from '../../services/serverapi';
+import StaffCastAddForm from '../../form/Staff/Cast/StaffCastAddForm';
+import CastComponent from '../../components/CastComponent';
 
-import '../styles/components/page-container.scss';
+import '../../styles/components/page-container.scss';
 
 export default function StaffCastPage() {
   const [castModalOpen, setCastModalOpen] = useState(false);
@@ -15,10 +15,6 @@ export default function StaffCastPage() {
   useEffect(() => {
     getPreCastList();
   }, []);
-
-  useEffect(() => {
-    console.log('castList', castList);
-  }, [castList]);
 
   const getPreCastList = async () => {
     const api = '/movie/cast/getList';
@@ -69,7 +65,7 @@ export default function StaffCastPage() {
   return (
     <>
       <div className='add-button-container'>
-        <button class='btn btn-success' onClick={showCastModal}>
+        <button className='btn btn-success' onClick={showCastModal}>
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />
@@ -91,7 +87,7 @@ export default function StaffCastPage() {
         </Modal>
       </div>
       <div className='list-container'>
-        <table class='table table-striped'>
+        <table className='table table-striped'>
           <thead>
             <tr>
               <th scope='col'>이름</th>

@@ -1,31 +1,29 @@
 import React, { useState } from 'react';
-import serverapi from '../services/serverapi';
+import serverapi from '../../../services/serverapi';
 import { useForm } from 'react-hook-form';
 
-import '../styles/components/form-container.scss';
-import '../styles/components/modal-container.scss';
+import '../../../styles/components/form-container.scss';
+import '../../../styles/components/modal-container.scss';
 
-export default function StaffRatingModifyForm(props) {
-  const closeRatingModify = props.closeRatingModify;
+export default function StaffRatingAddForm(props) {
+  const closeRatingModal = props.closeRatingModal;
   const getRatingList = props.getRatingList;
-  const rating = props.rating;
-
   const [isLoading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
-    setValue,
+    resetField,
     formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
-    setValue('code', rating.code);
-    setValue('name', rating.name);
+    resetField('code');
+    resetField('name');
   };
 
   const onSubmit = async (data) => {
-    const api = '/movie/rating/modify';
+    const api = '/movie/rating/add';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -35,18 +33,15 @@ export default function StaffRatingModifyForm(props) {
 
     try {
       setLoading(true);
-      const updatedData = {
-        ...data,
-        code: rating.code,
-      };
-      console.log('Request body', updatedData);
+      console.log('Request body', data);
 
-      const response = await serverapi.post(api, updatedData, options);
+      const response = await serverapi.post(api, data, options);
       console.log('response', response.data);
 
-      closeRatingModify();
-      alert('수정되었습니다');
+      closeRatingModal();
+      alert('장르가 등록되었습니다');
       getRatingList();
+      resetData();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -60,35 +55,51 @@ export default function StaffRatingModifyForm(props) {
       <div className='btn-close'>
         <button
           type='button'
-          class='btn-close'
+          className='btn-close'
           aria-label='Close'
-          onClick={closeRatingModify}
+          onClick={closeRatingModal}
         ></button>
       </div>
-      <div className='title-text-center-container'>등급 수정</div>
+      <div className='title-text-center-container'>등급 추가</div>
       <div className='form-container'>
         <form
           className='staff-rating-add-form'
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>등급 코드</div>
             </div>
-            <div class='col-sm-9'>
-              <span>{rating.code}</span>
+            <div className='col-sm-9'>
+              <input
+                className='form-control'
+                type='text'
+                placeholder='RT000'
+                defaultValue=''
+                aria-invalid={
+                  !isDirty ? undefined : errors.code ? 'true' : 'false'
+                }
+                {...register('code', {
+                  required: '등급 코드를 입력해주세요.',
+                })}
+              />
+              {errors.code && (
+                <small role='alert' className='input-alert'>
+                  {errors.code.message}
+                </small>
+              )}
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>등급 이름</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='text'
                 placeholder='등급 이름을 입력하세요'
-                defaultValue={rating.name}
+                defaultValue=''
                 aria-invalid={
                   !isDirty ? undefined : errors.name ? 'true' : 'false'
                 }
@@ -105,17 +116,13 @@ export default function StaffRatingModifyForm(props) {
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button
-                type='button'
-                class='btn btn-secondary'
-                onClick={resetData}
-              >
-                되돌리기
+              <button className='btn btn-secondary' onClick={resetData}>
+                초기화
               </button>
               &nbsp; &nbsp; &nbsp;
               <button
                 type='submit'
-                class='btn btn-success'
+                className='btn btn-success'
                 disabled={!(isDirty && isValid)}
               >
                 {isLoading ? (
@@ -123,7 +130,7 @@ export default function StaffRatingModifyForm(props) {
                     <span className='sr-only' />
                   </div>
                 ) : (
-                  <span>수정</span>
+                  <span>등록</span>
                 )}
               </button>
             </div>

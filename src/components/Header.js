@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import { AuthContext } from '../services/AuthContext';
 import serverapi from '../services/serverapi';
-import StaffMypageModifyForm from '../form/StaffMyPageModifyForm';
+import StaffMypageModifyForm from '../form/Staff/Info/StaffMyPageModifyForm';
 
 import '../styles/components/_header.scss';
 
@@ -49,7 +49,6 @@ function Logined(props) {
     };
 
     try {
-      console.log('staffToken', token);
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
@@ -80,11 +79,15 @@ function Logined(props) {
     <>
       <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
         <li className='nav-item'>
-          {isCustomerLogin &&
-          <a className='nav-link active' aria-current='page' href='/ticketlist'>
-            내 티켓 조회
-          </a>
-          }
+          {isCustomerLogin && (
+            <a
+              className='nav-link active'
+              aria-current='page'
+              href='/ticketlist'
+            >
+              내 티켓 조회
+            </a>
+          )}
         </li>
         <li className='nav-item'>
           {isCustomerLogin ? (

@@ -1,29 +1,31 @@
 import React, { useState } from 'react';
-import serverapi from '../services/serverapi';
+import serverapi from '../../../services/serverapi';
 import { useForm } from 'react-hook-form';
 
-import '../styles/components/form-container.scss';
-import '../styles/components/modal-container.scss';
+import '../../../styles/components/form-container.scss';
+import '../../../styles/components/modal-container.scss';
 
-export default function StaffGenreAddForm(props) {
-  const closeGenreModal = props.closeGenreModal;
+export default function StaffGenreModifyForm(props) {
+  const closeGenreModify = props.closeGenreModify;
   const getGenreList = props.getGenreList;
+  const genre = props.genre;
+
   const [isLoading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
-    resetField,
+    setValue,
     formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
-    resetField('code');
-    resetField('name');
+    setValue('code', genre.code);
+    setValue('name', genre.name);
   };
 
   const onSubmit = async (data) => {
-    const api = '/movie/genre/add';
+    const api = '/movie/genre/modify';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -33,15 +35,18 @@ export default function StaffGenreAddForm(props) {
 
     try {
       setLoading(true);
-      console.log('Request body', data);
+      const updatedData = {
+        ...data,
+        code: genre.code,
+      };
+      console.log('Request body', updatedData);
 
-      const response = await serverapi.post(api, data, options);
+      const response = await serverapi.post(api, updatedData, options);
       console.log('response', response.data);
 
-      closeGenreModal();
-      alert('장르가 등록되었습니다');
+      closeGenreModify();
+      alert('수정되었습니다');
       getGenreList();
-      resetData();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -55,51 +60,35 @@ export default function StaffGenreAddForm(props) {
       <div className='btn-close'>
         <button
           type='button'
-          class='btn-close'
+          className='btn-close'
           aria-label='Close'
-          onClick={closeGenreModal}
+          onClick={closeGenreModify}
         ></button>
       </div>
-      <div className='title-text-center-container'>장르 추가</div>
+      <div className='title-text-center-container'>장르 수정</div>
       <div className='form-container'>
         <form
           className='staff-genre-add-form'
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>장르 코드</div>
             </div>
-            <div class='col-sm-9'>
-              <input
-                class='form-control'
-                type='text'
-                placeholder='GR000'
-                defaultValue=''
-                aria-invalid={
-                  !isDirty ? undefined : errors.code ? 'true' : 'false'
-                }
-                {...register('code', {
-                  required: '장르 코드을 입력해주세요.',
-                })}
-              />
-              {errors.code && (
-                <small role='alert' className='input-alert'>
-                  {errors.code.message}
-                </small>
-              )}
+            <div className='col-sm-9'>
+              <span>{genre.code}</span>
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>장르 이름</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='text'
                 placeholder='장르 이름을 입력하세요'
-                defaultValue=''
+                defaultValue={genre.name}
                 aria-invalid={
                   !isDirty ? undefined : errors.name ? 'true' : 'false'
                 }
@@ -116,13 +105,17 @@ export default function StaffGenreAddForm(props) {
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button class='btn btn-secondary' onClick={resetData}>
-                초기화
+              <button
+                type='button'
+                className='btn btn-secondary'
+                onClick={resetData}
+              >
+                되돌리기
               </button>
               &nbsp; &nbsp; &nbsp;
               <button
                 type='submit'
-                class='btn btn-success'
+                className='btn btn-success'
                 disabled={!(isDirty && isValid)}
               >
                 {isLoading ? (
@@ -130,7 +123,7 @@ export default function StaffGenreAddForm(props) {
                     <span className='sr-only' />
                   </div>
                 ) : (
-                  <span>등록</span>
+                  <span>수정</span>
                 )}
               </button>
             </div>

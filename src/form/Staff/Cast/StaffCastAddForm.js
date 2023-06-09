@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import serverapi from '../services/serverapi';
+import serverapi from '../../../services/serverapi';
 import { useForm } from 'react-hook-form';
-import countries from '../constants/country.json';
+import countries from '../../../constants/country.json';
 
-import '../styles/components/form-container.scss';
-import '../styles/components/modal-container.scss';
+import '../../../styles/components/form-container.scss';
+import '../../../styles/components/modal-container.scss';
 
 export default function StaffCastAddForm(props) {
   const closeCastModal = props.closeCastModal;
@@ -67,7 +67,7 @@ export default function StaffCastAddForm(props) {
       <div className='btn-close'>
         <button
           type='button'
-          class='btn-close'
+          className='btn-close'
           aria-label='Close'
           onClick={closeCastModal}
         ></button>
@@ -76,12 +76,12 @@ export default function StaffCastAddForm(props) {
       <div className='form-container'>
         <form className='staff-cast-add-form' onSubmit={handleSubmit(onSubmit)}>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>이름</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='text'
                 placeholder='인물 이름을 입력하세요'
                 aria-invalid={
@@ -99,12 +99,12 @@ export default function StaffCastAddForm(props) {
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>생년월일</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='text'
                 placeholder='1970-01-01'
                 aria-invalid={
@@ -122,12 +122,12 @@ export default function StaffCastAddForm(props) {
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>사진</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='file'
                 aria-invalid={
                   !isDirty ? undefined : errors.profileImage ? 'true' : 'false'
@@ -144,12 +144,12 @@ export default function StaffCastAddForm(props) {
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>국적</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <select
-                class='form-select'
+                className='form-select'
                 aria-label='Default select example'
                 aria-invalid={
                   !isDirty ? undefined : errors.nationality ? 'true' : 'false'
@@ -165,12 +165,12 @@ export default function StaffCastAddForm(props) {
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>설명</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <textarea
-                class='form-control'
+                className='form-control'
                 rows='3'
                 aria-invalid={
                   !isDirty ? undefined : errors.nationality ? 'true' : 'false'
@@ -188,13 +188,13 @@ export default function StaffCastAddForm(props) {
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button class='btn btn-secondary' onClick={resetData}>
+              <button className='btn btn-secondary' onClick={resetData}>
                 초기화
               </button>
               &nbsp; &nbsp; &nbsp;
               <button
                 type='submit'
-                class='btn btn-success'
+                className='btn btn-success'
                 disabled={!(isDirty && isValid)}
               >
                 {isLoading ? (

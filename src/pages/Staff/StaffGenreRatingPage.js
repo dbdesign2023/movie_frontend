@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
-import serverapi from '../services/serverapi';
-import StaffGenreAddForm from '../form/StaffGenreAddForm';
-import StaffRatingAddForm from '../form/StaffRatingAddForm';
-import GenreComponent from '../components/GenreComponent';
-import RatingComponent from '../components/RatingComponent';
+import serverapi from '../../services/serverapi';
+import StaffGenreAddForm from '../../form/Staff/Genre/StaffGenreAddForm';
+import StaffRatingAddForm from '../../form/Staff/Rating/StaffRatingAddForm';
+import GenreComponent from '../../components/GenreComponent';
+import RatingComponent from '../../components/RatingComponent';
 
-import '../styles/components/page-container.scss';
+import '../../styles/components/page-container.scss';
 
 function StaffGenrePage() {
   const [genreModalOpen, setGenreModalOpen] = useState(false);
@@ -52,7 +52,7 @@ function StaffGenrePage() {
   return (
     <>
       <div className='add-button-container'>
-        <button class='btn btn-success' onClick={showGenreModal}>
+        <button className='btn btn-success' onClick={showGenreModal}>
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />
@@ -74,7 +74,7 @@ function StaffGenrePage() {
         </Modal>
       </div>
       <div className='list-container'>
-        <table class='table table-striped'>
+        <table className='table table-striped'>
           <thead>
             <tr>
               <th scope='col'>코드</th>
@@ -142,7 +142,7 @@ function StaffRatingPage() {
   return (
     <>
       <div className='add-button-container'>
-        <button class='btn btn-success' onClick={showRatingModal}>
+        <button className='btn btn-success' onClick={showRatingModal}>
           {isLoading2 ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />
@@ -164,7 +164,7 @@ function StaffRatingPage() {
         </Modal>
       </div>
       <div className='list-container'>
-        <table class='table table-striped'>
+        <table className='table table-striped'>
           <thead>
             <tr>
               <th scope='col'>코드</th>
@@ -176,9 +176,9 @@ function StaffRatingPage() {
           <tbody>
             {ratingList.map((rating) => (
               <RatingComponent
+                key={rating.code}
                 rating={rating}
                 getRatingList={getRatingList}
-                key={rating.ratingId}
               />
             ))}
           </tbody>

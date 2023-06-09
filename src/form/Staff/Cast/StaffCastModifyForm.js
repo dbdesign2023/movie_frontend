@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import serverapi from '../services/serverapi';
+import serverapi from '../../../services/serverapi';
 import { useForm } from 'react-hook-form';
-import countries from '../constants/country.json';
+import countries from '../../../constants/country.json';
 
-import '../styles/components/form-container.scss';
-import '../styles/components/modal-container.scss';
+import '../../../styles/components/form-container.scss';
+import '../../../styles/components/modal-container.scss';
 
 export default function StaffCastModifyForm(props) {
   const closeCastModify = props.closeCastModify;
@@ -67,7 +67,7 @@ export default function StaffCastModifyForm(props) {
       <div className='btn-close'>
         <button
           type='button'
-          class='btn-close'
+          className='btn-close'
           aria-label='Close'
           onClick={closeCastModify}
         ></button>
@@ -76,12 +76,12 @@ export default function StaffCastModifyForm(props) {
       <div className='form-container'>
         <form className='staff-cast-add-form' onSubmit={handleSubmit(onSubmit)}>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>이름</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='text'
                 placeholder='인물 이름을 입력하세요'
                 defaultValue={info.name}
@@ -92,12 +92,12 @@ export default function StaffCastModifyForm(props) {
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>생년월일</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='text'
                 placeholder='1970-01-01'
                 defaultValue={info.birthDate}
@@ -108,24 +108,24 @@ export default function StaffCastModifyForm(props) {
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>사진</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='file'
                 {...register('profileImage')}
               />
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>국적</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <select
-                class='form-select'
+                className='form-select'
                 aria-label='Default select example'
                 defaultValue={info.nationality}
                 {...register('nationality', {
@@ -135,23 +135,27 @@ export default function StaffCastModifyForm(props) {
                 {Object.entries(countries).map(([key, country]) => {
                   if (key === info.nationality)
                     return (
-                      <option value={key} selected>
+                      <option key={key} value={key} selected>
                         {country.CountryNameKR}
                       </option>
                     );
                   else
-                    return <option value={key}>{country.CountryNameKR}</option>;
+                    return (
+                      <option key={key} value={key}>
+                        {country.CountryNameKR}
+                      </option>
+                    );
                 })}
               </select>
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
+            <div className='col-sm-3'>
               <div className='content-text-container'>설명</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <textarea
-                class='form-control'
+                className='form-control'
                 rows='3'
                 defaultValue={info.info}
                 {...register('info', {
@@ -162,7 +166,7 @@ export default function StaffCastModifyForm(props) {
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button type='submit' class='btn btn-success'>
+              <button type='submit' className='btn btn-success'>
                 {isLoading ? (
                   <div className='spinner-border' role='status'>
                     <span className='sr-only' />

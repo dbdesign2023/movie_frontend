@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
-import StaffImageForm from '../form/StaffImageForm';
-import StaffCastModifyForm from '../form/StaffCastModifyForm';
+import StaffImageForm from '../form/Staff/Image/StaffImageForm';
+import StaffCastModifyForm from '../form/Staff/Cast/StaffCastModifyForm';
 
 export default function CastComponent(props) {
   const cast = props.cast;
@@ -14,7 +14,7 @@ export default function CastComponent(props) {
   const [info, setInfo] = useState({});
 
   const getInfo = async () => {
-    const api = `/movie/cast/detail?castId=${parseInt(cast.castId, 10)}`;
+    const api = `movie/cast/detail?castId=${parseInt(cast.castId, 10)}`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -23,7 +23,6 @@ export default function CastComponent(props) {
     };
 
     try {
-      console.log('staffToken', token);
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
@@ -94,11 +93,17 @@ export default function CastComponent(props) {
 
   return (
     <tr key={cast.castId}>
-      <td>{cast.name}</td>
-      <td>{cast.birthDate}</td>
-      <td>{cast.nationality}</td>
+      <td className='centered-cell'>
+        <span>{cast.name}</span>
+      </td>
+      <td className='centered-cell'>
+        <span>{cast.birthDate}</span>
+      </td>
+      <td className='centered-cell'>
+        <span>{cast.nationality}</span>
+      </td>
       <td>
-        <button class='btn btn-warning' onClick={showImageModal}>
+        <button className='btn btn-warning' onClick={showImageModal}>
           사진
         </button>
         {imageModalOpen && <Modal setImageModalOpen={showImageModal} />}
@@ -115,7 +120,7 @@ export default function CastComponent(props) {
         </Modal>
       </td>
       <td>
-        <button class='btn btn-warning' onClick={showCastModify}>
+        <button className='btn btn-warning' onClick={showCastModify}>
           수정
         </button>
         {castModifyOpen && <Modal setCastModifyOpen={showCastModify} />}
@@ -132,7 +137,10 @@ export default function CastComponent(props) {
         </Modal>
       </td>
       <td>
-        <button class='btn btn-danger' onClick={() => deleteCast(cast.castId)}>
+        <button
+          className='btn btn-danger'
+          onClick={() => deleteCast(cast.castId)}
+        >
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />

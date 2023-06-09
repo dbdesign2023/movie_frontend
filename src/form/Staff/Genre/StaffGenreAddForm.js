@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import serverapi from '../services/serverapi';
+import serverapi from '../../../services/serverapi';
 import { useForm } from 'react-hook-form';
 
-import '../styles/components/form-container.scss';
-import '../styles/components/modal-container.scss';
+import '../../../styles/components/form-container.scss';
+import '../../../styles/components/modal-container.scss';
 
-export default function StaffRoelForm(props) {
-  const closeRatingModal = props.closeRatingModal;
-  const getRatingList = props.getRatingList;
+export default function StaffGenreAddForm(props) {
+  const closeGenreModal = props.closeGenreModal;
+  const getGenreList = props.getGenreList;
   const [isLoading, setLoading] = useState(false);
 
   const {
@@ -23,7 +23,7 @@ export default function StaffRoelForm(props) {
   };
 
   const onSubmit = async (data) => {
-    const api = '/movie/rating/add';
+    const api = '/movie/genre/add';
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -38,9 +38,9 @@ export default function StaffRoelForm(props) {
       const response = await serverapi.post(api, data, options);
       console.log('response', response.data);
 
-      closeRatingModal();
+      closeGenreModal();
       alert('장르가 등록되었습니다');
-      getRatingList();
+      getGenreList();
       resetData();
     } catch (error) {
       console.log(error);
@@ -55,32 +55,32 @@ export default function StaffRoelForm(props) {
       <div className='btn-close'>
         <button
           type='button'
-          class='btn-close'
+          className='btn-close'
           aria-label='Close'
-          onClick={closeRatingModal}
+          onClick={closeGenreModal}
         ></button>
       </div>
-      <div className='title-text-center-container'>등급 추가</div>
+      <div className='title-text-center-container'>장르 추가</div>
       <div className='form-container'>
         <form
-          className='staff-rating-add-form'
+          className='staff-genre-add-form'
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className='row'>
-            <div class='col-sm-3'>
-              <div className='content-text-container'>등급 코드</div>
+            <div className='col-sm-3'>
+              <div className='content-text-container'>장르 코드</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='text'
-                placeholder='RT000'
+                placeholder='GR000'
                 defaultValue=''
                 aria-invalid={
                   !isDirty ? undefined : errors.code ? 'true' : 'false'
                 }
                 {...register('code', {
-                  required: '등급 코드를 입력해주세요.',
+                  required: '장르 코드을 입력해주세요.',
                 })}
               />
               {errors.code && (
@@ -91,20 +91,20 @@ export default function StaffRoelForm(props) {
             </div>
           </div>
           <div className='row'>
-            <div class='col-sm-3'>
-              <div className='content-text-container'>등급 이름</div>
+            <div className='col-sm-3'>
+              <div className='content-text-container'>장르 이름</div>
             </div>
-            <div class='col-sm-9'>
+            <div className='col-sm-9'>
               <input
-                class='form-control'
+                className='form-control'
                 type='text'
-                placeholder='등급 이름을 입력하세요'
+                placeholder='장르 이름을 입력하세요'
                 defaultValue=''
                 aria-invalid={
                   !isDirty ? undefined : errors.name ? 'true' : 'false'
                 }
                 {...register('name', {
-                  required: '등급 이름을 입력해주세요.',
+                  required: '장르 이름을 입력해주세요.',
                 })}
               />
               {errors.name && (
@@ -116,13 +116,13 @@ export default function StaffRoelForm(props) {
           </div>
           <div className='bottom-container'>
             <div className='button-container'>
-              <button class='btn btn-secondary' onClick={resetData}>
+              <button className='btn btn-secondary' onClick={resetData}>
                 초기화
               </button>
               &nbsp; &nbsp; &nbsp;
               <button
                 type='submit'
-                class='btn btn-success'
+                className='btn btn-success'
                 disabled={!(isDirty && isValid)}
               >
                 {isLoading ? (

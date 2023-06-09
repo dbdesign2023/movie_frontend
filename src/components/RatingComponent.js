@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
-import StaffRatingModifyForm from '../form/StaffRatingModifyForm';
+import StaffRatingModifyForm from '../form/Staff/Rating/StaffRatingModifyForm';
 
 export default function RatingComponent(props) {
   const rating = props.rating;
@@ -50,10 +50,14 @@ export default function RatingComponent(props) {
 
   return (
     <tr key={rating.code}>
-      <td>{rating.code}</td>
-      <td>{rating.name}</td>
+      <td className='centered-cell'>
+        <span>{rating.code}</span>
+      </td>
+      <td className='centered-cell'>
+        <span>{rating.name}</span>
+      </td>
       <td>
-        <button class='btn btn-warning' onClick={showRatingModify}>
+        <button className='btn btn-warning' onClick={showRatingModify}>
           수정
         </button>
         {ratingModifyOpen && <Modal setRatingModifyOpen={showRatingModify} />}
@@ -71,7 +75,7 @@ export default function RatingComponent(props) {
       </td>
       <td>
         <button
-          class='btn btn-danger'
+          className='btn btn-danger'
           onClick={() => deleteRating(rating.code)}
         >
           {isLoading ? (

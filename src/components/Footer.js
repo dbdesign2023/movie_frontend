@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
-import StaffLoginForm from '../form/StaffLoginForm';
-import StaffSignUpForm from '../form/StaffSignUpForm';
+import StaffLoginForm from '../form/Staff/Info/StaffLoginForm';
+import StaffSignUpForm from '../form/Staff/Info/StaffSignUpForm';
 import { AuthContext } from '../services/AuthContext';
 
 function Unlogined() {
@@ -67,58 +67,58 @@ function StaffLogined() {
   return (
     <>
       <ul className='nav me-auto'>
-        <li class='nav-item'>
+        <li className='nav-item'>
           <a
-            class='nav-link link-dark px-2 active'
+            className='nav-link link-dark px-2 active'
             href='/staff/movie'
             aria-current='page'
           >
             영화 관리
           </a>
         </li>
-        <li class='nav-item'>
+        <li className='nav-item'>
           <a
-            class='nav-link link-dark px-2 active'
+            className='nav-link link-dark px-2 active'
             href='/staff/schedule'
             aria-current='page'
           >
             상영 일정 관리
           </a>
         </li>
-        <li class='nav-item'>
+        <li className='nav-item'>
           <a
-            class='nav-link link-dark px-2 active'
+            className='nav-link link-dark px-2 active'
+            href='/staff/role'
+            aria-current='page'
+          >
+            등장인물 관리
+          </a>
+        </li>
+        <li className='nav-item'>
+          <a
+            className='nav-link link-dark px-2 active'
             href='/staff/cast'
             aria-current='page'
           >
             인물 관리
           </a>
         </li>
-        <li class='nav-item'>
+        <li className='nav-item'>
           <a
-            class='nav-link link-dark px-2 active'
+            className='nav-link link-dark px-2 active'
             href='/staff/genrerating'
             aria-current='page'
           >
             장르&등급 관리
           </a>
         </li>
-        <li class='nav-item'>
+        <li className='nav-item'>
           <a
-            class='nav-link link-dark px-2 active'
+            className='nav-link link-dark px-2 active'
             href='/staff/theater'
             aria-current='page'
           >
             상영관 관리
-          </a>
-        </li>
-        <li class='nav-item'>
-          <a
-            class='nav-link link-dark px-2 active'
-            href='/staff/customer'
-            aria-current='page'
-          >
-            고객 관리
           </a>
         </li>
       </ul>

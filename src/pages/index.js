@@ -8,12 +8,13 @@ import NotFoundPage from './NotFoundPage';
 import SchedulePage from './SchedulePage';
 import TicketingPage from './TicketingPage';
 
-import StaffCastPage from './StaffCastPage';
-import StaffCustomerPage from './StaffCustomerPage';
-import StaffGenreRatingPage from './StaffGenreRatingPage';
-import StaffMoviePage from './StaffMoviePage';
-import StaffSchedulePage from './StaffSchedulePage';
-import StaffTheaterPage from './StaffTheaterPage';
+import StaffCastPage from './Staff/StaffCastPage';
+import StaffGenreRatingPage from './Staff/StaffGenreRatingPage';
+import StaffMoviePage from './Staff/StaffMoviePage';
+import StaffSchedulePage from './Staff/StaffSchedulePage';
+import StaffTheaterPage from './Staff/StaffTheaterPage';
+import StaffSeatPage from './Staff/StaffSeatPage';
+import StaffRolePage from './Staff/StaffRolePage';
 
 import CustomerLoginPage from './CustomerLoginPage';
 import CustomerRegisterPage from './CustomerRegisterPage';
@@ -45,7 +46,8 @@ function Router() {
           <Route path='/staff/cast' element={<StaffCastPage />} />
           <Route path='/staff/genrerating' element={<StaffGenreRatingPage />} />
           <Route path='/staff/theater' element={<StaffTheaterPage />} />
-          <Route path='/staff/customer' element={<StaffCustomerPage />} />
+          <Route path='/staff/theater/:theaterId' element={<StaffSeatPage />} />
+          <Route path='/staff/role' element={<StaffRolePage />} />
 
           <Route path='/main' element={<MainPage />} />
           <Route path='/login' element={<CustomerLoginPage />} />
@@ -57,7 +59,7 @@ function Router() {
             path='/schedulewithmovie'
             element={<ScheduleWithMoviePage />}
           />
-          <Route path='/moviedetail' element={<MovieDetailPage />}/>
+          <Route path='/moviedetail' element={<MovieDetailPage />} />
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>

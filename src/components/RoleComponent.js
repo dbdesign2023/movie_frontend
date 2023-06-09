@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
-import StaffGenreModifyForm from '../form/Staff/Genre/StaffGenreModifyForm';
+import StaffRoleModifyForm from '../form/Staff/Role/StaffRoleModifyForm';
 
-export default function GenreComponent(props) {
-  const genre = props.genre;
-  const getGenreList = props.getGenreList;
+export default function RoleComponent(props) {
+  const role = props.role;
+  const getMovieList = props.getMovieList;
+  const info = props.info;
 
-  const [genreModifyOpen, setGenreModifyOpen] = useState(false);
+  const [roleModifyOpen, setRoleModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const showGenreModify = () => {
-    setGenreModifyOpen(true);
+  const showRoleModify = () => {
+    setRoleModifyOpen(true);
   };
 
-  const closeGenreModify = () => {
-    setGenreModifyOpen(false);
+  const closeRoleModify = () => {
+    setRoleModifyOpen(false);
   };
 
-  const deleteGenre = async (id) => {
-    const api = `/movie/genre/delete?id=${id}`;
+  const deleteRole = async (id) => {
+    console.log('id', id);
+    const api = `/movie/${parseInt(info.movieId, 10)}/role/delete?castId=${id}`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -27,7 +29,7 @@ export default function GenreComponent(props) {
       },
     };
 
-    const yesOrNo = window.confirm('장르를 삭제하시겠습니까?');
+    const yesOrNo = window.confirm('인물을 삭제하시겠습니까?');
     if (yesOrNo === false) {
       return;
     }
@@ -37,9 +39,8 @@ export default function GenreComponent(props) {
 
       const response = await serverapi.delete(api, options);
       console.log('response', response.data);
-
       alert('삭제되었습니다');
-      getGenreList();
+      window.location.reload();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -49,34 +50,38 @@ export default function GenreComponent(props) {
   };
 
   return (
-    <tr key={genre.code}>
+    <tr key={role.key}>
       <td className='centered-cell'>
-        <span>{genre.code}</span>
+        <span>{role.starring === true ? '주연' : '조연'}</span>
       </td>
       <td className='centered-cell'>
-        <span>{genre.name}</span>
+        <span>{role.name}</span>
+      </td>
+      <td className='centered-cell'>
+        <span>{role.role}</span>
       </td>
       <td>
-        <button className='btn btn-warning' onClick={showGenreModify}>
+        <button className='btn btn-warning' onClick={showRoleModify}>
           수정
         </button>
-        {genreModifyOpen && <Modal setGenreModifyOpen={showGenreModify} />}
+        {roleModifyOpen && <Modal setRoleModifyOpen={showRoleModify} />}
         <Modal
-          visible={genreModifyOpen}
+          visible={roleModifyOpen}
           effect='fadeInDown'
-          onClickAway={closeGenreModify}
+          onClickAway={closeRoleModify}
         >
-          <StaffGenreModifyForm
-            closeGenreModify={closeGenreModify}
-            getGenreList={getGenreList}
-            genre={genre}
+          <StaffRoleModifyForm
+            closeRoleModify={closeRoleModify}
+            getMovieList={getMovieList}
+            role={role}
+            info={info}
           />
         </Modal>
       </td>
       <td>
         <button
           className='btn btn-danger'
-          onClick={() => deleteGenre(genre.code)}
+          onClick={() => deleteRole(role.castId)}
         >
           {isLoading ? (
             <div className='spinner-border' role='status'>

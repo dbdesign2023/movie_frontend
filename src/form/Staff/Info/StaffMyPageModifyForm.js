@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import serverapi from '../services/serverapi';
+import serverapi from '../../../services/serverapi';
 import { useForm } from 'react-hook-form';
 
-import '../styles/components/form-container.scss';
-import '../styles/components/modal-container.scss';
+import '../../../styles/components/form-container.scss';
+import '../../../styles/components/modal-container.scss';
 
 export default function StaffMypageModifyForm(props) {
   const closeMypageModify = props.closeMypageModify;
@@ -113,7 +113,7 @@ export default function StaffMypageModifyForm(props) {
       <div className='btn-close'>
         <button
           type='button'
-          class='btn-close'
+          className='btn-close'
           aria-label='Close'
           onClick={closeMypageModify}
         ></button>
@@ -127,7 +127,7 @@ export default function StaffMypageModifyForm(props) {
             </div>
             <div className='col-sm-8'>
               <input
-                class='form-control'
+                className='form-control'
                 type='text'
                 placeholder='이름을 입력하세요'
                 defaultValue={info.name}
@@ -156,7 +156,7 @@ export default function StaffMypageModifyForm(props) {
             </div>
             <div className='col-sm-8'>
               <input
-                class='form-control'
+                className='form-control'
                 type='password'
                 placeholder='비밀번호를 입력하세요'
                 onChange={(e) => setPassword(e.value)}
@@ -180,7 +180,7 @@ export default function StaffMypageModifyForm(props) {
             </div>
             <div className='col-sm-8'>
               <input
-                class='form-control'
+                className='form-control'
                 type='password'
                 placeholder='비밀번호를 다시 한 번 입력하세요'
                 onChange={(e) => setPassword2(e.value)}
@@ -199,13 +199,13 @@ export default function StaffMypageModifyForm(props) {
             </div>
           </div>
           <div className='bottom-container'>
-            <button class='btn btn-secondary' onClick={resetData}>
+            <button className='btn btn-secondary' onClick={resetData}>
               저장된 정보
             </button>
             &nbsp; &nbsp; &nbsp;
             <button
               type='submit'
-              class='btn btn-success'
+              className='btn btn-success'
               disabled={!(isDirty && isValid)}
             >
               {isLoading ? (
@@ -217,7 +217,7 @@ export default function StaffMypageModifyForm(props) {
               )}
             </button>
             &nbsp; &nbsp; &nbsp;
-            <div class='btn btn-danger' onClick={exit}>
+            <div className='btn btn-danger' onClick={exit}>
               {isLoading2 ? (
                 <div className='spinner-border' role='status'>
                   <span className='sr-only' />

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
-import serverapi from '../services/serverapi';
-import StaffMovieAddForm from '../form/StaffMovieAddForm';
-import MovieComponent from '../components/MovieComponent';
+import serverapi from '../../services/serverapi';
+import StaffMovieAddForm from '../../form/Staff/Movie/StaffMovieAddForm';
+import MovieComponent from '../../components/MovieComponent';
 
-import '../styles/components/page-container.scss';
+import '../../styles/components/page-container.scss';
 
 export default function StaffMoviePage() {
   const [movieModalOpen, setMovieModalOpen] = useState(false);
@@ -69,7 +69,7 @@ export default function StaffMoviePage() {
   return (
     <>
       <div className='add-button-container'>
-        <button class='btn btn-success' onClick={showMovieModal}>
+        <button className='btn btn-success' onClick={showMovieModal}>
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />
@@ -91,7 +91,7 @@ export default function StaffMoviePage() {
         </Modal>
       </div>
       <div className='list-container'>
-        <table class='table table-striped'>
+        <table className='table table-striped'>
           <thead>
             <tr>
               <th scope='col'>제목</th>
