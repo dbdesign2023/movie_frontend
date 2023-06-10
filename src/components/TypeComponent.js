@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
-import StaffGenreModifyForm from '../form/Staff/Genre/StaffGenreModifyForm';
+import StaffTypeModifyForm from '../form/Staff/Theater/StaffTypeModifyForm';
 
-export default function GenreComponent(props) {
-  const genre = props.genre;
-  const getGenreList = props.getGenreList;
+export default function TypeComponent(props) {
+  const type = props.type;
+  const getTypeList = props.getTypeList;
 
-  const [genreModifyOpen, setGenreModifyOpen] = useState(false);
+  const [typeModifyOpen, setTypeModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const showGenreModify = () => {
-    setGenreModifyOpen(true);
+  const showTypeModify = () => {
+    setTypeModifyOpen(true);
   };
 
-  const closeGenreModify = () => {
-    setGenreModifyOpen(false);
+  const closeTypeModify = () => {
+    setTypeModifyOpen(false);
   };
 
-  const deleteGenre = async (id) => {
-    const api = `/movie/genre/delete?id=${id}`;
+  const deleteType = async (id) => {
+    const api = `/theater/type/delete?id=${id}`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -29,7 +29,7 @@ export default function GenreComponent(props) {
       },
     };
 
-    const yesOrNo = window.confirm('장르를 삭제하시겠습니까?');
+    const yesOrNo = window.confirm('상영관 종류를 삭제하시겠습니까?');
     if (yesOrNo === false) {
       return;
     }
@@ -41,7 +41,7 @@ export default function GenreComponent(props) {
       console.log('response', response.data);
 
       alert('삭제되었습니다');
-      getGenreList();
+      getTypeList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -51,34 +51,34 @@ export default function GenreComponent(props) {
   };
 
   return (
-    <tr key={genre.code}>
+    <tr key={type.code}>
       <td className='centered-cell'>
-        <span>{genre.code}</span>
+        <span>{type.code}</span>
       </td>
       <td className='centered-cell'>
-        <span>{genre.name}</span>
+        <span>{type.name}</span>
       </td>
       <td>
-        <button className='btn btn-warning' onClick={showGenreModify}>
+        <button className='btn btn-warning' onClick={showTypeModify}>
           수정
         </button>
-        {genreModifyOpen && <Modal setGenreModifyOpen={showGenreModify} />}
+        {typeModifyOpen && <Modal setTypeModifyOpen={showTypeModify} />}
         <Modal
-          visible={genreModifyOpen}
+          visible={typeModifyOpen}
           effect='fadeInDown'
-          onClickAway={closeGenreModify}
+          onClickAway={closeTypeModify}
         >
-          <StaffGenreModifyForm
-            closeGenreModify={closeGenreModify}
-            getGenreList={getGenreList}
-            genre={genre}
+          <StaffTypeModifyForm
+            closeTypeModify={closeTypeModify}
+            getTypeList={getTypeList}
+            type={type}
           />
         </Modal>
       </td>
       <td>
         <button
           className='btn btn-danger'
-          onClick={() => deleteGenre(genre.code)}
+          onClick={() => deleteType(type.code)}
         >
           {isLoading ? (
             <div className='spinner-border' role='status'>

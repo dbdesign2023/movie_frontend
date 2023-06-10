@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
-import StaffImageForm from '../form/StaffImageForm';
-import StaffMovieModifyForm from '../form/StaffMovieModifyForm';
+import StaffImageForm from '../form/Staff/Image/StaffImageForm';
+import StaffMovieModifyForm from '../form/Staff/Movie/StaffMovieModifyForm';
 
 export default function MovieComponent(props) {
   const movie = props.movie;
@@ -19,11 +19,12 @@ export default function MovieComponent(props) {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
     try {
-      console.log('staffToken', token);
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
@@ -67,6 +68,8 @@ export default function MovieComponent(props) {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
@@ -93,11 +96,17 @@ export default function MovieComponent(props) {
 
   return (
     <tr key={movie.movieId}>
-      <td>{movie.title}</td>
-      <td>{movie.directorName}</td>
-      <td>{movie.releaseDate}</td>
+      <td className='centered-cell'>
+        <span>{movie.title}</span>
+      </td>
+      <td className='centered-cell'>
+        <span>{movie.directorName}</span>
+      </td>
+      <td className='centered-cell'>
+        <span>{movie.releaseDate}</span>
+      </td>
       <td>
-        <button class='btn btn-warning' onClick={showImageModal}>
+        <button className='btn btn-warning' onClick={showImageModal}>
           포스터
         </button>
         {imageModalOpen && <Modal setImageModalOpen={showImageModal} />}
@@ -114,7 +123,7 @@ export default function MovieComponent(props) {
         </Modal>
       </td>
       <td>
-        <button class='btn btn-warning' onClick={showMovieModify}>
+        <button className='btn btn-warning' onClick={showMovieModify}>
           수정
         </button>
         {movieModifyOpen && <Modal setMovieModifyOpen={showMovieModify} />}
@@ -132,7 +141,7 @@ export default function MovieComponent(props) {
       </td>
       <td>
         <button
-          class='btn btn-danger'
+          className='btn btn-danger'
           onClick={() => deleteMovie(movie.movieId)}
         >
           {isLoading ? (

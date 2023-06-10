@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
-import StaffGenreModifyForm from '../form/Staff/Genre/StaffGenreModifyForm';
+import StaffScheduleModifyForm from '../form/Staff/Schedule/StaffScheduleModifyForm';
 
-export default function GenreComponent(props) {
-  const genre = props.genre;
-  const getGenreList = props.getGenreList;
+export default function ScheduleComponent(props) {
+  const schedule = props.schedule;
+  const theaterList = props.theaterList;
+  const getTheaterList = props.getTheaterList;
 
-  const [genreModifyOpen, setGenreModifyOpen] = useState(false);
+  const [scheduleModifyOpen, setScheduleModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const showGenreModify = () => {
-    setGenreModifyOpen(true);
+  const showScheduleModify = () => {
+    setScheduleModifyOpen(true);
+    getTheaterList();
   };
 
-  const closeGenreModify = () => {
-    setGenreModifyOpen(false);
+  const closeScheduleModify = () => {
+    setScheduleModifyOpen(false);
   };
 
-  const deleteGenre = async (id) => {
-    const api = `/movie/genre/delete?id=${id}`;
+  const deleteSchedule = async (id) => {
+    const api = `/schedule/${id}/delete`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
@@ -29,7 +31,7 @@ export default function GenreComponent(props) {
       },
     };
 
-    const yesOrNo = window.confirm('장르를 삭제하시겠습니까?');
+    const yesOrNo = window.confirm('상영 일정을 삭제하시겠습니까?');
     if (yesOrNo === false) {
       return;
     }
@@ -39,9 +41,8 @@ export default function GenreComponent(props) {
 
       const response = await serverapi.delete(api, options);
       console.log('response', response.data);
-
       alert('삭제되었습니다');
-      getGenreList();
+      window.location.reload();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -51,34 +52,39 @@ export default function GenreComponent(props) {
   };
 
   return (
-    <tr key={genre.code}>
+    <tr key={schedule.key}>
       <td className='centered-cell'>
-        <span>{genre.code}</span>
+        <span>{schedule.movieName}</span>
       </td>
       <td className='centered-cell'>
-        <span>{genre.name}</span>
+        <span>{schedule.theaterDTO.name}</span>
+      </td>
+      <td className='centered-cell'>
+        <span>{schedule.startTime}</span>
       </td>
       <td>
-        <button className='btn btn-warning' onClick={showGenreModify}>
+        <button className='btn btn-warning' onClick={showScheduleModify}>
           수정
         </button>
-        {genreModifyOpen && <Modal setGenreModifyOpen={showGenreModify} />}
+        {scheduleModifyOpen && (
+          <Modal setScheduleModifyOpen={showScheduleModify} />
+        )}
         <Modal
-          visible={genreModifyOpen}
+          visible={scheduleModifyOpen}
           effect='fadeInDown'
-          onClickAway={closeGenreModify}
+          onClickAway={closeScheduleModify}
         >
-          <StaffGenreModifyForm
-            closeGenreModify={closeGenreModify}
-            getGenreList={getGenreList}
-            genre={genre}
+          <StaffScheduleModifyForm
+            closeScheduleModify={closeScheduleModify}
+            schedule={schedule}
+            theaterList={theaterList}
           />
         </Modal>
       </td>
       <td>
         <button
           className='btn btn-danger'
-          onClick={() => deleteGenre(genre.code)}
+          onClick={() => deleteSchedule(schedule.scheduleId)}
         >
           {isLoading ? (
             <div className='spinner-border' role='status'>
