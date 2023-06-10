@@ -35,6 +35,8 @@ export default function StaffSeatPage(props) {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
@@ -69,40 +71,43 @@ export default function StaffSeatPage(props) {
     setSeatModifyOpen(false);
   };
 
-  const selectedDelete = async (id) => {
-    const api = `/theater/${parseInt(theaterId, 10)}/seat/delete?id=${id}`;
+  const deleteSeat = async () => {
+    const api = `/theater/${parseInt(theaterId, 10)}/seat/delete`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
+
+    const yesOrNo = window.confirm('좌석을 삭제하시겠습니까?');
+    if (yesOrNo === false) {
+      return;
+    }
 
     try {
       setLoading(true);
 
-      const response = await serverapi.delete(api, options);
+      const requestBodyString = selectedSeats.join(','); // 배열을 문자열로 변환
+      const requestBody = { seatsToDelete: requestBodyString };
+      console.log('Request body', requestBody);
+
+      const response = await serverapi.delete(api, {
+        ...options,
+        data: requestBody, // 요청 본문에 데이터를 포함시킴
+      });
       console.log('response', response.data);
+
+      alert('삭제되었습니다');
+      getSeatList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
     } finally {
       setLoading(false);
     }
-  };
-
-  const deleteSeat = () => {
-    const yesOrNo = window.confirm('좌석을 삭제하시겠습니까?');
-    if (yesOrNo === false) {
-      return;
-    }
-
-    selectedSeats.forEach((seat) => {
-      selectedDelete(seat);
-    });
-
-    alert('삭제되었습니다');
-    getSeatList();
   };
 
   const handleSeatSelection = (seatId) => {

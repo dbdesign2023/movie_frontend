@@ -21,8 +21,9 @@ export default function StaffSeatAddForm(props) {
   } = useForm();
 
   const resetData = () => {
-    resetField('row');
-    resetField('column');
+    resetField('minRow');
+    resetField('maxRow');
+    resetField('maxColumn');
     setSeatList([]);
   };
 
@@ -34,6 +35,8 @@ export default function StaffSeatAddForm(props) {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
@@ -56,13 +59,14 @@ export default function StaffSeatAddForm(props) {
         for (let column = 1; column <= data.maxColumn; column++) {
           const seat =
             String.fromCharCode(row) + column.toString().padStart(2, '0');
-          seatList.push({ seatId: seat, price: data.price });
+          seatList.push(seat);
         }
       }
 
-      console.log('Request body', seatList);
+      const { maxColumn, minRow, maxRow, ...requestData } = data;
+      requestData.seatIds = seatList;
 
-      const response = await serverapi.post(api, seatList, options);
+      const response = await serverapi.post(api, requestData, options);
       console.log('response', response.data);
 
       closeSeatModal();

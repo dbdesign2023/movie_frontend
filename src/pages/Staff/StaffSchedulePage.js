@@ -52,6 +52,8 @@ export default function StaffSchedulePage() {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
@@ -91,6 +93,8 @@ export default function StaffSchedulePage() {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
@@ -111,6 +115,8 @@ export default function StaffSchedulePage() {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
@@ -179,6 +185,7 @@ export default function StaffSchedulePage() {
               toggleItem={toggleItem}
               isOpen={isOpen}
               scheduleList={scheduleList}
+              getTheaterList={getTheaterList}
               theaterList={theaterList}
             />
           );

@@ -15,7 +15,7 @@ export default function StaffScheduleModifyForm(props) {
   const { register, handleSubmit } = useForm({
     defaultValues: {
       movieId: schedule.movieId,
-      theaterId: schedule.theaterId,
+      theaterId: schedule.theaterDTO.theaterId,
       scheduleId: schedule.scheduleId,
       discount: schedule.discount,
     },
@@ -28,11 +28,15 @@ export default function StaffScheduleModifyForm(props) {
       return;
     }
 
+    data.discount = `${data.discount}%`;
+
     const api = `/schedule/${schedule.scheduleId}/modify`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
@@ -126,7 +130,7 @@ export default function StaffScheduleModifyForm(props) {
                 type='number'
                 placeholder='할인율을 입력해주세요'
                 defaultValue={schedule.discount}
-                {...register('startTime')}
+                {...register('discount')}
               />
             </div>
           </div>

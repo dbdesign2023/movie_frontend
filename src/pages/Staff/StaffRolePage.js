@@ -40,6 +40,8 @@ export default function StaffRolePage() {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
@@ -69,6 +71,8 @@ export default function StaffRolePage() {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
@@ -107,6 +111,8 @@ export default function StaffRolePage() {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 

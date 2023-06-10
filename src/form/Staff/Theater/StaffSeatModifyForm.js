@@ -19,39 +19,35 @@ export default function StaffSeatAddForm(props) {
     formState: { isValid, isDirty, errors },
   } = useForm();
 
-  const selectedModify = async (seat, price) => {
+  const onSubmit = async (data) => {
     const api = `/theater/${parseInt(theaterId, 10)}/seat/modify`;
     const token = localStorage.getItem('staffToken');
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 
     try {
       setLoading(true);
-      const data = { seatId: seat, price: price };
 
+      data.seatIds = selectedSeats;
       console.log('Request body', data);
 
       const response = await serverapi.post(api, data, options);
       console.log('response', response.data);
+
+      closeSeatModify();
+      alert('좌석이 수정되었습니다');
+      getSeatList();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
     } finally {
       setLoading(false);
     }
-  };
-
-  const onSubmit = (data) => {
-    selectedSeats.forEach((seat) => {
-      selectedModify(seat, data.price);
-    });
-
-    closeSeatModify();
-    alert('좌석이 수정되었습니다');
-    getSeatList();
   };
 
   return (

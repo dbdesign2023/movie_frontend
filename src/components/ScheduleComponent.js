@@ -6,12 +6,14 @@ import StaffScheduleModifyForm from '../form/Staff/Schedule/StaffScheduleModifyF
 export default function ScheduleComponent(props) {
   const schedule = props.schedule;
   const theaterList = props.theaterList;
+  const getTheaterList = props.getTheaterList;
 
   const [scheduleModifyOpen, setScheduleModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
   const showScheduleModify = () => {
     setScheduleModifyOpen(true);
+    getTheaterList();
   };
 
   const closeScheduleModify = () => {
@@ -24,6 +26,8 @@ export default function ScheduleComponent(props) {
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': true,
       },
     };
 

@@ -5,6 +5,7 @@ function AccordionBody(props) {
   const date = props.date;
   const scheduleList = props.scheduleList;
   const theaterList = props.theaterList;
+  const getTheaterList = props.getTheaterList;
 
   return (
     <div className='accordion-body'>
@@ -26,6 +27,7 @@ function AccordionBody(props) {
                   key={schedule.Id}
                   schedule={schedule}
                   theaterList={theaterList}
+                  getTheaterList={getTheaterList}
                 />
               );
             })}
@@ -41,6 +43,7 @@ export default function DateScheduleComponent(props) {
   const isOpen = props.isOpen;
   const scheduleList = props.scheduleList;
   const theaterList = props.theaterList;
+  const getTheaterList = props.getTheaterList;
 
   return (
     <div className='accordion-item' key={date}>
@@ -71,6 +74,7 @@ export default function DateScheduleComponent(props) {
           date={date}
           scheduleList={scheduleList}
           theaterList={theaterList}
+          getTheaterList={getTheaterList}
         />
       </div>
     </div>
