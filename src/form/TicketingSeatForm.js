@@ -4,13 +4,16 @@ import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
 import '../styles/components/page-container.scss';
 import Modal from 'react-awesome-modal';
-import seat from '/img/seat.png'
-import seat_gray from '/img/seat_gray.png'
-import seat_choose from '/img/seat_choosepng.png'
+//import seat from '../img/seat.png'
+//import seat_gray from '../img/seat_gray.png'
+//import seat_choose from '../img/seat_choosepng.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { baseUrl } from './axios';
 export default function TicketingSeatForm(){
+    const seat = 'img/seat.png'
+    const seat_gray = 'img/seat_gray.png'
+    const seat_choose = '/img/seat_choosepng.png'
     const ip = baseUrl;
     const modify = localStorage.getItem('modifyticketid')
     const modifysc = localStorage.getItem('modifyscheduleid')
