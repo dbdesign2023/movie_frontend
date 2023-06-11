@@ -89,7 +89,7 @@ export default function PaymentForm() {
       const response = await axios.post(url, formData, header);
       localStorage.setItem('payment_data', JSON.stringify(response.data));
       alert('결제가 완료되었습니다.');
-      navigate('/');
+      navigate('../');
     } catch (error) {
       if (error.response.data.message) alert(error.response.data.message);
       else alert('알수 없는 에러.');

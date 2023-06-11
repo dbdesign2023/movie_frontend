@@ -287,7 +287,7 @@ export default function TicketingSeatForm(){
                 alert("알수 없는 에러.")
             localStorage.removeItem('modifyticketid')
             localStorage.removeItem('modifyscheduleid')
-            navigate('/')
+            navigate('../')
         }
     }
     const membermodify = async() =>{
@@ -322,7 +322,7 @@ export default function TicketingSeatForm(){
                 alert("알수 없는 에러.")
             localStorage.removeItem('modifyticketid')
             localStorage.removeItem('modifyscheduleid')
-            navigate('/')
+            navigate('../')
         }
     }
     const membermodifyhandler = () =>{

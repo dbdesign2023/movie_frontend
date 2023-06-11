@@ -74,7 +74,7 @@ function Logined(props) {
     localStorage.clear();
     setIsCustomerLogin(false);
     setIsStaffLogin(false);
-    window.location.replace('/');
+    window.location.replace('/movie_frontend/');
   };
 
   return (
@@ -85,7 +85,7 @@ function Logined(props) {
             <a
               className='nav-link active'
               aria-current='page'
-              href='/ticketlist'
+              href='ticketlist'
             >
               내 티켓 조회
             </a>
@@ -93,7 +93,7 @@ function Logined(props) {
         </li>
         <li className='nav-item'>
           {isCustomerLogin ? (
-            <a className='nav-link active' aria-current='page' href='/mypage'>
+            <a className='nav-link active' aria-current='page' href='mypage'>
               마이페이지
             </a>
           ) : (
@@ -146,13 +146,13 @@ function Header() {
       aria-label='Eighth navbar example'
     >
       <div className='container'>
-        <a className='navbar-brand' href='/'>
+        <a className='navbar-brand' href='/movie_frontend/'>
           HiMovie
         </a>
         <div className='collapse navbar-collapse'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <a className='nav-link active' aria-current='page' href='/'>
+              <a className='nav-link active' aria-current='page' href='/movie_frontend/'>
                 영화
               </a>
             </li>
@@ -160,7 +160,7 @@ function Header() {
               <a
                 className='nav-link active'
                 aria-current='page'
-                href='/schedule'
+                href='schedule'
               >
                 상영 일정
               </a>

@@ -37,7 +37,7 @@ export default function CustomerLoginForm() {
         localStorage.setItem("customerToken", response.data);
         setIsCustomerLogin(true)
         localStorage.setItem("loginId", login_id)
-        navigate(`%PUBLIC_URL%`)
+        navigate('../')
       } 
       catch (error) {
         if(error.response.data.message)
@@ -92,7 +92,7 @@ export default function CustomerLoginForm() {
             <button className='btn btn-primary m-1' onClick={loginHandler}>
               로그인
             </button>
-            <a className='btn btn-primary m-1' href='/signup' role='button'>
+            <a className='btn btn-primary m-1' href='signup' role='button'>
               회원가입
             </a>
           </div>
