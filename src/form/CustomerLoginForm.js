@@ -7,9 +7,10 @@ import '../styles/components/page-container.scss';
 import axios from 'axios';
 import { AuthContext } from '../services/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from './axios';
 
 export default function CustomerLoginForm() {
-  const ip = process.env.REACT_APP_API_ORIGIN;
+  const ip = baseUrl;
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [clickcheck, setClickcheck] = useState(false);
