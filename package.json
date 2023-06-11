@@ -1,5 +1,6 @@
 {
   "name": "dbdesign",
+  "homepage": "https://dbdesign2023.github.io/movie_frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -32,7 +33,9 @@
     "eject": "react-scripts eject",
     "prettier": "prettier --write --config ./.prettierrc \"**/*.{js,jsx}\"",
     "lint": "eslint './src/**/*.{js,jsx}'",
-    "lint:fix": "eslint --fix './src/**/*.{js,jsx}'"
+    "lint:fix": "eslint --fix './src/**/*.{js,jsx}'",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -54,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^5.0.0",
     "prettier": "2.8.8"
   }
 }

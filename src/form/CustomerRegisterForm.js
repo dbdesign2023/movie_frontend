@@ -6,10 +6,9 @@ import { useNavigate } from 'react-router-dom';
 
 import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
-import { baseUrl } from './axios';
 
 export default function CustomerRegisterForm() {
-  const ip = baseUrl
+  const ip = process.env.REACT_APP_API_ORIGIN;
   const [name, setName] = useState('');
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');

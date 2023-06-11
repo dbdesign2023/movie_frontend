@@ -11,17 +11,17 @@ function Unlogined() {
     <>
       <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' href='/nonmember'>
+          <a className='nav-link active' aria-current='page' href='nonmember'>
             비회원조회
           </a>
         </li>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' href='/login'>
+          <a className='nav-link active' aria-current='page' href='login'>
             로그인
           </a>
         </li>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' href='/signup'>
+          <a className='nav-link active' aria-current='page' href='signup'>
             회원가입
           </a>
         </li>
