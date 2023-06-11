@@ -33,8 +33,7 @@ function Unlogined() {
 function Logined(props) {
   const value = props.value;
   const isCustomerLogin = value.isCustomerLogin;
-  const setIsCustomerLogin = value.setIsCustomerLogin;
-  const setIsStaffLogin = value.setIsStaffLogin;
+  const { logout } = useContext(AuthContext);
 
   const [mypageModifyOpen, setMypageModifyOpen] = useState(false);
   const [info, setInfo] = useState({});
@@ -56,8 +55,13 @@ function Logined(props) {
 
       setInfo(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
@@ -68,13 +72,6 @@ function Logined(props) {
 
   const closeMypageModify = () => {
     setMypageModifyOpen(false);
-  };
-
-  const Logout = () => {
-    localStorage.clear();
-    setIsCustomerLogin(false);
-    setIsStaffLogin(false);
-    window.location.replace('/');
   };
 
   return (
@@ -111,14 +108,11 @@ function Logined(props) {
             effect='fadeInDown'
             onClickAway={closeMypageModify}
           >
-            <StaffMypageModifyForm
-              closeMypageModify={closeMypageModify}
-              Logout={Logout}
-            />
+            <StaffMypageModifyForm closeMypageModify={closeMypageModify} />
           </Modal>
         </li>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' onClick={Logout}>
+          <a className='nav-link active' aria-current='page' onClick={logout}>
             로그아웃
           </a>
         </li>

@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
+import { AuthContext } from '../services/AuthContext';
 import StaffImageForm from '../form/Staff/Image/StaffImageForm';
 import StaffCastModifyForm from '../form/Staff/Cast/StaffCastModifyForm';
+import countries from '../constants/country.json';
 
 export default function CastComponent(props) {
+  const { logout } = useContext(AuthContext);
   const cast = props.cast;
   const getCastList = props.getCastList;
 
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [castModifyOpen, setCastModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState(null);
+
+  useEffect(() => {
+    getInfo();
+  }, [cast]);
 
   const getInfo = async () => {
     const api = `movie/cast/detail?castId=${parseInt(cast.castId, 10)}`;
@@ -39,14 +46,19 @@ export default function CastComponent(props) {
 
       setInfo(modifiedData);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
-  const showImageModal = () => {
+  const showImageModal = async () => {
+    await getInfo();
     setImageModalOpen(true);
-    getInfo();
   };
 
   const closeImageModal = () => {
@@ -88,11 +100,24 @@ export default function CastComponent(props) {
       alert('삭제되었습니다');
       getCastList();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  const getCountryName = (countryCode) => {
+    const country = countries[countryCode];
+    if (country) {
+      return country.CountryNameKR;
+    }
+    return '';
   };
 
   return (
@@ -104,41 +129,43 @@ export default function CastComponent(props) {
         <span>{cast.birthDate}</span>
       </td>
       <td className='centered-cell'>
-        <span>{cast.nationality}</span>
+        <span>{getCountryName(cast.nationality)}</span>
       </td>
       <td>
-        <button className='btn btn-warning' onClick={showImageModal}>
+        <button className='btn btn-secondary' onClick={showImageModal}>
           사진
         </button>
-        {imageModalOpen && <Modal setImageModalOpen={showImageModal} />}
-        <Modal
-          visible={imageModalOpen}
-          effect='fadeInDown'
-          onClickAway={closeImageModal}
-        >
-          <StaffImageForm
-            closeImageModal={closeImageModal}
-            fileURL='/api/profileImage?fileName='
-            info={info}
-          />
-        </Modal>
+        {imageModalOpen && info && info.profileImage && (
+          <Modal
+            visible={imageModalOpen}
+            effect='fadeInDown'
+            onClickAway={closeImageModal}
+          >
+            <StaffImageForm
+              closeImageModal={closeImageModal}
+              fileURL='/api/profileImage?fileName='
+              info={info}
+            />
+          </Modal>
+        )}
       </td>
       <td>
         <button className='btn btn-warning' onClick={showCastModify}>
           수정
         </button>
-        {castModifyOpen && <Modal setCastModifyOpen={showCastModify} />}
-        <Modal
-          visible={castModifyOpen}
-          effect='fadeInDown'
-          onClickAway={closeCastModify}
-        >
-          <StaffCastModifyForm
-            closeCastModify={closeCastModify}
-            getCastList={getCastList}
-            info={info}
-          />
-        </Modal>
+        {castModifyOpen && (
+          <Modal
+            visible={castModifyOpen}
+            effect='fadeInDown'
+            onClickAway={closeCastModify}
+          >
+            <StaffCastModifyForm
+              closeCastModify={closeCastModify}
+              getCastList={getCastList}
+              info={info}
+            />
+          </Modal>
+        )}
       </td>
       <td>
         <button

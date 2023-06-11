@@ -2,6 +2,13 @@
   padding: 10px;
   padding-left: 50px;
   padding-right: 50px;
+  overflow: auto;
+  max-height: 500px;
+  .form-check-container {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
   .row {
     padding: 4px;
   }

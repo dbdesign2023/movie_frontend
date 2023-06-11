@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../../services/serverapi';
+import { AuthContext } from '../../services/AuthContext';
 import StaffCastAddForm from '../../form/Staff/Cast/StaffCastAddForm';
 import CastComponent from '../../components/CastComponent';
 
 import '../../styles/components/page-container.scss';
 
 export default function StaffCastPage() {
+  const { logout } = useContext(AuthContext);
   const [castModalOpen, setCastModalOpen] = useState(false);
   const [preCastList, setPreCastList] = useState([]);
   const [castList, setCastList] = useState([]);
@@ -43,14 +45,20 @@ export default function StaffCastPage() {
             : tmp.getMonth() + 1) +
           '-' +
           (tmp.getDate() < 10 ? '0' + tmp.getDate() : tmp.getDate());
+
         return cast;
       });
 
       setPreCastList(response.data);
       setCastList(updatedCastList);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }

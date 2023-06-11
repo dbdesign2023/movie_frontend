@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import serverapi from '../../../services/serverapi';
+import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
 
 export default function StaffTheaterAddForm(props) {
+  const { logout } = useContext(AuthContext);
   const closeTheaterModal = props.closeTheaterModal;
   const getTheaterList = props.getTheaterList;
   const typeList = props.typeList;
@@ -56,8 +58,13 @@ export default function StaffTheaterAddForm(props) {
       getTheaterList();
       resetData();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }

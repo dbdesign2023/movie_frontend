@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../../services/serverapi';
+import { AuthContext } from '../../services/AuthContext';
 import StaffRoleAddForm from '../../form/Staff/Role/StaffRoleAddForm';
 import MovieRoleComponent from '../../components/MovieRoleComponent';
 
 import '../../styles/components/page-container.scss';
 
 export default function StaffRolePage() {
+  const { logout } = useContext(AuthContext);
   const [preMovieList, setPreMovieList] = useState([]);
   const [movieList, setMovieList] = useState([]);
   const [info, setInfo] = useState({});
@@ -60,8 +62,13 @@ export default function StaffRolePage() {
 
       setInfo(modifiedData);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
@@ -98,8 +105,13 @@ export default function StaffRolePage() {
       setPreMovieList(response.data);
       setMovieList(updatedMovieList);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -122,8 +134,13 @@ export default function StaffRolePage() {
 
       setCastList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
