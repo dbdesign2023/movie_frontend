@@ -35,12 +35,18 @@ export default function CustomerTicketForm(props) {
         seat.push(item.seatId);
         movie.bill += item.price;
       });
-      if (movie.discount.at(-1) === '%') {
-        let tmp = parseInt(movie.discount.slice(0, -1));
-        movie.fin_bill = (movie.bill * (100 - tmp)) / 100;
-      } else {
-        let tmp = parseInt(movie.discount.slice(0, -1));
-        movie.fin_bill = movie.bill - tmp * ticket.seats.length;
+      if (movie.discount){
+        if (movie.discount.at(-1) === '%') {
+          let tmp = parseInt(movie.discount.slice(0, -1));
+          movie.fin_bill = (movie.bill * (100 - tmp)) / 100;
+        } else {
+          let tmp = parseInt(movie.discount.slice(0, -1));
+          movie.fin_bill = movie.bill - tmp * ticket.seats.length;
+        }
+      }
+      else{
+        movie.discount = "할인 적용 대상이 아닙니다."
+        movie.fin_bill = movie.bill
       }
       let string = '';
       seat.map((tmp) => {
