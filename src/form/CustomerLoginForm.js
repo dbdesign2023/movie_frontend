@@ -43,7 +43,7 @@ export default function CustomerLoginForm() {
         if(error.response.data.message)
             alert(error.response.data.message)
         else
-            alert("알수 없는 에러.")
+            alert("ID가 존재하지 않거나 비밀번호가 일치하지 않습니다.")
       }
     }
   }

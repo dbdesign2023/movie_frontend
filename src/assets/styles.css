@@ -26,3 +26,9 @@
         flex-wrap:wrap;
     }
 }
+.ticket-detail-box {
+    .text-start {
+        padding-bottom: 10px;
+        padding-left: 10px;
+    }
+}

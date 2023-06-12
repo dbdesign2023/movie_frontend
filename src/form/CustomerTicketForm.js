@@ -63,6 +63,8 @@ export default function CustomerTicketForm(props) {
   const style = {
     background: '#BBBBBB88',
     borderRadius: 15,
+    padding: "20px",
+    height: "60vh"
   };
   const navigate = useNavigate();
   const modify = () => {
@@ -118,23 +120,23 @@ export default function CustomerTicketForm(props) {
   return (
     <div>
       <div className='ticket-container m-3' style={style}>
-        <div style={{ display: 'flex' }}>
-          <div style={{ width: '50%', padding: 10 }}>
+        <div style={{ display: 'flex', height: "100%" }}>
+          <div className='ticket-detail-box' style={{ width: '50%', padding: 10 }}>
             {movie && (
               <h5 className='text-start'>ticket_no : {movie.ticket_id}</h5>
             )}
             {movie && (
               <h2 className='text-start pb-1'>영화 제목 : {movie.title}</h2>
             )}
-            {movie && <h3 className='text-start'>상영관 : {movie.theater}</h3>}
+            {movie && <h4 className='text-start'>상영관 : {movie.theater}</h4>}
             {movie && <h4 className='text-start pb-1'>좌석 : {string}</h4>}
             {movie && (
-              <h3 className='text-start'>시작시간 : {movie.start_time}</h3>
+              <h4 className='text-start'>시작시간 : {movie.start_time}</h4>
             )}
-            {movie && <h3 className='text-start'>금액 : {movie.bill}</h3>}
-            {movie && <h3 className='text-start'>할인율 : {movie.discount}</h3>}
+            {movie && <h4 className='text-start'>금액 : {movie.bill}\</h4>}
+            {movie && <h4 className='text-start'>할인율 : {movie.discount}</h4>}
             {movie && (
-              <h3 className='text-start'>최종결제금액 : {movie.fin_bill}</h3>
+              <h3 className='text-start' style={{paddingTop:"25%"}}>최종결제금액 : {movie.fin_bill}\</h3>
             )}
           </div>
           <div style={{ width: '50%' }}>
@@ -142,75 +144,75 @@ export default function CustomerTicketForm(props) {
               <img
                 className='img-fluid'
                 src={ip+"/api/posters?fileName="+movie.img}
-                style={{ width: 250, padding: 10 }}
+                style={{ height: "100%", padding: 10 }}
               ></img>
             )}
           </div>
         </div>
-        <div>
+      </div>
+      <div style={{marginBottom:"2%"}}>
+      {!movie.payed && (
+          <button
+            type='button'
+            className='btn btn-primary m-1'
+            onClick={modify}
+          >
+            좌석 재선택
+          </button>
+        )}
         {!movie.payed && (
-            <button
-              type='button'
-              className='btn btn-primary m-1'
-              onClick={modify}
-            >
-              좌석 재선택
-            </button>
-          )}
-          {!movie.payed && (
-            <button
-              type='button'
-              className='btn btn-primary m-1'
-              onClick={pay}
-            >
-              결제하러 가기
-            </button>
-          )}
-          {!movie.payed && (
-            <button
-              type='button'
-              className='btn btn-danger m-1'
-              onClick={openModal}
-            >
-              예약 취소
-            </button>
-          )}
-          {movie.payed && (
-            <button
-              type='button'
-              className='btn btn-danger m-1'
-              onClick={openModal}
-            >
-              티켓 환불
-            </button>
-          )}
-        </div>
-        <Modal
-          visible={modal}
-          effect='fadeInDown'
-          onClickAway={closeModal}
-          width='600'
-        >
-          <div>
-            <div className='content-text-container'>비밀번호를 입력하세요.</div>
-          </div>
-          <div style={{ padding: 10 }}>
-            <input
-              type='password'
-              className='form-control'
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </div>
+          <button
+            type='button'
+            className='btn btn-primary m-1'
+            onClick={pay}
+          >
+            결제하러 가기
+          </button>
+        )}
+        {!movie.payed && (
           <button
             type='button'
             className='btn btn-danger m-1'
-            onClick={deletehandler}
+            onClick={openModal}
           >
-            티켓 삭제하기
+            예약 취소
           </button>
-        </Modal>
+        )}
+        {movie.payed && (
+          <button
+            type='button'
+            className='btn btn-danger m-1'
+            onClick={openModal}
+          >
+            티켓 환불
+          </button>
+        )}
       </div>
+      <Modal
+        visible={modal}
+        effect='fadeInDown'
+        onClickAway={closeModal}
+        width='600'
+      >
+        <div>
+          <div className='content-text-container'>비밀번호를 입력하세요.</div>
+        </div>
+        <div style={{ padding: 10 }}>
+          <input
+            type='password'
+            className='form-control'
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </div>
+        <button
+          type='button'
+          className='btn btn-danger m-1'
+          onClick={deletehandler}
+        >
+          티켓 삭제하기
+        </button>
+      </Modal>
     </div>
   );
 }

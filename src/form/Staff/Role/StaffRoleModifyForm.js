@@ -116,7 +116,7 @@ export default function StaffRoleModifyForm(props) {
           </div>
           <div className='row'>
             <div className='col-sm-3'>
-              <div className='content-text-container'>개봉일</div>
+              <div className='content-text-container'>주연 여부</div>
             </div>
             <div className='col-9'>
               <div className='form-check'>
