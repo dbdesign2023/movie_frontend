@@ -6,3 +6,20 @@
     display: block;
     align-items: left;
 }
+.schedule_list_box {
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    font-weight:bold;
+    max-width:700px;
+    font-size:1.5em;
+    text-align: left;
+    margin-bottom: 3%;
+    justify-content: space-between;
+    .schedule_list {
+        display:flex;
+        align-items: center;
+        justify-content: left;
+        flex-wrap:wrap;
+    }
+}

@@ -8,7 +8,7 @@ export default function ScheduleWithMovieForm() {
     const movie = JSON.parse(localStorage.getItem("movie"));
     const ip = baseUrl;
     const img = ip+`/api/posters?fileName=`+movie.poster.fileName
-    const [schedule, setSchedule] = useState()
+    const [schedule, setSchedule] = useState([])
     const [scheduledetail, setScheduledetail] = useState()
     const [modal, setModal] = useState(false)
     const getMovieSchedule = async()=>{
@@ -24,7 +24,9 @@ export default function ScheduleWithMovieForm() {
                 url,
                 header
             )
+            console.log(response.data)
             setSchedule(response.data)
+            console.log(schedule)
         }
         catch(error){
             if(error.response.data.message)
@@ -57,9 +59,27 @@ export default function ScheduleWithMovieForm() {
             <h2 style={{marginTop: '3%'}}>
                 {movie.title} 상영일정
             </h2>
-            <img src={img} style={{width: '60%', height: '70%'}}/>
+            <img src={img} style={{width: '60%', height: '70%', marginBottom: '5%'}}/>
             <div>
-                {schedule &&(schedule.map((item,idx)=>(
+                {schedule&&schedule.map(sche=>`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}`).filter((element,index)=>{
+                    return schedule.map(sche=>`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}`).indexOf(element) == index;
+                }).map((date,idx) => (
+                    <div key={idx} className='schedule_list_box'>{date}<div className='schedule_list'>{
+                    schedule.filter(sche => date==`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}`).map((item,idx)=>(
+                        <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
+                            <div>
+                                {item.startTime[3]<10?'0'+item.startTime[3]:item.startTime[3]}:{item.startTime[4]<10?'0'+item.startTime[4]:item.startTime[4]} ~
+                            </div>
+                            <div>
+                                남은 좌석 {item.totalSeat-item.filledSeat}/{item.totalSeat}
+                            </div>
+                        </button>))
+                    }</div>
+                    </div>
+                ))}
+            </div>
+            <div>
+                {/*schedule &&(schedule.map((item,idx)=>(
                     <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
                         <div>
                             {item.startTime[0]}-{item.startTime[1]<10?'0'+item.startTime[1]:item.startTime[1]}-{item.startTime[2]<10?'0'+item.startTime[2]:item.startTime[2]}
@@ -71,7 +91,7 @@ export default function ScheduleWithMovieForm() {
                             남은 좌석 {item.totalSeat-item.filledSeat}/{item.totalSeat}
                         </div>
                     </button>
-                )))}
+                )))*/}
             </div>
             {scheduledetail &&(<Modal                
                 visible={modal}
