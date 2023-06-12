@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 
 import '../styles/components/modal-container.scss';
 import '../styles/components/form-container.scss';
+import '../assets/styles.css';
+
 import { baseUrl } from './axios';
 
 export default function CustomerRegisterForm() {
@@ -166,26 +168,28 @@ const registerHandler = async () => {
           <div className='col-sm-4'>
             <div className='content-text-container'>성별</div>
           </div>
-          <div className='col-sm-4, gender-box'>
-            <label>
+          <div className='col-sm-4 gender-outer-box' style={{justifyContent:"space-around"}}>
+              <div className='gender-box'>
               <input
                 type='radio'
                 value='1'
                 checked={gender === '1'}
                 onChange={handleClickRadioButton}
+                style={{marginRight: '5px'}}
               />
               <span>남성</span>
-
-            </label>
-            <label className='ms-auto'>
+              </div>
+              <div className='gender-box'>
               <input
                 type='radio'
                 value='2'
                 checked={gender === '2'}
                 onChange={handleClickRadioButton}
+                style={{marginRight: '5px'}}
+
               />
               <span>여성</span>
-            </label>
+              </div>
           </div>
           <div className='col-sm-4 justify-content-start'>
             {clickcheck && !gender && (
@@ -239,10 +243,10 @@ const registerHandler = async () => {
           effect='fadeInDown'
           onClickAway={closemodal}
         >
-          <div className='title-text-center-container'>
+          <div className='title-text-center-container' style={{margin:'20px'}}>
             회원가입이 완료되었습니다!
           </div>
-          <div className='bottom-container'>
+          <div className='bottom-container' style={{padding:0, marginBottom:'10px'}}>
             <div className='button-container'>
               <button
                 type='button'
