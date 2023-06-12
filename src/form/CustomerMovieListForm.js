@@ -34,6 +34,7 @@ export default function CustomerMovieListForm() {
     }
   };
   useEffect(() => {
+    localStorage.clear()
     getmoviedata();
   }, []);
   useEffect(() => {
