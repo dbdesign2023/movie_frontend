@@ -137,7 +137,7 @@ export default function CustomerTicketForm(props) {
             {movie && (
               <img
                 className='img-fluid'
-                src={movie.img}
+                src={ip+"/api/posters?fileName="+movie.img}
                 style={{ width: 250, padding: 10 }}
               ></img>
             )}
