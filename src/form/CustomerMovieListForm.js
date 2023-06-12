@@ -34,7 +34,15 @@ export default function CustomerMovieListForm() {
     }
   };
   useEffect(() => {
-    localStorage.clear()
+    const tokenToSaveCustomer = localStorage.getItem("customerToken");
+    const tokenToSaveAdmin = localStorage.getItem("staffToken");
+    localStorage.clear();
+    if(tokenToSaveCustomer) {
+      localStorage.setItem("customerToken", tokenToSaveCustomer);
+    }
+    if(tokenToSaveAdmin) {
+      localStorage.setItem("staffToken", tokenToSaveAdmin);
+    }
     getmoviedata();
   }, []);
   useEffect(() => {

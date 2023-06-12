@@ -9,41 +9,28 @@ export default function StaffImageForm(props) {
   const info = props.info;
 
   return (
-    <div className='modal-container'>
-      <div className='btn-close'>
-        <button
-          type='button'
-          className='btn-close'
-          aria-label='Close'
-          onClick={closeImageModal}
-        ></button>
-      </div>
-      <div className='title-text-center-container'>이미지 보기</div>
-      <div className='form-container'>
-        <div className='img-container'>
-          {fileURL === '/api/profileImage?fileName=' ? (
-            <img
-              src={
-                process.env.REACT_APP_API_ORIGIN +
-                fileURL +
-                info.profileImage.fileName
-              }
-              className='w-100'
-              alt='profileImage_image'
-            />
-          ) : (
-            <img
-              src={
-                process.env.REACT_APP_API_ORIGIN +
-                fileURL +
-                info.poster.fileName
-              }
-              className='w-100'
-              alt='poster_image'
-            />
-          )}
-        </div>
-      </div>
+    <div className='modal-container' style={{height:"1000px", padding:0}}>
+        {fileURL === '/api/profileImage?fileName=' ? (
+          <img
+            src={
+              process.env.REACT_APP_API_ORIGIN +
+              fileURL +
+              info.profileImage.fileName
+            }
+            className='w-100'
+            alt='profileImage_image'
+            style={{height:"100%"}}
+          />
+        ) : (
+          <img
+            src={
+              process.env.REACT_APP_API_ORIGIN + fileURL + info.poster.fileName
+            }
+            className='w-100'
+            alt='poster_image'
+            style={{height:"100%"}}
+          />
+        )}
     </div>
   );
 }
