@@ -42,18 +42,39 @@ function Router() {
           <Route path='mypage' element={<MyPagePage />} />
           <Route path='ticketing' element={<TicketingPage />} />
 
-          <Route path='staff/*' element={<StaffMoviePage />} />
-          <Route path='staff/movie' element={<StaffMoviePage />} />
+          <Route path='/movie_frontend/staff/*' element={<StaffMoviePage />} />
           <Route
-            path='staff/movie/genrerating'
+            path='/movie_frontend/staff/movie'
+            element={<StaffMoviePage />}
+          />
+          <Route
+            path='/movie_frontend/staff/movie/genrerating'
             element={<StaffGenreRatingPage />}
           />
-          <Route path='staff/schedule' element={<StaffSchedulePage />} />
-          <Route path='staff/cast' element={<StaffCastPage />} />
-          <Route path='staff/theater' element={<StaffTheaterPage />} />
-          <Route path='staff/theater/:theaterId' element={<StaffSeatPage />} />
-          <Route path='staff/theater/type' element={<StaffTypePage />} />
-          <Route path='staff/role' element={<StaffRolePage />} />
+          <Route
+            path='/movie_frontend/staff/schedule'
+            element={<StaffSchedulePage />}
+          />
+          <Route
+            path='/movie_frontend/staff/cast'
+            element={<StaffCastPage />}
+          />
+          <Route
+            path='/movie_frontend/staff/theater'
+            element={<StaffTheaterPage />}
+          />
+          <Route
+            path='/movie_frontend/staff/theater/:theaterId'
+            element={<StaffSeatPage />}
+          />
+          <Route
+            path='/movie_frontend/staff/theater/type'
+            element={<StaffTypePage />}
+          />
+          <Route
+            path='/movie_frontend/staff/role'
+            element={<StaffRolePage />}
+          />
 
           <Route path='main' element={<MainPage />} />
           <Route path='/login' element={<CustomerLoginPage />} />
@@ -61,10 +82,7 @@ function Router() {
           <Route path='chooseseat' element={<ChooseSeatPage />} />
           <Route path='payment' element={<CustomerPaymentPage />} />
           <Route path='ticketlist' element={<CustomerTicketListPage />} />
-          <Route
-            path='schedulewithmovie'
-            element={<ScheduleWithMoviePage />}
-          />
+          <Route path='schedulewithmovie' element={<ScheduleWithMoviePage />} />
           <Route path='moviedetail' element={<MovieDetailPage />} />
         </Route>
         <Route path='*' element={<NotFoundPage />} />
