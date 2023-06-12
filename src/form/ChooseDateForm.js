@@ -188,7 +188,7 @@ export default function ChooseDateForm(date) {
     }
     const navigate = useNavigate()
     function clickHandler(){
-        setScheduledata(this.start)
+        setScheduledata(this)
         setModalstate(true)
         localStorage.setItem("schedule_id",this.id)
     }
@@ -223,7 +223,7 @@ export default function ChooseDateForm(date) {
                                         <div style={{display:"flex", justifyContent:"left"}}>
                                         {
                                             sc.schedule_id.map((id,idx) => (
-                                            <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind({id:id,start:sc.start_time[idx]})}>
+                                            <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind({id:id,start:sc.start_time[idx],theater_name:sc.theater_name})}>
                                                 <div>
                                                     {sc.start_time[idx]} ~ {sc.end_time[idx]}
                                                 </div>
@@ -243,9 +243,16 @@ export default function ChooseDateForm(date) {
                     effect='fadeInDown'
                     onClickAway={closeModal}
                 >
+                    {scheduledata &&
                     <div className='modal-container'>
-                        <div className='title-text-center-container'>
-                            {scheduledata} 에 예매 하시겠습니까?
+                        <h3>
+                            상영관 : {scheduledata.theater_name}
+                        </h3>
+                        <h3>
+                            시작시간 : {scheduledata.start}
+                        </h3>
+                        <div>
+                            예약 하시겠습니까?
                         </div>
                         <div className='bottom-container'>
                             <div className='button-container'>
@@ -254,6 +261,7 @@ export default function ChooseDateForm(date) {
                             </div>
                         </div>
                     </div>
+                    }
                 </Modal>
         </div>
     );
