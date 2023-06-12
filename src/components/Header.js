@@ -80,20 +80,19 @@ function Logined(props) {
       <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
         <li className='nav-item'>
           {isCustomerLogin && (
-            <a
+            <Link to={"/ticketlist"}
               className='nav-link active'
               aria-current='page'
-              href='ticketlist'
             >
               내 티켓 조회
-            </a>
+            </Link>
           )}
         </li>
         <li className='nav-item'>
           {isCustomerLogin ? (
-            <a className='nav-link active' aria-current='page' href='mypage'>
+            <Link to={"/mypage"} className='nav-link active' aria-current='page'>
               마이페이지
-            </a>
+            </Link>
           ) : (
             <a
               className='nav-link active'

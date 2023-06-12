@@ -304,8 +304,8 @@ export default function TicketingSeatForm() {
     }
   };
   const image_style = {
-    width: '50px',
-    height: '50px',
+    width: '100%',
+    height: '100%',
   };
   return (
     <div>
