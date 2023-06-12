@@ -156,13 +156,12 @@ function Header() {
               </Link>
             </li>
             <li className='nav-item'>
-              <a
+              <Link to={"/schedule"}
                 className='nav-link active'
                 aria-current='page'
-                href='schedule'
               >
                 상영 일정
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
