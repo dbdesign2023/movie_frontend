@@ -85,7 +85,7 @@ export default function ScheduleWithMovieForm() {
                             상영관 종류 : {scheduledetail.theaterDTO.typeName}
                         </h3>
                         <h3 className='text-start'>
-                            시작 시간 : {scheduledetail.startTime}
+                            시작 시간 : {scheduledetail.startTime[0]}-{scheduledetail.startTime[1]<10?'0'+scheduledetail.startTime[1]:scheduledetail.startTime[1]}-{scheduledetail.startTime[2]<10?'0'+scheduledetail.startTime[2]:scheduledetail.startTime[2]+' '+scheduledetail.startTime[3]<10?'0'+scheduledetail.startTime[3]:scheduledetail.startTime[3]}:{scheduledetail.startTime[4]<10?'0'+scheduledetail.startTime[4]:scheduledetail.startTime[4]}
                         </h3>
                         <h3 className='text-start'>
                             러닝 타임 : {movie.runningTime} 분
