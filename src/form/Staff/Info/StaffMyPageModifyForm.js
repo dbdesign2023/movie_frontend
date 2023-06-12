@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import serverapi from '../../../services/serverapi';
+import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
 
 export default function StaffMypageModifyForm(props) {
+  const { logout } = useContext(AuthContext);
   const closeMypageModify = props.closeMypageModify;
   const Logout = props.Logout;
   const info = props.info;
@@ -64,11 +66,16 @@ export default function StaffMypageModifyForm(props) {
         alert('회원탈퇴 되었습니다.');
         // 로그 아웃
         Logout();
-        window.location.replace('/');
+        window.location.replace('/movie_frontend/');
       }
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading2(false);
     }
@@ -103,8 +110,13 @@ export default function StaffMypageModifyForm(props) {
         resetData();
       }
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }

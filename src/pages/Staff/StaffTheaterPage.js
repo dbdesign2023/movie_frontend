@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../../services/serverapi';
+import { AuthContext } from '../../services/AuthContext';
 import StaffTheaterAddForm from '../../form/Staff/Theater/StaffTheaterAddForm';
 import TheaterComponent from '../../components/TheaterComponent';
 
 import '../../styles/components/page-container.scss';
 
 export default function StaffTheaterPage() {
+  const { logout } = useContext(AuthContext);
+
   const [theaterModalOpen, setTheaterModalOpen] = useState(false);
   const [theaterList, setTheaterList] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -39,8 +42,13 @@ export default function StaffTheaterPage() {
 
       setTheaterList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === 'undefined') {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -72,13 +80,18 @@ export default function StaffTheaterPage() {
 
       setTypeList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
   const goToTypePage = () => {
-    window.location.replace('/staff/theater/type');
+    window.location.replace('type');
   };
 
   return (
@@ -106,7 +119,7 @@ export default function StaffTheaterPage() {
           />
         </Modal>
         &nbsp;&nbsp;&nbsp;
-        <button className='btn btn-success' onClick={goToTypePage}>
+        <button className='btn btn-primary' onClick={goToTypePage}>
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />

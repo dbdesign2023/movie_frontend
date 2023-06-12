@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import serverapi from '../../../services/serverapi';
+import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
 
 export default function StaffRoleAddForm(props) {
+  const { logout } = useContext(AuthContext);
   const movieList = props.movieList;
   const closeRoleModal = props.closeRoleModal;
   const castList = props.castList;
@@ -57,8 +59,13 @@ export default function StaffRoleAddForm(props) {
       alert('역할이 등록되었습니다');
       resetData();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -74,7 +81,7 @@ export default function StaffRoleAddForm(props) {
           onClick={closeRoleModal}
         ></button>
       </div>
-      <div className='title-text-center-container'>영화 추가</div>
+      <div className='title-text-center-container'>등장인물 추가</div>
       <div className='form-container'>
         <form className='staff-role-add-form' onSubmit={handleSubmit(onSubmit)}>
           <div className='row'>
@@ -152,9 +159,9 @@ export default function StaffRoleAddForm(props) {
           </div>
           <div className='row'>
             <div className='col-sm-3'>
-              <div className='content-text-container'>개봉일</div>
+              <div className='content-text-container'>주연/조연</div>
             </div>
-            <div className='col-sm-9'>
+            <div className='col-9'>
               <div className='form-check'>
                 <input
                   className='form-check-input'
@@ -169,6 +176,7 @@ export default function StaffRoleAddForm(props) {
                   주연
                 </label>
               </div>
+              &nbsp; &nbsp;
               <div className='form-check'>
                 <input
                   className='form-check-input'

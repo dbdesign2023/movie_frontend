@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../../services/serverapi';
+import { AuthContext } from '../../services/AuthContext';
 import StaffGenreAddForm from '../../form/Staff/Genre/StaffGenreAddForm';
 import StaffRatingAddForm from '../../form/Staff/Rating/StaffRatingAddForm';
 import GenreComponent from '../../components/GenreComponent';
@@ -9,6 +10,7 @@ import RatingComponent from '../../components/RatingComponent';
 import '../../styles/components/page-container.scss';
 
 function StaffGenrePage() {
+  const { logout } = useContext(AuthContext);
   const [genreModalOpen, setGenreModalOpen] = useState(false);
   const [genreList, setGenreList] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -36,8 +38,13 @@ function StaffGenrePage() {
 
       setGenreList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -101,6 +108,7 @@ function StaffGenrePage() {
 }
 
 function StaffRatingPage() {
+  const { logout } = useContext(AuthContext);
   const [ratingModalOpen, setRatingModalOpen] = useState(false);
   const [ratingList, setRatingList] = useState([]);
   const [isLoading2, setLoading2] = useState(false);
@@ -128,8 +136,13 @@ function StaffRatingPage() {
 
       setRatingList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading2(false);
     }

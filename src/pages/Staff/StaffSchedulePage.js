@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../../services/serverapi';
+import { AuthContext } from '../../services/AuthContext';
 import StaffScheduleAddForm from '../../form/Staff/Schedule/StaffScheduleAddForm';
 import DateScheduleComponent from '../../components/DateScheduleComponent';
 
 import '../../styles/components/page-container.scss';
 
 export default function StaffSchedulePage() {
+  const { logout } = useContext(AuthContext);
+
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [preMovieList, setPreMovieList] = useState([]);
   const [movieList, setMovieList] = useState([]);
+  const [preScheduleList, setPreScheduleList] = useState([]);
   const [scheduleList, setScheduleList] = useState([]);
   const [theaterList, setTheaterList] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -46,6 +50,22 @@ export default function StaffSchedulePage() {
     setScheduleModalOpen(false);
   };
 
+  function padZero(value) {
+    return value.toString().padStart(2, '0');
+  }
+
+  function formatDateTime(dateTime) {
+    const [year, month, day, hour, minute] = dateTime;
+
+    const paddedYear = padZero(year);
+    const paddedMonth = padZero(month);
+    const paddedDay = padZero(day);
+    const paddedHour = padZero(hour);
+    const paddedMinute = padZero(minute);
+
+    return `${paddedYear}-${paddedMonth}-${paddedDay} ${paddedHour}:${paddedMinute}`;
+  }
+
   const getTheaterList = async () => {
     const api = '/theater/all';
     const token = localStorage.getItem('staffToken');
@@ -65,8 +85,13 @@ export default function StaffSchedulePage() {
 
       setTheaterList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === 'undefined') {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -80,14 +105,14 @@ export default function StaffSchedulePage() {
         return [...prevOpen, date];
       }
     });
-    getScheduleList(date);
+    getPreScheduleList(date);
   };
 
   useEffect(() => {
     console.log('ScheduleList', scheduleList);
   }, [scheduleList]);
 
-  const getScheduleList = async (date) => {
+  const getPreScheduleList = async (date) => {
     const api = `schedule/date/${date}`;
     const token = localStorage.getItem('staffToken');
     const options = {
@@ -102,10 +127,25 @@ export default function StaffSchedulePage() {
       const response = await serverapi.get(api, options);
       console.log('response', response.data);
 
-      setScheduleList(response.data);
+      const updatedScheduleList = response.data.map((schedule) => {
+        console.log('schedule', schedule);
+
+        let tmp = formatDateTime(schedule.startTime);
+        schedule.startTime = tmp;
+
+        return schedule;
+      });
+
+      setPreScheduleList(response.data);
+      setScheduleList(updatedScheduleList);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
@@ -142,8 +182,13 @@ export default function StaffSchedulePage() {
       setPreMovieList(response.data);
       setMovieList(updatedMovieList);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -173,6 +218,7 @@ export default function StaffSchedulePage() {
             closeScheduleModal={closeScheduleModal}
             movieList={movieList}
             theaterList={theaterList}
+            getScheduleList={getPreScheduleList}
           />
         </Modal>
       </div>

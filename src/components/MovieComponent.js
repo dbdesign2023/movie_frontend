@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
+import { AuthContext } from '../services/AuthContext';
 import StaffImageForm from '../form/Staff/Image/StaffImageForm';
 import StaffMovieModifyForm from '../form/Staff/Movie/StaffMovieModifyForm';
 
 export default function MovieComponent(props) {
+  const { logout } = useContext(AuthContext);
   const movie = props.movie;
   const getMovieList = props.getMovieList;
 
@@ -12,6 +14,10 @@ export default function MovieComponent(props) {
   const [movieModifyOpen, setMovieModifyOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [info, setInfo] = useState({});
+
+  useEffect(() => {
+    getInfo();
+  }, [movie]);
 
   const getInfo = async () => {
     const api = `/movie/detail?id=${parseInt(movie.movieId, 10)}`;
@@ -39,14 +45,19 @@ export default function MovieComponent(props) {
 
       setInfo(modifiedData);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
-  const showImageModal = () => {
+  const showImageModal = async () => {
+    await getInfo();
     setImageModalOpen(true);
-    getInfo();
   };
 
   const closeImageModal = () => {
@@ -87,8 +98,13 @@ export default function MovieComponent(props) {
       alert('삭제되었습니다');
       getMovieList();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -106,21 +122,22 @@ export default function MovieComponent(props) {
         <span>{movie.releaseDate}</span>
       </td>
       <td>
-        <button className='btn btn-warning' onClick={showImageModal}>
+        <button className='btn btn-secondary' onClick={showImageModal}>
           포스터
         </button>
-        {imageModalOpen && <Modal setImageModalOpen={showImageModal} />}
-        <Modal
-          visible={imageModalOpen}
-          effect='fadeInDown'
-          onClickAway={closeImageModal}
-        >
-          <StaffImageForm
-            closeImageModal={closeImageModal}
-            fileURL='/api/posters?fileName='
-            info={info}
-          />
-        </Modal>
+        {imageModalOpen && info && info.poster && (
+          <Modal
+            visible={imageModalOpen}
+            effect='fadeInDown'
+            onClickAway={closeImageModal}
+          >
+            <StaffImageForm
+              closeImageModal={closeImageModal}
+              fileURL='/api/posters?fileName='
+              info={info}
+            />
+          </Modal>
+        )}
       </td>
       <td>
         <button className='btn btn-warning' onClick={showMovieModify}>

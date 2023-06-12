@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
+import { AuthContext } from '../services/AuthContext';
 import StaffTheaterModifyForm from '../form/Staff/Theater/StaffTheaterModifyForm';
 
 export default function TheaterComponent(props) {
+  const { logout } = useContext(AuthContext);
   const theater = props.theater;
   const getTheaterList = props.getTheaterList;
 
@@ -21,7 +23,7 @@ export default function TheaterComponent(props) {
   };
 
   const goToSeatPage = (id) => {
-    window.location.replace(`/staff/theater/${id}`);
+    window.location.replace(`${id}`);
   };
 
   const getTypeList = async () => {
@@ -41,8 +43,13 @@ export default function TheaterComponent(props) {
 
       setTypeList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
@@ -72,8 +79,13 @@ export default function TheaterComponent(props) {
       alert('삭제되었습니다');
       getTheaterList();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -92,7 +104,7 @@ export default function TheaterComponent(props) {
       </td>
       <td>
         <button
-          className='btn btn-warning'
+          className='btn btn-primary'
           onClick={() => goToSeatPage(theater.theaterId)}
         >
           좌석 관리

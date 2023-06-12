@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import serverapi from '../../../services/serverapi';
+import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
 import countries from '../../../constants/country.json';
 
@@ -7,6 +8,7 @@ import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
 
 export default function StaffMovieAddForm(props) {
+  const { logout } = useContext(AuthContext);
   const closeMovieModal = props.closeMovieModal;
   const getMovieList = props.getMovieList;
 
@@ -46,8 +48,13 @@ export default function StaffMovieAddForm(props) {
 
       setCastList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
@@ -68,8 +75,13 @@ export default function StaffMovieAddForm(props) {
 
       setRatingList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
@@ -90,8 +102,13 @@ export default function StaffMovieAddForm(props) {
 
       setGenreList(response.data);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     }
   };
 
@@ -164,8 +181,13 @@ export default function StaffMovieAddForm(props) {
       getMovieList();
       resetData();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -295,7 +317,7 @@ export default function StaffMovieAddForm(props) {
               >
                 {Object.entries(countries).map(([key, country]) => {
                   return (
-                    <option key={key} value={key}>
+                    <option key={key} value={key} selected={key === 'KR'}>
                       {country.CountryNameKR}
                     </option>
                   );
@@ -402,25 +424,27 @@ export default function StaffMovieAddForm(props) {
             <div className='col-sm-3'>
               <div className='content-text-container'>장르</div>
             </div>
-            <div className='col-sm-9'>
-              {genreList.map((genre) => {
-                return (
-                  <div key={genre.code} className='form-check'>
-                    <input
-                      className='form-check-input'
-                      type='checkbox'
-                      value={genre.code}
-                      id={genre.code}
-                      name='genreCodes'
-                      onChange={handleCheckboxChange}
-                      checked={selectedGenres.includes(genre.code)}
-                    />
-                    <label className='form-check-label' htmlFor={genre.code}>
-                      {genre.name}
-                    </label>
-                  </div>
-                );
-              })}
+            <div className='col-9'>
+              <div className='form-check-container'>
+                {genreList.map((genre) => {
+                  return (
+                    <div key={genre.code} className='form-check'>
+                      <input
+                        className='form-check-input'
+                        type='checkbox'
+                        value={genre.code}
+                        id={genre.code}
+                        name='genreCodes'
+                        onChange={handleCheckboxChange}
+                        checked={selectedGenres.includes(genre.code)}
+                      />
+                      <label className='form-check-label' htmlFor={genre.code}>
+                        {genre.name}
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
           <div className='bottom-container'>

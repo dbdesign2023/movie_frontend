@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import serverapi from '../../../services/serverapi';
+import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
 
 export default function StaffScheduleAddForm(props) {
+  const { logout } = useContext(AuthContext);
   const closeScheduleModal = props.closeScheduleModal;
   const movieList = props.movieList;
   const theaterList = props.theaterList;
@@ -52,8 +54,13 @@ export default function StaffScheduleAddForm(props) {
       alert('상영 일정이 등록되었습니다');
       resetData();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -112,13 +119,13 @@ export default function StaffScheduleAddForm(props) {
                   !isDirty ? undefined : errors.theaterId ? 'true' : 'false'
                 }
                 {...register('theaterId', {
-                  required: '배우를 선택해주세요.',
+                  required: '상영관을 선택해주세요.',
                 })}
               >
                 {theaterList.map((theater) => {
                   return (
                     <option key={theater.theaterId} value={theater.theaterId}>
-                      {theater.theaterId}
+                      {theater.name}({theater.theaterId})
                     </option>
                   );
                 })}

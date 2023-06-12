@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react';
 import serverapi from '../../../services/serverapi';
-import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../../services/AuthContext';
+import { useForm } from 'react-hook-form';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
 
 export default function StaffLoginForm(props) {
+  const { logout } = useContext(AuthContext);
   const closeLoginModal = props.closeLoginModal;
 
   const [isLoading, setLoading] = useState(false);
@@ -39,13 +40,18 @@ export default function StaffLoginForm(props) {
       closeLoginModal();
       alert('로그인 되었습니다');
       resetData();
-      window.location.replace('/');
+      window.location.reload();
       localStorage.setItem('staffToken', response.data);
       setIsStaffLogin(true);
       console.log("localStorage['staffToken']", localStorage['staffToken']);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }

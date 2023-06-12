@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
+import { AuthContext } from '../services/AuthContext';
 import StaffTypeModifyForm from '../form/Staff/Theater/StaffTypeModifyForm';
 
 export default function TypeComponent(props) {
+  const { logout } = useContext(AuthContext);
   const type = props.type;
   const getTypeList = props.getTypeList;
 
@@ -43,8 +45,13 @@ export default function TypeComponent(props) {
       alert('삭제되었습니다');
       getTypeList();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }

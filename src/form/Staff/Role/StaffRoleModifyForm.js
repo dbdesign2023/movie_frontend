@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import serverapi from '../../../services/serverapi';
+import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
 
 export default function StaffRoleModifyForm(props) {
+  const { logout } = useContext(AuthContext);
   const closeRoleModify = props.closeRoleModify;
   const getMovieList = props.getMovieList;
   const role = props.role;
@@ -56,8 +58,13 @@ export default function StaffRoleModifyForm(props) {
       alert('역할이 수정되었습니다');
       getMovieList();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -73,14 +80,14 @@ export default function StaffRoleModifyForm(props) {
           onClick={closeRoleModify}
         ></button>
       </div>
-      <div className='title-text-center-container'>역할 수정</div>
+      <div className='title-text-center-container'>등장인물 수정</div>
       <div className='form-container'>
         <form className='staff-role-add-form' onSubmit={handleSubmit(onSubmit)}>
           <div className='row'>
             <div className='col-sm-3'>
               <div className='content-text-container'>(개봉일)영화</div>
             </div>
-            <div className='col-sm-9'>
+            <div className='col-9'>
               ({info.releaseDate}){info.title}
             </div>
           </div>
@@ -88,7 +95,7 @@ export default function StaffRoleModifyForm(props) {
             <div className='col-sm-3'>
               <div className='content-text-container'>(ID)배우</div>
             </div>
-            <div className='col-sm-9'>
+            <div className='col-9'>
               ({role.castId}){role.name}
             </div>
           </div>
@@ -111,7 +118,7 @@ export default function StaffRoleModifyForm(props) {
             <div className='col-sm-3'>
               <div className='content-text-container'>개봉일</div>
             </div>
-            <div className='col-sm-9'>
+            <div className='col-9'>
               <div className='form-check'>
                 <input
                   className='form-check-input'
@@ -125,6 +132,7 @@ export default function StaffRoleModifyForm(props) {
                 <label className='form-check-label' htmlFor='flexRadioDefault1'>
                   주연
                 </label>
+                &nbsp; &nbsp;
               </div>
               <div className='form-check'>
                 <input

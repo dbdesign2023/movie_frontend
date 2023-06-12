@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
@@ -7,10 +7,6 @@ export default function StaffImageForm(props) {
   const closeImageModal = props.closeImageModal;
   const fileURL = props.fileURL;
   const info = props.info;
-
-  if (!info || !info.profileImage || !info.poster) {
-    return null;
-  }
 
   return (
     <div className='modal-container'>

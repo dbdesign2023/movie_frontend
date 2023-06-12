@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../../services/serverapi';
+import { AuthContext } from '../../services/AuthContext';
 import StaffMovieAddForm from '../../form/Staff/Movie/StaffMovieAddForm';
 import MovieComponent from '../../components/MovieComponent';
 
 import '../../styles/components/page-container.scss';
 
 export default function StaffMoviePage() {
+  const { logout } = useContext(AuthContext);
   const [movieModalOpen, setMovieModalOpen] = useState(false);
   const [preMovieList, setPreMovieList] = useState([]);
   const [movieList, setMovieList] = useState([]);
@@ -53,8 +55,13 @@ export default function StaffMoviePage() {
       setPreMovieList(response.data);
       setMovieList(updatedMovieList);
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -69,7 +76,7 @@ export default function StaffMoviePage() {
   };
 
   const goToGenreRatingPage = () => {
-    window.location.replace('/staff/movie/genrerating');
+    window.location.replace('genrerating');
   };
 
   return (
@@ -96,7 +103,7 @@ export default function StaffMoviePage() {
           />
         </Modal>
         &nbsp;&nbsp;&nbsp;
-        <button className='btn btn-success' onClick={goToGenreRatingPage}>
+        <button className='btn btn-primary' onClick={goToGenreRatingPage}>
           {isLoading ? (
             <div className='spinner-border' role='status'>
               <span className='sr-only' />
