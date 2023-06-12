@@ -82,12 +82,13 @@ export default function ScheduleWithMovieForm() {
                     return schedule.map(sche=>`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}`).indexOf(element) == index;
                 }).map((date,idx) => (
                     <div key={idx} className='schedule_list_box'>{date}<div>
-                    {schedule&&schedule.map(sche=>`${sche.theaterDTO.name}`).filter((element,index)=>{
-                        return schedule.map(sche=>`${sche.theaterDTO.name}`).indexOf(element) == index;
+                    {schedule&&schedule.map(sche=> date==`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}` &&`${sche.theaterDTO.name}`).filter((element,index)=>{
+                        return schedule.map(sche=> date==`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}` &&`${sche.theaterDTO.name}`).indexOf(element) == index;
                     }).map((theatername,idx2) => (
                         <div key={idx2} className='schedule_list_box'>{theatername}<div className='schedule_list'>
-                        {schedule.filter(sche => date==`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}` && theatername==`${sche.theaterDTO.name}`).map((item,idx3)=>(<button key={idx2} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
-                            <div key={idx3}>
+                        {schedule.filter(sche => date==`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}` && theatername==`${sche.theaterDTO.name}`).map((item,idx3)=>(
+                        <button key={idx3} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
+                            <div>
                                 {start_at(item)} ~ {end_at(item,item.runningTime)}
                             </div>
                             <div>
