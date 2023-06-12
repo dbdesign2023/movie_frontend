@@ -156,7 +156,7 @@ export default function MovieDetailForm(){
                         <h3 className='text-start'>
                             국적 : {castdetail.nationality}
                         </h3>
-                        <h3 className='text-start'>
+                        <h3 className='text-start' style={{whiteSpace:'pre-line'}}>
                             정보 : {castdetail.info}
                         </h3>
                     </div>
