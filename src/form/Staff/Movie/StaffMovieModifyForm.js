@@ -157,9 +157,10 @@ export default function StaffMovieModifyForm(props) {
       console.log(selectedGenres);
 
       console.log('Request body', data);
+      formData.append('movieId', info.movieId);
       formData.append('title', data.title);
       formData.append('releaseDate', data.releaseDate);
-      formData.append('runngingTime', data.runngingTime);
+      formData.append('runningTime', data.runningTime);
       formData.append('info', data.info);
       formData.append('countryCode', data.countryCode);
       formData.append('language', data.language);
@@ -245,7 +246,7 @@ export default function StaffMovieModifyForm(props) {
                 type='number'
                 placeholder='상영 시간을 입력하세요'
                 defaultValue={info.runningTime}
-                {...register('runngingTime', {
+                {...register('runningTime', {
                   required: '상영 시간을 입력하세요.',
                 })}
               />

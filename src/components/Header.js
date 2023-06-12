@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Modal from 'react-awesome-modal';
 import { AuthContext } from '../services/AuthContext';
 import serverapi from '../services/serverapi';
@@ -12,17 +12,21 @@ function Unlogined() {
     <>
       <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
         <li className='nav-item'>
-          <Link to={"/nonmember"} className='nav-link active' aria-current='page'>
+          <Link
+            to={'/nonmember'}
+            className='nav-link active'
+            aria-current='page'
+          >
             비회원조회
           </Link>
         </li>
         <li className='nav-item'>
-          <Link to={"/login"} className='nav-link active' aria-current='page'>
+          <Link to={'/login'} className='nav-link active' aria-current='page'>
             로그인
           </Link>
         </li>
         <li className='nav-item'>
-          <Link to={"/signup"} className='nav-link active' aria-current='page'>
+          <Link to={'/signup'} className='nav-link active' aria-current='page'>
             회원가입
           </Link>
         </li>
@@ -66,10 +70,14 @@ function Logined(props) {
     }
   };
 
-  const showMypageModify = () => {
-    getInfo();
+  const showMypageModify = async () => {
+    await getInfo();
     setMypageModifyOpen(true);
   };
+
+  useEffect(() => {
+    console.log('info', info);
+  }, [info]);
 
   const closeMypageModify = () => {
     setMypageModifyOpen(false);
@@ -80,7 +88,8 @@ function Logined(props) {
       <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
         <li className='nav-item'>
           {isCustomerLogin && (
-            <Link to={"/ticketlist"}
+            <Link
+              to={'/ticketlist'}
               className='nav-link active'
               aria-current='page'
             >
@@ -90,7 +99,11 @@ function Logined(props) {
         </li>
         <li className='nav-item'>
           {isCustomerLogin ? (
-            <Link to={"/mypage"} className='nav-link active' aria-current='page'>
+            <Link
+              to={'/mypage'}
+              className='nav-link active'
+              aria-current='page'
+            >
               마이페이지
             </Link>
           ) : (
@@ -102,14 +115,18 @@ function Logined(props) {
               마이페이지
             </a>
           )}
-          {mypageModifyOpen && <Modal setMypageModifyOpen={showMypageModify} />}
-          <Modal
-            visible={mypageModifyOpen}
-            effect='fadeInDown'
-            onClickAway={closeMypageModify}
-          >
-            <StaffMypageModifyForm closeMypageModify={closeMypageModify} />
-          </Modal>
+          {mypageModifyOpen && (
+            <Modal
+              visible={mypageModifyOpen}
+              effect='fadeInDown'
+              onClickAway={closeMypageModify}
+            >
+              <StaffMypageModifyForm
+                closeMypageModify={closeMypageModify}
+                info={info}
+              />
+            </Modal>
+          )}
         </li>
         <li className='nav-item'>
           <a className='nav-link active' aria-current='page' onClick={logout}>
@@ -140,22 +157,19 @@ function Header() {
       aria-label='Eighth navbar example'
     >
       <div className='container'>
-        
-        <Link to={"/"} className='navbar-brand'>
+        <Link to={'/'} className='navbar-brand'>
           HiMovie
         </Link>
         <div className='collapse navbar-collapse'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <Link to={"/"}
-                className='nav-link active'
-                aria-current='page'
-              >
+              <Link to={'/'} className='nav-link active' aria-current='page'>
                 영화
               </Link>
             </li>
             <li className='nav-item'>
-              <Link to={"/schedule"}
+              <Link
+                to={'/schedule'}
                 className='nav-link active'
                 aria-current='page'
               >

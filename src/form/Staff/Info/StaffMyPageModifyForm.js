@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import serverapi from '../../../services/serverapi';
 import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
@@ -10,30 +10,20 @@ export default function StaffMypageModifyForm(props) {
   const { logout } = useContext(AuthContext);
   const closeMypageModify = props.closeMypageModify;
   const Logout = props.Logout;
-  const info = props.info;
+  const info = props.info || {};
 
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [isLoading2, setLoading2] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { isValid, isDirty, errors },
-  } = useForm();
+  useEffect(() => {
+    console.log('info', info);
+  }, [info]);
 
-  if (!info) {
-    return null;
-  }
-
-  const resetData = () => {
-    setValue('name', info.name);
-    setValue('loginId', info.loginId);
-    setValue('password', '');
-    setValue('password2', '');
-  };
+  const { register, handleSubmit } = useForm({
+    defaultValues: { name: info.name },
+  });
 
   async function exit() {
     const api = '/admin/delete'; // 회원탈퇴로 바꾸기
@@ -100,6 +90,7 @@ export default function StaffMypageModifyForm(props) {
         alert('입력한 비밀번호가 같지 않습니다.');
       } else {
         delete data['password2'];
+        data['info'] = { loginId: info.loginId }; // 수정된 부분
         //console.log('data', data);
 
         const response = await serverapi.post(api, data, options);
@@ -107,7 +98,6 @@ export default function StaffMypageModifyForm(props) {
 
         closeMypageModify();
         alert('회원 정보가 수정되었습니다');
-        resetData();
       }
     } catch (error) {
       if (error.response.data === undefined) {
@@ -149,18 +139,13 @@ export default function StaffMypageModifyForm(props) {
                   required: '이름을 입력해주세요.',
                 })}
               />
-              {errors.name && (
-                <small role='alert' className='input-alert'>
-                  {errors.name.message}
-                </small>
-              )}
             </div>
           </div>
           <div className='row'>
             <div className='col-sm-3'>
               <div className='content-text-container'>아이디</div>
             </div>
-            <div className='col-sm-8'>
+            <div className='col-8'>
               <span>{info.loginId}</span>
             </div>
           </div>
@@ -173,19 +158,11 @@ export default function StaffMypageModifyForm(props) {
                 className='form-control'
                 type='password'
                 placeholder='비밀번호를 입력하세요'
-                onChange={(e) => setPassword(e.value)}
-                aria-invalid={
-                  !isDirty ? undefined : errors.password ? 'true' : 'false'
-                }
+                onChange={(e) => setPassword(e.target.value)}
                 {...register('password', {
                   required: '비밀번호를 입력해주세요.',
                 })}
               />
-              {errors.password && (
-                <small role='alert' className='input-alert'>
-                  {errors.password.message}
-                </small>
-              )}
             </div>
           </div>
           <div className='row'>
@@ -197,31 +174,15 @@ export default function StaffMypageModifyForm(props) {
                 className='form-control'
                 type='password'
                 placeholder='비밀번호를 다시 한 번 입력하세요'
-                onChange={(e) => setPassword2(e.value)}
-                aria-invalid={
-                  !isDirty ? undefined : errors.password2 ? 'true' : 'false'
-                }
+                onChange={(e) => setPassword2(e.target.value)}
                 {...register('password2', {
                   required: '비밀번호를 다시 한 번 입력해주세요.',
                 })}
               />
-              {errors.password2 && (
-                <small role='alert' className='input-alert'>
-                  {errors.password2.message}
-                </small>
-              )}
             </div>
           </div>
           <div className='bottom-container'>
-            <button className='btn btn-secondary' onClick={resetData}>
-              저장된 정보
-            </button>
-            &nbsp; &nbsp; &nbsp;
-            <button
-              type='submit'
-              className='btn btn-success'
-              disabled={!(isDirty && isValid)}
-            >
+            <button type='submit' className='btn btn-success'>
               {isLoading ? (
                 <div className='spinner-border' role='status'>
                   <span className='sr-only' />

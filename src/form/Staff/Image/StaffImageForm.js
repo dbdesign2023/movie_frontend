@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';

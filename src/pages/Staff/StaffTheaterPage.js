@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
-import { useNavigate } from 'react-router-dom';
 import serverapi from '../../services/serverapi';
 import { AuthContext } from '../../services/AuthContext';
 import StaffTheaterAddForm from '../../form/Staff/Theater/StaffTheaterAddForm';
@@ -10,7 +9,7 @@ import '../../styles/components/page-container.scss';
 
 export default function StaffTheaterPage() {
   const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+
   const [theaterModalOpen, setTheaterModalOpen] = useState(false);
   const [theaterList, setTheaterList] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -92,7 +91,7 @@ export default function StaffTheaterPage() {
   };
 
   const goToTypePage = () => {
-    navigate('/staff/theater/type');
+    window.location.replace('type');
   };
 
   return (

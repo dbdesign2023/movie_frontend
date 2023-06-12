@@ -69,7 +69,8 @@ function StaffLogined() {
     <>
       <ul className='nav me-auto'>
         <li className='nav-item'>
-          <Link to={"/staff/schedule"}
+          <Link
+            to={'/staff/schedule'}
             className='nav-link link-dark px-2 active'
             aria-current='page'
           >
@@ -77,7 +78,8 @@ function StaffLogined() {
           </Link>
         </li>
         <li className='nav-item'>
-          <Link to={"/staff/movie"}
+          <Link
+            to={'/staff/movie'}
             className='nav-link link-dark px-2 active'
             aria-current='page'
           >
@@ -86,15 +88,17 @@ function StaffLogined() {
         </li>
 
         <li className='nav-item'>
-          <Link to={"/staff/role"}
+          <Link
+            to={'/staff/role'}
             className='nav-link link-dark px-2 active'
             aria-current='page'
           >
-            등장인물 관리
+            역할 관리
           </Link>
         </li>
         <li className='nav-item'>
-          <Link to={"/staff/cast"}
+          <Link
+            to={'/staff/cast'}
             className='nav-link link-dark px-2 active'
             aria-current='page'
           >
@@ -102,7 +106,8 @@ function StaffLogined() {
           </Link>
         </li>
         <li className='nav-item'>
-          <Link to={"/staff/theater"}
+          <Link
+            to={'/staff/theater'}
             className='nav-link link-dark px-2 active'
             aria-current='page'
           >

@@ -108,6 +108,7 @@ export default function StaffSeatPage(props) {
       console.log('response', response.data);
 
       alert('삭제되었습니다');
+      setSelectedSeats([]);
       getSeatList();
     } catch (error) {
       if (error.response.data === undefined) {
@@ -157,6 +158,7 @@ export default function StaffSeatPage(props) {
             theaterId={theaterId}
             selectedSeats={selectedSeats}
             getSeatList={getSeatList}
+            setSelectedSeats={setSelectedSeats}
           />
         </Modal>
         &nbsp; &nbsp; &nbsp;
