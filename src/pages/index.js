@@ -30,10 +30,7 @@ import ScheduleWithMoviePage from './ScheduleWithMoviePage';
 import MovieDetailPage from './MovieDetailPage';
 
 function Router() {
-  console.log(process.env.PUBLIC_URL);
-
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
         {/**any logined or unlogined */}
         <Route>
@@ -68,7 +65,6 @@ function Router() {
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
-    </BrowserRouter>
   );
 }
 

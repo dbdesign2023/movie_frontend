@@ -140,7 +140,7 @@ function Header() {
       aria-label='Eighth navbar example'
     >
       <div className='container'>
-        <a className='navbar-brand' href='/movie_frontend/'>
+        <a className='navbar-brand' href=''>
           HiMovie
         </a>
         <div className='collapse navbar-collapse'>
@@ -149,7 +149,7 @@ function Header() {
               <a
                 className='nav-link active'
                 aria-current='page'
-                href='/movie_frontend/'
+                href=''
               >
                 영화
               </a>

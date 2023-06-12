@@ -40,7 +40,7 @@ export default function StaffLoginForm(props) {
       closeLoginModal();
       alert('로그인 되었습니다');
       resetData();
-      window.location.reload();
+      window.location.reload("");
       localStorage.setItem('staffToken', response.data);
       setIsStaffLogin(true);
       console.log("localStorage['staffToken']", localStorage['staffToken']);
