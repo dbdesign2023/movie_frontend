@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
+import { useNavigate } from 'react-router-dom';
 import serverapi from '../services/serverapi';
 import { AuthContext } from '../services/AuthContext';
 import StaffTheaterModifyForm from '../form/Staff/Theater/StaffTheaterModifyForm';
 
 export default function TheaterComponent(props) {
   const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const theater = props.theater;
   const getTheaterList = props.getTheaterList;
 
