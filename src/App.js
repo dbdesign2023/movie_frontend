@@ -3,6 +3,8 @@ import Header from './components/Header';
 import Router from './pages';
 import Footer from './components/Footer';
 import { ContextProvider } from './services/AuthContext';
+import './assets/styles.css';
+
 
 function App() {
   return (

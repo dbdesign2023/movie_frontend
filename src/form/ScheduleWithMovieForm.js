@@ -54,10 +54,10 @@ export default function ScheduleWithMovieForm() {
     },[scheduledetail])
     return (
         <div>
-            <h2>
+            <h2 style={{marginTop: '3%'}}>
                 {movie.title} 상영일정
             </h2>
-            <img src={img}/>
+            <img src={img} style={{width: '60%', height: '70%'}}/>
             <div>
                 {schedule &&(schedule.map((item,idx)=>(
                     <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
@@ -78,9 +78,9 @@ export default function ScheduleWithMovieForm() {
                 effect='fadeInDown'
                 onClickAway={closeModal}>
                     <div className='modal-container'>
-                        <h2 className='text-start'>
+                        <h3 className='text-start'>
                             상영관 : {scheduledetail.theaterDTO.name}
-                        </h2>
+                        </h3>
                         <h3 className='text-start'>
                             상영관 종류 : {scheduledetail.theaterDTO.typeName}
                         </h3>
@@ -90,9 +90,11 @@ export default function ScheduleWithMovieForm() {
                         <h3 className='text-start'>
                             러닝 타임 : {movie.runningTime} 분
                         </h3>
-                        <h3 className='text-start'>
-                            할인율 : {scheduledetail.discount}
-                        </h3>
+                        {scheduledetail.discount && (
+                            <h3 className='text-start'>
+                            현재 할인중 : {scheduledetail.discount}
+                            </h3>
+                        )}
                         <div className='bottom-container'>
                             <div className='button-container'>
                                 <button type="button" className="btn btn-primary m-1" onClick={ok}>좌석 선택</button>

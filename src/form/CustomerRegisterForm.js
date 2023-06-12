@@ -166,7 +166,7 @@ const registerHandler = async () => {
           <div className='col-sm-4'>
             <div className='content-text-container'>성별</div>
           </div>
-          <div className='col-sm-4'>
+          <div className='col-sm-4, gender-box'>
             <label>
               <input
                 type='radio'
@@ -174,7 +174,8 @@ const registerHandler = async () => {
                 checked={gender === '1'}
                 onChange={handleClickRadioButton}
               />
-              남성
+              <span>남성</span>
+
             </label>
             <label className='ms-auto'>
               <input
@@ -183,7 +184,7 @@ const registerHandler = async () => {
                 checked={gender === '2'}
                 onChange={handleClickRadioButton}
               />
-              여성
+              <span>여성</span>
             </label>
           </div>
           <div className='col-sm-4 justify-content-start'>
