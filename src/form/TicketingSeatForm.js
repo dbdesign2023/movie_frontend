@@ -92,18 +92,17 @@ export default function TicketingSeatForm() {
             col_num: [tmp.column],
             ticketed: [tmp.empty ? 0 : 1],
           });
-          size[row] = parseInt(100 / size[row]);
           if (size[row] > maxrow) {
             maxrow = size[row];
+            console.log(maxrow)
           }
           size.push(0);
           row++;
           size[row]++;
         }
       });
-      size[row] = parseInt(100 / size[row]);
       setPdata(pdata);
-      setSize(maxrow);
+      setSize(parseInt(100/maxrow));
     }
   }, [data]);
   const [choosenseat, setSeat] = useState({});

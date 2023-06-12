@@ -20,6 +20,7 @@ export default function PaymentForm() {
         },
       };
       const response = await axios.get(url, header);
+      console.log(response.data)
       setMethodlist(response.data);
     } catch (error) {
       if (error.response.data.message) alert(error.response.data.message);
