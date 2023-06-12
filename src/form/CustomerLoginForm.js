@@ -7,9 +7,10 @@ import '../styles/components/page-container.scss';
 import axios from 'axios';
 import { AuthContext } from '../services/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from './axios';
 
 export default function CustomerLoginForm() {
-  const ip = process.env.REACT_APP_API_ORIGIN;
+  const ip = baseUrl;
   const [login_id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [clickcheck, setClickcheck] = useState(false);
@@ -36,7 +37,7 @@ export default function CustomerLoginForm() {
         localStorage.setItem("customerToken", response.data);
         setIsCustomerLogin(true)
         localStorage.setItem("loginId", login_id)
-        navigate(`%PUBLIC_URL%`)
+        navigate('../')
       } 
       catch (error) {
         if(error.response.data.message)
@@ -91,7 +92,7 @@ export default function CustomerLoginForm() {
             <button className='btn btn-primary m-1' onClick={loginHandler}>
               로그인
             </button>
-            <a className='btn btn-primary m-1' href='/signup' role='button'>
+            <a className='btn btn-primary m-1' href='signup' role='button'>
               회원가입
             </a>
           </div>

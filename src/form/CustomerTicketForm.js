@@ -91,7 +91,7 @@ export default function CustomerTicketForm(props) {
         };
         response = await axios.delete(url, header);
         alert('티켓이 취소되었습니다.');
-        navigate('/');
+        navigate('../');
       }
     } catch (error) {
       if (error.response.data.message) alert(error.response.data.message);

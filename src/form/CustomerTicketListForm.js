@@ -5,46 +5,6 @@ import CustomerTicketForm from './CustomerTicketForm';
 import { baseUrl } from './axios';
 
 export default function CustomerTicketListForm() {
-    /*
-    const ticket_data = {
-        ticketId: 1,
-        ticketTime: "2023-06-05 11:00:00",
-        movieId: 1,
-        movieTitle: "test",
-        theaterName: "1관",
-        floor: 1,
-        startTime: "2023-06-05 11:00:00",
-        runningtime: 150,
-        posterFileName: "https://upload.wikimedia.org/wikipedia/ko/b/bc/%EB%B0%B1%EB%91%90%EC%82%B0_%EC%98%81%ED%99%94_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg",
-        seats:[{
-            seatId:"A1",
-            theaterId:1,
-            row:"A",
-            column:"1",
-            price: 15000
-        },{
-            seatId:"A2",
-            theaterId:1,
-            row:"A",
-            column:"2",
-            price: 15000
-        },{
-            seatId:"A3",
-            theaterId:1,
-            row:"A",
-            column:"3",
-            price: 15000
-        }],
-        discount: "1000KR"
-    }
-    setTickets([{
-            ticketId:1,
-            ticketingTime:"2023-06-06 06:00:00",
-            movieName:"test",
-            theaterName:"test",
-            startTime:"2023-06-06 09:00:00"
-        }])*/
-    
     const ip = baseUrl;
     const[tickets, setTickets] = useState()
     const[detail, setDetail] = useState()

@@ -25,11 +25,10 @@ export default function MovieDetailForm(){
     const navigate = useNavigate();
     useEffect(()=>{
         if(moviedetail){
-            console.log(moviedetail)
+  
         }
         else{
-            getMoviedetail()
-            //navigate('/')
+            navigate('../')
         }
     },[])
     useEffect(()=>{
@@ -37,45 +36,6 @@ export default function MovieDetailForm(){
             getcastdetail()
         }
     },[castid])
-    const getMoviedetail = async()=>{
-        try{
-            const url = ip+`/movie/detail?id=`+"110";
-            const token = localStorage.getItem('customerToken')
-            const header = {
-                headers: {
-                "Authorization": `Bearer ${token}`,
-                "Access-Control-Allow-Origin": "*",
-                "ngrok-skip-browser-warning": true
-                },
-            }
-            const response = await axios.get(
-                url,
-                header
-            )
-            let data = response.data
-            let tmp = new Date(data.releaseDate)
-            data.releaseDate = tmp.getFullYear()+"-"+(tmp.getMonth()<10?"0"+(tmp.getMonth()+1):(tmp.getMonth()+1))+"-"+(tmp.getDate()<10?"0"+tmp.getDate():tmp.getDate());
-            tmp = new Date(data.director.birthDate)
-            data.director.birthDate = tmp.getFullYear()+"-"+(tmp.getMonth()<10?"0"+(tmp.getMonth()+1):(tmp.getMonth()+1))+"-"+(tmp.getDate()<10?"0"+tmp.getDate():tmp.getDate());
-            let genrestring = ""
-            data.genreList.map((item)=>{
-                if(genrestring===""){
-                    genrestring += item
-                }
-                else{
-                    genrestring += ", "+item
-                }
-            })
-            data.genrestring = genrestring
-            setMoviedetail(data)
-        }
-        catch (error) {
-            if(error.response.data.message)
-                alert(error.response.data.message)
-            else
-                alert("알수 없는 에러.")
-        }
-    }
     const getcastdetail = async()=>{
         try{
             const url = ip+`/movie/cast/detail?castId=`+castid;
