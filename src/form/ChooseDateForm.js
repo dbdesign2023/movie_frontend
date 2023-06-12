@@ -201,8 +201,7 @@ export default function ChooseDateForm(date) {
     return (
         <div className="customer-ticketing-form-container">
             <div className='title-text-container'> 예매 페이지</div>
-            <div className='form-container'>
-                <div className='row justify-content-center'>
+                <div className='row justify-content-center form-container'>
                     <input type="date" className="inputField w-50" value={rundate} onChange={(event) => setRundate(event.target.value)}/>
                 </div>
                 <div className='row justify-content-evenly'>
@@ -210,15 +209,18 @@ export default function ChooseDateForm(date) {
                     {rundate === "" || pdata && pdata.length ? "":<div>해당 일자에 상영 예정인 영화가 없습니다.</div>}
                     {pdata && rundate !== "" && pdata.map((item, idx)=>(
                         <div key={idx} className='row'>
-                            <h3>
+                            <h2 className='title' style={{marginBottom:"3%", marginTop:"5%", textAlign:"left"}}>
                                 {item.movie_title}
-                            </h3>
+                            </h2>
                             {
                                 item.schedule.map((sc,idx)=>(
                                     <div key={idx}>
                                         <div>
-                                            {sc.theater_name}
+                                            <h3 style={{marginBottom:"5px", marginTop:"10px", textAlign:"left"}}>
+                                                {sc.theater_name}
+                                            </h3>
                                         </div>
+                                        <div style={{display:"flex", justifyContent:"left"}}>
                                         {
                                             sc.schedule_id.map((id,idx) => (
                                             <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind({id:id,start:sc.start_time[idx]})}>
@@ -230,6 +232,7 @@ export default function ChooseDateForm(date) {
                                                 </div>
                                             </button>
                                         ))}
+                                        </div>
                                     </div>
                             ))}
                         </div>
@@ -252,7 +255,6 @@ export default function ChooseDateForm(date) {
                         </div>
                     </div>
                 </Modal>
-            </div>
         </div>
     );
   }
