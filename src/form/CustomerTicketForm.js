@@ -104,6 +104,10 @@ export default function CustomerTicketForm(props) {
       else alert('알수 없는 에러.');
     }
   };
+  const pay = ()=>{
+    localStorage.setItem('ticket_data',JSON.stringify(ticket))
+    navigate('/payment')
+  }
   const deletehandler = () => {
     if (password) {
       deleteticket();
@@ -144,13 +148,22 @@ export default function CustomerTicketForm(props) {
           </div>
         </div>
         <div>
-          {!movie.payed && (
+        {!movie.payed && (
             <button
               type='button'
               className='btn btn-primary m-1'
               onClick={modify}
             >
               좌석 재선택
+            </button>
+          )}
+          {!movie.payed && (
+            <button
+              type='button'
+              className='btn btn-primary m-1'
+              onClick={pay}
+            >
+              결제하러 가기
             </button>
           )}
           {!movie.payed && (
