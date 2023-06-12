@@ -107,9 +107,7 @@ export default function TheaterComponent(props) {
       <td>
         <button
           className='btn btn-primary'
-          onClick={() =>
-            navigate(`/movie_frontend/staff/movie/${theater.theaterId}`)
-          }
+          onClick={() => navigate(`/staff/theater/${theater.theaterId}`)}
         >
           좌석 관리
         </button>

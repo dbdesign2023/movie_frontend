@@ -92,7 +92,7 @@ export default function StaffTheaterPage() {
   };
 
   const goToTypePage = () => {
-    navigate('type');
+    navigate('/staff/theater/type');
   };
 
   return (
