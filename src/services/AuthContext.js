@@ -33,7 +33,7 @@ export const ContextProvider = (props) => {
 
   const logout = () => {
     localStorage.clear();
-    window.location.replace('/');
+    window.location.replace('/movie_frontend/');
     setIsCustomerLogin(false);
     setIsStaffLogin(false);
   };
