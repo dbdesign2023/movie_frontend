@@ -3,6 +3,7 @@ import Modal from 'react-awesome-modal';
 import { AuthContext } from '../services/AuthContext';
 import serverapi from '../services/serverapi';
 import StaffMypageModifyForm from '../form/Staff/Info/StaffMyPageModifyForm';
+import { Link } from 'react-router-dom';
 
 import '../styles/components/_header.scss';
 
@@ -140,19 +141,19 @@ function Header() {
       aria-label='Eighth navbar example'
     >
       <div className='container'>
-        <a className='navbar-brand' href=''>
+        
+        <Link to={"/"} className='navbar-brand'>
           HiMovie
-        </a>
+        </Link>
         <div className='collapse navbar-collapse'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <a
+              <Link to={"/"}
                 className='nav-link active'
                 aria-current='page'
-                href=''
               >
                 영화
-              </a>
+              </Link>
             </li>
             <li className='nav-item'>
               <a
