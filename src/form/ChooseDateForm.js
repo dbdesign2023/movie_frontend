@@ -51,8 +51,13 @@ export default function ChooseDateForm(date) {
         }
         //날짜 변경시 상영일정 db에서 가져오기
       },[data]);
+    const start_at = (time)=>{
+        return time[0].toString()+"-"+time[1].toString()+"-"+time[2].toString()+" "+time[3].toString()+":"+time[4].toString()+":00"
+    }
     const dataprocessing = (data)=>{
         const pdata = []
+        let sortdata = data.sort((a,b)=> a.movieName.localeCompare(b.movieName) ||start_at(a.startTime) - start_at(b.startTime)||a.theaterDTO.name.localeCompare(b.theaterDTO.name));
+        console.log(sortdata)
         data.map((tmp)=>{
             const schedule_id = tmp.scheduleId
             const movie_title = tmp.movieName
