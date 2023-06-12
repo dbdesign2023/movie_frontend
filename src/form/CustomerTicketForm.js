@@ -35,12 +35,18 @@ export default function CustomerTicketForm(props) {
         seat.push(item.seatId);
         movie.bill += item.price;
       });
-      if (movie.discount.at(-1) === '%') {
-        let tmp = parseInt(movie.discount.slice(0, -1));
-        movie.fin_bill = (movie.bill * (100 - tmp)) / 100;
-      } else {
-        let tmp = parseInt(movie.discount.slice(0, -1));
-        movie.fin_bill = movie.bill - tmp * ticket.seats.length;
+      if (movie.discount){
+        if (movie.discount.at(-1) === '%') {
+          let tmp = parseInt(movie.discount.slice(0, -1));
+          movie.fin_bill = (movie.bill * (100 - tmp)) / 100;
+        } else {
+          let tmp = parseInt(movie.discount.slice(0, -1));
+          movie.fin_bill = movie.bill - tmp * ticket.seats.length;
+        }
+      }
+      else{
+        movie.discount = "할인 적용 대상이 아닙니다."
+        movie.fin_bill = movie.bill
       }
       let string = '';
       seat.map((tmp) => {
@@ -98,6 +104,10 @@ export default function CustomerTicketForm(props) {
       else alert('알수 없는 에러.');
     }
   };
+  const pay = ()=>{
+    localStorage.setItem('ticket_data',JSON.stringify(ticket))
+    navigate('/payment')
+  }
   const deletehandler = () => {
     if (password) {
       deleteticket();
@@ -131,20 +141,29 @@ export default function CustomerTicketForm(props) {
             {movie && (
               <img
                 className='img-fluid'
-                src={movie.img}
+                src={ip+"/api/posters?fileName="+movie.img}
                 style={{ width: 250, padding: 10 }}
               ></img>
             )}
           </div>
         </div>
         <div>
-          {!movie.payed && (
+        {!movie.payed && (
             <button
               type='button'
               className='btn btn-primary m-1'
               onClick={modify}
             >
               좌석 재선택
+            </button>
+          )}
+          {!movie.payed && (
+            <button
+              type='button'
+              className='btn btn-primary m-1'
+              onClick={pay}
+            >
+              결제하러 가기
             </button>
           )}
           {!movie.payed && (

@@ -51,8 +51,13 @@ export default function ChooseDateForm(date) {
         }
         //날짜 변경시 상영일정 db에서 가져오기
       },[data]);
+    const start_at = (time)=>{
+        return time[0].toString()+"-"+time[1].toString()+"-"+time[2].toString()+" "+time[3].toString()+":"+time[4].toString()+":00"
+    }
     const dataprocessing = (data)=>{
         const pdata = []
+        let sortdata = data.sort((a,b)=> a.movieName.localeCompare(b.movieName) ||start_at(a.startTime) - start_at(b.startTime)||a.theaterDTO.name.localeCompare(b.theaterDTO.name));
+        console.log(sortdata)
         data.map((tmp)=>{
             const schedule_id = tmp.scheduleId
             const movie_title = tmp.movieName
@@ -183,7 +188,7 @@ export default function ChooseDateForm(date) {
     }
     const navigate = useNavigate()
     function clickHandler(){
-        setScheduledata(this.start)
+        setScheduledata(this)
         setModalstate(true)
         localStorage.setItem("schedule_id",this.id)
     }
@@ -196,8 +201,7 @@ export default function ChooseDateForm(date) {
     return (
         <div className="customer-ticketing-form-container">
             <div className='title-text-container'> 예매 페이지</div>
-            <div className='form-container'>
-                <div className='row justify-content-center'>
+                <div className='row justify-content-center form-container'>
                     <input type="date" className="inputField w-50" value={rundate} onChange={(event) => setRundate(event.target.value)}/>
                 </div>
                 <div className='row justify-content-evenly'>
@@ -205,18 +209,21 @@ export default function ChooseDateForm(date) {
                     {rundate === "" || pdata && pdata.length ? "":<div>해당 일자에 상영 예정인 영화가 없습니다.</div>}
                     {pdata && rundate !== "" && pdata.map((item, idx)=>(
                         <div key={idx} className='row'>
-                            <h3>
+                            <h2 className='title' style={{marginBottom:"3%", marginTop:"5%", textAlign:"left"}}>
                                 {item.movie_title}
-                            </h3>
+                            </h2>
                             {
                                 item.schedule.map((sc,idx)=>(
                                     <div key={idx}>
                                         <div>
-                                            {sc.theater_name}
+                                            <h3 style={{marginBottom:"5px", marginTop:"10px", textAlign:"left"}}>
+                                                {sc.theater_name}
+                                            </h3>
                                         </div>
+                                        <div style={{display:"flex", justifyContent:"left"}}>
                                         {
                                             sc.schedule_id.map((id,idx) => (
-                                            <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind({id:id,start:sc.start_time[idx]})}>
+                                            <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind({id:id,start:sc.start_time[idx],theater_name:sc.theater_name})}>
                                                 <div>
                                                     {sc.start_time[idx]} ~ {sc.end_time[idx]}
                                                 </div>
@@ -225,6 +232,7 @@ export default function ChooseDateForm(date) {
                                                 </div>
                                             </button>
                                         ))}
+                                        </div>
                                     </div>
                             ))}
                         </div>
@@ -235,9 +243,16 @@ export default function ChooseDateForm(date) {
                     effect='fadeInDown'
                     onClickAway={closeModal}
                 >
+                    {scheduledata &&
                     <div className='modal-container'>
-                        <div className='title-text-center-container'>
-                            {scheduledata} 에 예매 하시겠습니까?
+                        <h3>
+                            상영관 : {scheduledata.theater_name}
+                        </h3>
+                        <h3>
+                            시작시간 : {scheduledata.start}
+                        </h3>
+                        <div>
+                            예약 하시겠습니까?
                         </div>
                         <div className='bottom-container'>
                             <div className='button-container'>
@@ -246,8 +261,8 @@ export default function ChooseDateForm(date) {
                             </div>
                         </div>
                     </div>
+                    }
                 </Modal>
-            </div>
         </div>
     );
   }

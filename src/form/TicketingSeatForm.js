@@ -11,9 +11,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { baseUrl } from './axios';
 export default function TicketingSeatForm() {
-  const seat = 'movie_frontend/img/seat.png';
-  const seat_gray = 'movie_frontend/img/seat_gray.png';
-  const seat_choose = 'movie_frontend/img/seat_choosepng.png';
+  const seat = `${process.env.PUBLIC_URL}/img/seat.png`;
+  const seat_gray = `${process.env.PUBLIC_URL}/img/seat_gray.png`;
+  const seat_choose = `${process.env.PUBLIC_URL}/img/seat_choosepng.png`;
   const ip = baseUrl;
   const modify = localStorage.getItem('modifyticketid');
   const modifysc = localStorage.getItem('modifyscheduleid');
@@ -92,18 +92,17 @@ export default function TicketingSeatForm() {
             col_num: [tmp.column],
             ticketed: [tmp.empty ? 0 : 1],
           });
-          size[row] = parseInt(100 / size[row]);
           if (size[row] > maxrow) {
             maxrow = size[row];
+            console.log(maxrow)
           }
           size.push(0);
           row++;
           size[row]++;
         }
       });
-      size[row] = parseInt(100 / size[row]);
       setPdata(pdata);
-      setSize(maxrow);
+      setSize(parseInt(100/maxrow));
     }
   }, [data]);
   const [choosenseat, setSeat] = useState({});

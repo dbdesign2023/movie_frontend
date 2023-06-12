@@ -46,6 +46,23 @@ export default function ScheduleWithMovieForm() {
         localStorage.setItem('schedule_id', scheduledetail.scheduleId)
         navigate('/chooseseat')
     }
+    const start_at = (item)=>{
+        let tmp = (item.startTime[3]<10?'0'+item.startTime[3]:item.startTime[3])+':'+(item.startTime[4]<10?'0'+item.startTime[4]:item.startTime[4])
+        return tmp
+    }
+    const end_at = (item, time)=>{
+        let min = item.startTime[4] + time%60
+        let hour = item.startTime[3] + parseInt(time/60)
+        if(min > 59){
+            min -= 60
+            hour += 1
+        }
+        if(hour > 23){
+            hour -=24
+        }
+        let tmp = (hour<10?'0'+hour:hour)+':'+(min<10?'0'+min:min)
+        return tmp
+    }
     useEffect(()=>{
         getMovieSchedule()
     },[])
@@ -64,17 +81,24 @@ export default function ScheduleWithMovieForm() {
                 {schedule&&schedule.map(sche=>`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}`).filter((element,index)=>{
                     return schedule.map(sche=>`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}`).indexOf(element) == index;
                 }).map((date,idx) => (
-                    <div key={idx} className='schedule_list_box'>{date}<div className='schedule_list'>{
-                    schedule.filter(sche => date==`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}`).map((item,idx)=>(
-                        <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
+                    <div key={idx} className='schedule_list_box'>{date}<div>
+                    {schedule&&schedule.map(sche=> date==`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}` &&`${sche.theaterDTO.name}`).filter((element,index)=>{
+                        return schedule.map(sche=> date==`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}` &&`${sche.theaterDTO.name}`).indexOf(element) == index;
+                    }).map((theatername,idx2) => (
+                        <div key={idx2} className='schedule_list_box'>{theatername}<div className='schedule_list'>
+                        {schedule.filter(sche => date==`${sche.startTime[0]}. ${sche.startTime[1]}. ${sche.startTime[2]}` && theatername==`${sche.theaterDTO.name}`).map((item,idx3)=>(
+                        <button key={idx3} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
                             <div>
-                                {item.startTime[3]<10?'0'+item.startTime[3]:item.startTime[3]}:{item.startTime[4]<10?'0'+item.startTime[4]:item.startTime[4]} ~
+                                {start_at(item)} ~ {end_at(item,item.runningTime)}
                             </div>
                             <div>
                                 남은 좌석 {item.totalSeat-item.filledSeat}/{item.totalSeat}
                             </div>
-                        </button>))
-                    }</div>
+                        </button>))}
+                            </div>
+                        </div>
+                        ))}
+                        </div>
                     </div>
                 ))}
             </div>

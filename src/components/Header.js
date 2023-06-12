@@ -3,6 +3,7 @@ import Modal from 'react-awesome-modal';
 import { AuthContext } from '../services/AuthContext';
 import serverapi from '../services/serverapi';
 import StaffMypageModifyForm from '../form/Staff/Info/StaffMyPageModifyForm';
+import { Link } from 'react-router-dom';
 
 import '../styles/components/_header.scss';
 
@@ -11,19 +12,23 @@ function Unlogined() {
     <>
       <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' href='nonmember'>
+          <Link
+            to={'/nonmember'}
+            className='nav-link active'
+            aria-current='page'
+          >
             비회원조회
-          </a>
+          </Link>
         </li>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' href='login'>
+          <Link to={'/login'} className='nav-link active' aria-current='page'>
             로그인
-          </a>
+          </Link>
         </li>
         <li className='nav-item'>
-          <a className='nav-link active' aria-current='page' href='signup'>
+          <Link to={'/signup'} className='nav-link active' aria-current='page'>
             회원가입
-          </a>
+          </Link>
         </li>
       </ul>
     </>
@@ -83,20 +88,24 @@ function Logined(props) {
       <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
         <li className='nav-item'>
           {isCustomerLogin && (
-            <a
+            <Link
+              to={'/ticketlist'}
               className='nav-link active'
               aria-current='page'
-              href='ticketlist'
             >
               내 티켓 조회
-            </a>
+            </Link>
           )}
         </li>
         <li className='nav-item'>
           {isCustomerLogin ? (
-            <a className='nav-link active' aria-current='page' href='mypage'>
+            <Link
+              to={'/mypage'}
+              className='nav-link active'
+              aria-current='page'
+            >
               마이페이지
-            </a>
+            </Link>
           ) : (
             <a
               className='nav-link active'
@@ -148,24 +157,24 @@ function Header() {
       aria-label='Eighth navbar example'
     >
       <div className='container'>
-        <a className='navbar-brand' href=''>
+        <Link to={'/'} className='navbar-brand'>
           HiMovie
-        </a>
+        </Link>
         <div className='collapse navbar-collapse'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <a className='nav-link active' aria-current='page' href=''>
+              <Link to={'/'} className='nav-link active' aria-current='page'>
                 영화
-              </a>
+              </Link>
             </li>
             <li className='nav-item'>
-              <a
+              <Link
+                to={'/schedule'}
                 className='nav-link active'
                 aria-current='page'
-                href='schedule'
               >
                 상영 일정
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
