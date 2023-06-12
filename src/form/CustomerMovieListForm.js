@@ -171,7 +171,7 @@ export default function CustomerMovieListForm() {
   return (
     <div className='movie-list-form-container'>
       <div className='title-text-container'>영화 목록</div>
-      <div className='form-container'>
+      <div>
         <div className='row'>
           {allmovie &&
             allmovie.map((item) => (

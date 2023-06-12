@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../../services/serverapi';
 import { AuthContext } from '../../services/AuthContext';
@@ -10,6 +10,7 @@ import SeatComponent from '../../components/SeatComponent';
 import '../../styles/components/page-container.scss';
 
 export default function StaffSeatPage(props) {
+  const { logout } = useContext(AuthContext);
   const { theaterId } = useParams();
 
   const [seatModifyOpen, setSeatModifyOpen] = useState(false);

@@ -70,7 +70,7 @@ function StaffLogined() {
         <li className='nav-item'>
           <a
             className='nav-link link-dark px-2 active'
-            href='/staff/schedule'
+            href='/movie_frontend/staff/schedule'
             aria-current='page'
           >
             상영 일정 관리
@@ -79,7 +79,7 @@ function StaffLogined() {
         <li className='nav-item'>
           <a
             className='nav-link link-dark px-2 active'
-            href='/staff/movie'
+            href='/movie_frontend/staff/movie'
             aria-current='page'
           >
             영화 관리
@@ -89,7 +89,7 @@ function StaffLogined() {
         <li className='nav-item'>
           <a
             className='nav-link link-dark px-2 active'
-            href='/staff/role'
+            href='/movie_frontend/staff/role'
             aria-current='page'
           >
             등장인물 관리
@@ -98,7 +98,7 @@ function StaffLogined() {
         <li className='nav-item'>
           <a
             className='nav-link link-dark px-2 active'
-            href='/staff/cast'
+            href='/movie_frontend/staff/cast'
             aria-current='page'
           >
             인물 관리
@@ -107,7 +107,7 @@ function StaffLogined() {
         <li className='nav-item'>
           <a
             className='nav-link link-dark px-2 active'
-            href='/staff/theater'
+            href='/movie_frontend/staff/theater'
             aria-current='page'
           >
             상영관 관리
