@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../services/serverapi';
+import { AuthContext } from '../services/AuthContext';
 import StaffScheduleModifyForm from '../form/Staff/Schedule/StaffScheduleModifyForm';
 
 export default function ScheduleComponent(props) {
+  const { logout } = useContext(AuthContext);
   const schedule = props.schedule;
   const theaterList = props.theaterList;
   const getTheaterList = props.getTheaterList;
@@ -44,8 +46,13 @@ export default function ScheduleComponent(props) {
       alert('삭제되었습니다');
       window.location.reload();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }

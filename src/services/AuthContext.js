@@ -1,5 +1,4 @@
-import React, { createContext, useState } from 'react';
-import { useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext(null);
 
@@ -8,23 +7,36 @@ export const ContextProvider = (props) => {
   const [isCustomerLogin, setIsCustomerLogin] = useState(false);
 
   useEffect(() => {
-    /**고객 */
-    if (!localStorage.getItem('customerToken')) {
-      setIsCustomerLogin(false);
-      console.log('CustomerLogin X');
-    } else {
+    checkCustomerLogin();
+    checkStaffLogin();
+  }, []);
+
+  const checkCustomerLogin = () => {
+    if (localStorage.getItem('customerToken')) {
       setIsCustomerLogin(true);
       console.log('CustomerLogin O');
-    }
-    /**직원 */
-    if (!localStorage.getItem('staffToken')) {
-      setIsStaffLogin(false);
-      console.log('StaffLogin X');
     } else {
+      setIsCustomerLogin(false);
+      console.log('CustomerLogin X');
+    }
+  };
+
+  const checkStaffLogin = () => {
+    if (localStorage.getItem('staffToken')) {
       setIsStaffLogin(true);
       console.log('StaffLogin O');
+    } else {
+      setIsStaffLogin(false);
+      console.log('StaffLogin X');
     }
-  }, []);
+  };
+
+  const logout = () => {
+    localStorage.clear();
+    window.location.replace('/');
+    setIsCustomerLogin(false);
+    setIsStaffLogin(false);
+  };
 
   return (
     <AuthContext.Provider
@@ -33,6 +45,7 @@ export const ContextProvider = (props) => {
         setIsStaffLogin,
         isCustomerLogin,
         setIsCustomerLogin,
+        logout,
       }}
     >
       {props.children}

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import serverapi from '../../../services/serverapi';
+import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
 import countries from '../../../constants/country.json';
 
@@ -7,6 +8,7 @@ import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
 
 export default function StaffCastAddForm(props) {
+  const { logout } = useContext(AuthContext);
   const closeCastModal = props.closeCastModal;
   const getCastList = props.getCastList;
 
@@ -16,13 +18,14 @@ export default function StaffCastAddForm(props) {
     register,
     handleSubmit,
     resetField,
+    setValue,
     formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
     resetField('name');
     resetField('birthdate');
-    resetField('nationality');
+    setValue('nationality', 'KR');
     resetField('info');
     resetField('profileImage');
   };
@@ -55,8 +58,13 @@ export default function StaffCastAddForm(props) {
       getCastList();
       resetData();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -159,7 +167,11 @@ export default function StaffCastAddForm(props) {
                 })}
               >
                 {Object.entries(countries).map(([key, country]) => {
-                  return <option value={key}>{country.CountryNameKR}</option>;
+                  return (
+                    <option key={key} value={key} selected={key === 'KR'}>
+                      {country.CountryNameKR}
+                    </option>
+                  );
                 })}
               </select>
             </div>

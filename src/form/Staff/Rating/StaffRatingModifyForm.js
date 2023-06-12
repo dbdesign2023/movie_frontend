@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import serverapi from '../../../services/serverapi';
+import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
 
 export default function StaffRatingModifyForm(props) {
+  const { logout } = useContext(AuthContext);
   const closeRatingModify = props.closeRatingModify;
   const getRatingList = props.getRatingList;
   const rating = props.rating;
@@ -50,8 +52,13 @@ export default function StaffRatingModifyForm(props) {
       alert('수정되었습니다');
       getRatingList();
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+      if (error.response.data === undefined) {
+        logout();
+        alert('토큰이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        console.log(error);
+        alert(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -77,7 +84,7 @@ export default function StaffRatingModifyForm(props) {
             <div className='col-sm-3'>
               <div className='content-text-container'>등급 코드</div>
             </div>
-            <div className='col-sm-9'>
+            <div className='col-9'>
               <span>{rating.code}</span>
             </div>
           </div>
