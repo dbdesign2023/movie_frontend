@@ -33,9 +33,9 @@ export const ContextProvider = (props) => {
 
   const logout = () => {
     localStorage.clear();
-    window.location.replace("/");
     setIsCustomerLogin(false);
     setIsStaffLogin(false);
+    window.location.replace("/");
   };
 
   return (

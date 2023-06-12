@@ -102,7 +102,7 @@ export default function TicketingSeatForm() {
         }
       });
       setPdata(pdata);
-      setSize(parseInt(100/maxrow));
+      setSize(100/maxrow);
     }
   }, [data]);
   const [choosenseat, setSeat] = useState({});
@@ -309,8 +309,8 @@ export default function TicketingSeatForm() {
   return (
     <div>
       <div className='title-text-center-container'>좌석 목록</div>
-      <div className='seat-container'>
-        <div className='row'>
+      <div className='seat-container' style={{width:"fit-content"}}>
+        <div className='row' style={{width:"fit-content"}}>
           {pdata &&
             pdata.map((item, idx1) => (
               <div key={idx1} className='row justify-content-start'>
