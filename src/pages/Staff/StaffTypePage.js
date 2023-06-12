@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import serverapi from '../../services/serverapi';
 import { AuthContext } from '../../services/AuthContext';
@@ -8,6 +8,8 @@ import TypeComponent from '../../components/TypeComponent';
 import '../../styles/components/page-container.scss';
 
 export default function StaffTypePage() {
+  const { logout } = useContext(AuthContext);
+
   const [typeModalOpen, setTypeModalOpen] = useState(false);
   const [typeList, setTypeList] = useState([]);
   const [isLoading2, setLoading2] = useState(false);
