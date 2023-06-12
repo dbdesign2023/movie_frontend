@@ -36,7 +36,7 @@ export default function StaffSignUpForm(props) {
       closeSignUpModal();
       alert('회원가입 되었습니다');
       resetData();
-      window.location.replace('');
+      window.location.reload();
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);

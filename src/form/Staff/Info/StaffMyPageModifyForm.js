@@ -64,7 +64,7 @@ export default function StaffMypageModifyForm(props) {
         alert('회원탈퇴 되었습니다.');
         // 로그 아웃
         Logout();
-        window.location.replace('/');
+        window.location.replace('/movie_frontend/');
       }
     } catch (error) {
       console.log(error);

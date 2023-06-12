@@ -69,7 +69,7 @@ export default function StaffMoviePage() {
   };
 
   const goToGenreRatingPage = () => {
-    window.location.replace('/staff/movie/genrerating');
+    window.location.replace('genrerating');
   };
 
   return (

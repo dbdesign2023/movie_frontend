@@ -21,7 +21,7 @@ export default function TheaterComponent(props) {
   };
 
   const goToSeatPage = (id) => {
-    window.location.replace(`/staff/theater/${id}`);
+    window.location.replace(`${id}`);
   };
 
   const getTypeList = async () => {

@@ -78,7 +78,7 @@ export default function StaffTheaterPage() {
   };
 
   const goToTypePage = () => {
-    window.location.replace('/staff/theater/type');
+    window.location.replace('type');
   };
 
   return (

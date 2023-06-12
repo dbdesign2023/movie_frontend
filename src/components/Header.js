@@ -152,7 +152,11 @@ function Header() {
         <div className='collapse navbar-collapse'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <a className='nav-link active' aria-current='page' href='/movie_frontend/'>
+              <a
+                className='nav-link active'
+                aria-current='page'
+                href='/movie_frontend/'
+              >
                 영화
               </a>
             </li>
