@@ -3,8 +3,11 @@
     margin-bottom: 10px;
 }
 .gender-box {
-    display: block;
-    align-items: left;
+    display: flex;
+    justify-content: space-between;
+    input {
+        margin-right: 10px;
+    }
 }
 .schedule_list_box {
     display:flex;
