@@ -32,7 +32,7 @@ export default function StaffScheduleModifyForm(props) {
   const onSubmit = async (data) => {
     console.log(data);
 
-    if (!data.startTime || !data.discount) {
+    if (!data.startTime) {
       return;
     }
 
