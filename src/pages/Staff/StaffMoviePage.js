@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Modal from 'react-awesome-modal';
+import { useNavigate } from 'react-router-dom';
 import serverapi from '../../services/serverapi';
 import { AuthContext } from '../../services/AuthContext';
 import StaffMovieAddForm from '../../form/Staff/Movie/StaffMovieAddForm';
@@ -9,6 +10,7 @@ import '../../styles/components/page-container.scss';
 
 export default function StaffMoviePage() {
   const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [movieModalOpen, setMovieModalOpen] = useState(false);
   const [preMovieList, setPreMovieList] = useState([]);
   const [movieList, setMovieList] = useState([]);
@@ -21,6 +23,10 @@ export default function StaffMoviePage() {
   useEffect(() => {
     console.log('movieList', movieList);
   }, [movieList]);
+
+  const goToGenreRatingPage = () => {
+    navigate('/staff/movie/genrerating');
+  };
 
   const getPreMovieList = async () => {
     const api = '/movie/all';
@@ -73,10 +79,6 @@ export default function StaffMoviePage() {
 
   const closeMovieModal = () => {
     setMovieModalOpen(false);
-  };
-
-  const goToGenreRatingPage = () => {
-    window.location.replace('genrerating');
   };
 
   return (
