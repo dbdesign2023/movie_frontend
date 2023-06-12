@@ -69,6 +69,9 @@ export default function ScheduleComponent(props) {
       <td className='centered-cell'>
         <span>{schedule.startTime}</span>
       </td>
+      <td className='centered-cell'>
+        <span>{schedule.discount}</span>
+      </td>
       <td>
         <button className='btn btn-warning' onClick={showScheduleModify}>
           수정

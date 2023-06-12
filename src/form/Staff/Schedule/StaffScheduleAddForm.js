@@ -18,19 +18,19 @@ export default function StaffScheduleAddForm(props) {
     register,
     handleSubmit,
     resetField,
+    setValue,
     formState: { isValid, isDirty, errors },
   } = useForm();
 
   const resetData = () => {
     resetField('movieId');
     resetField('theaterId');
-    resetField('discount');
+    setValue('discount', null);
   };
 
   const onSubmit = async (data) => {
+    if (data.discount == 0) data.discount = null;
     console.log(data);
-
-    data.discount = `${data.discount}%`;
 
     const api = `/schedule/add`;
     const token = localStorage.getItem('staffToken');
@@ -162,20 +162,10 @@ export default function StaffScheduleAddForm(props) {
             <div className='col-sm-9'>
               <input
                 className='form-control'
-                type='number'
+                type='text'
                 placeholder='할인율을 입력해주세요'
-                aria-invalid={
-                  !isDirty ? undefined : errors.discount ? 'true' : 'false'
-                }
-                {...register('discount', {
-                  required: '할인율을 입력해주세요.',
-                })}
+                {...register('discount')}
               />
-              {errors.discout && (
-                <small role='alert' className='input-alert'>
-                  {errors.discount.message}
-                </small>
-              )}
             </div>
           </div>
 

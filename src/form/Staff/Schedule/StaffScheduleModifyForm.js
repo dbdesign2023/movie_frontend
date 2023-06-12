@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import serverapi from '../../../services/serverapi';
 import { AuthContext } from '../../../services/AuthContext';
 import { useForm } from 'react-hook-form';
@@ -25,14 +25,16 @@ export default function StaffScheduleModifyForm(props) {
     },
   });
 
+  useEffect(() => {
+    console.log('schedule', schedule);
+  }, [schedule]);
+
   const onSubmit = async (data) => {
     console.log(data);
 
     if (!data.startTime || !data.discount) {
       return;
     }
-
-    data.discount = `${data.discount}%`;
 
     const api = `/schedule/${schedule.scheduleId}/modify`;
     const token = localStorage.getItem('staffToken');
@@ -47,6 +49,7 @@ export default function StaffScheduleModifyForm(props) {
     try {
       setLoading(true);
 
+      if (data.discount == 0) data.discount = null;
       console.log('Request body', data);
 
       const response = await serverapi.post(api, data, options);
@@ -130,7 +133,7 @@ export default function StaffScheduleModifyForm(props) {
             <div className='col-sm-9'>
               <input
                 className='form-control'
-                type='number'
+                type='text'
                 placeholder='할인율을 입력해주세요'
                 defaultValue={schedule.discount}
                 {...register('discount')}

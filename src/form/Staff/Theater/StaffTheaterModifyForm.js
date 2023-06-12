@@ -123,7 +123,11 @@ export default function StaffTheaterModfyForm(props) {
               >
                 {typeList.map((type) => {
                   return (
-                    <option key={type.code} value={type.code}>
+                    <option
+                      key={type.code}
+                      value={type.code}
+                      selected={type.code === theater.typeCode}
+                    >
                       {type.name}
                     </option>
                   );
@@ -142,7 +146,7 @@ export default function StaffTheaterModfyForm(props) {
                 placeholder='위치(층)을 입력하세요'
                 defaultValue={theater.floor}
                 {...register('floor', {
-                  required: '상영 시간을 입력하세요.',
+                  required: '위치(층)을 입력하세요.',
                 })}
               />
             </div>

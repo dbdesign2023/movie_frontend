@@ -24,10 +24,6 @@ export default function TheaterComponent(props) {
     setTheaterModifyOpen(false);
   };
 
-  const goToSeatPage = (id) => {
-    window.location.replace(`${id}`);
-  };
-
   const getTypeList = async () => {
     const api = '/theater/type/list';
     const token = localStorage.getItem('staffToken');
@@ -116,6 +112,21 @@ export default function TheaterComponent(props) {
         <button className='btn btn-warning' onClick={showTheaterModify}>
           수정
         </button>
+        {theaterModifyOpen && (
+          <Modal setTheaterModifyOpen={showTheaterModify} />
+        )}
+        <Modal
+          visible={theaterModifyOpen}
+          effect='fadeInDown'
+          onClickAway={closeTheaterModify}
+        >
+          <StaffTheaterModifyForm
+            closeTheaterModify={closeTheaterModify}
+            getTheaterList={getTheaterList}
+            theater={theater}
+            typeList={typeList}
+          />
+        </Modal>
       </td>
       <td>
         <button

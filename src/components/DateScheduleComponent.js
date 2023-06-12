@@ -16,6 +16,7 @@ function AccordionBody(props) {
               <th scope='col'>영화</th>
               <th scope='col'>상영관</th>
               <th scope='col'>시작 시간</th>
+              <th scope='col'>할인</th>
               <th scope='col'>수정</th>
               <th scope='col'>삭제</th>
             </tr>
