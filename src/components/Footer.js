@@ -3,6 +3,7 @@ import Modal from 'react-awesome-modal';
 import StaffLoginForm from '../form/Staff/Info/StaffLoginForm';
 import StaffSignUpForm from '../form/Staff/Info/StaffSignUpForm';
 import { AuthContext } from '../services/AuthContext';
+import { Link } from 'react-router-dom';
 
 function Unlogined() {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
@@ -68,50 +69,45 @@ function StaffLogined() {
     <>
       <ul className='nav me-auto'>
         <li className='nav-item'>
-          <a
+          <Link to={"/staff/schedule"}
             className='nav-link link-dark px-2 active'
-            href='/movie_frontend/staff/schedule'
             aria-current='page'
           >
             상영 일정 관리
-          </a>
+          </Link>
         </li>
         <li className='nav-item'>
-          <a
+          <Link to={"/staff/movie"}
             className='nav-link link-dark px-2 active'
-            href='/movie_frontend/staff/movie'
             aria-current='page'
           >
             영화 관리
-          </a>
+          </Link>
         </li>
 
         <li className='nav-item'>
-          <a
+          <Link to={"/staff/role"}
             className='nav-link link-dark px-2 active'
-            href='/movie_frontend/staff/role'
             aria-current='page'
           >
             등장인물 관리
-          </a>
+          </Link>
         </li>
         <li className='nav-item'>
-          <a
+          <Link to={"/staff/cast"}
             className='nav-link link-dark px-2 active'
-            href='/movie_frontend/staff/cast'
             aria-current='page'
           >
             인물 관리
-          </a>
+          </Link>
         </li>
         <li className='nav-item'>
-          <a
+          <Link to={"/staff/theater"}
             className='nav-link link-dark px-2 active'
-            href='/movie_frontend/staff/theater'
             aria-current='page'
           >
             상영관 관리
-          </a>
+          </Link>
         </li>
       </ul>
     </>
