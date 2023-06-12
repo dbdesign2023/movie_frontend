@@ -59,6 +59,26 @@ export default function ScheduleWithMovieForm() {
             </h2>
             <img src={img} style={{width: '60%', height: '70%'}}/>
             <div>
+                {schedule && schedule.reduce((sche, cur, idx) => {
+                    if(cur.includes(`${sche.startTime[0]}-${sche.startTime[1]}-${sche.startTime[2]}`))cur.push(`${sche.startTime[0]}-${sche.startTime[1]}-${sche.startTime[2]}`);
+                },[]).map((date,idx) => (
+                    <div>{date}{
+                    schedule.filter(sche => date==`${sche.startTime[0]}-${sche.startTime[1]}-${sche.startTime[2]}`).map((item,idx)=>(
+                        <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
+                            <div>
+                                {item.startTime[0]}-{item.startTime[1]<10?'0'+item.startTime[1]:item.startTime[1]}-{item.startTime[2]<10?'0'+item.startTime[2]:item.startTime[2]}
+                            </div>
+                            <div>
+                                {item.startTime[3]<10?'0'+item.startTime[3]:item.startTime[3]}:{item.startTime[4]<10?'0'+item.startTime[4]:item.startTime[4]} ~
+                            </div>
+                            <div>
+                                남은 좌석 {item.totalSeat-item.filledSeat}/{item.totalSeat}
+                            </div>
+                        </button>))
+                    }</div>
+                ))}
+            </div>
+            <div>
                 {schedule &&(schedule.map((item,idx)=>(
                     <button key={idx} className="btn btn-light m-2" onClick={clickHandler.bind(item)}>
                         <div>
