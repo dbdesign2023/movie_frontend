@@ -12,6 +12,7 @@ export default function StaffSeatAddForm(props) {
   const theaterId = props.theaterId;
   const selectedSeats = props.selectedSeats;
   const getSeatList = props.getSeatList;
+  const setSelectedSeats = props.setSelectedSeats;
 
   const [isLoading, setLoading] = useState(false);
 
@@ -43,6 +44,7 @@ export default function StaffSeatAddForm(props) {
 
       closeSeatModify();
       alert('좌석이 수정되었습니다');
+      setSelectedSeats([]);
       getSeatList();
     } catch (error) {
       if (error.response.data === undefined) {

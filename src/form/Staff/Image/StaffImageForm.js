@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import '../../../styles/components/form-container.scss';
 import '../../../styles/components/modal-container.scss';
@@ -20,25 +20,29 @@ export default function StaffImageForm(props) {
       </div>
       <div className='title-text-center-container'>이미지 보기</div>
       <div className='form-container'>
-        {fileURL === '/api/profileImage?fileName=' ? (
-          <img
-            src={
-              process.env.REACT_APP_API_ORIGIN +
-              fileURL +
-              info.profileImage.fileName
-            }
-            className='w-100'
-            alt='profileImage_image'
-          />
-        ) : (
-          <img
-            src={
-              process.env.REACT_APP_API_ORIGIN + fileURL + info.poster.fileName
-            }
-            className='w-100'
-            alt='poster_image'
-          />
-        )}
+        <div className='img-container'>
+          {fileURL === '/api/profileImage?fileName=' ? (
+            <img
+              src={
+                process.env.REACT_APP_API_ORIGIN +
+                fileURL +
+                info.profileImage.fileName
+              }
+              className='w-100'
+              alt='profileImage_image'
+            />
+          ) : (
+            <img
+              src={
+                process.env.REACT_APP_API_ORIGIN +
+                fileURL +
+                info.poster.fileName
+              }
+              className='w-100'
+              alt='poster_image'
+            />
+          )}
+        </div>
       </div>
     </div>
   );

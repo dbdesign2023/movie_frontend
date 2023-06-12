@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Modal from 'react-awesome-modal';
 import { AuthContext } from '../services/AuthContext';
 import serverapi from '../services/serverapi';
@@ -65,10 +65,14 @@ function Logined(props) {
     }
   };
 
-  const showMypageModify = () => {
-    getInfo();
+  const showMypageModify = async () => {
+    await getInfo();
     setMypageModifyOpen(true);
   };
+
+  useEffect(() => {
+    console.log('info', info);
+  }, [info]);
 
   const closeMypageModify = () => {
     setMypageModifyOpen(false);
@@ -102,14 +106,18 @@ function Logined(props) {
               마이페이지
             </a>
           )}
-          {mypageModifyOpen && <Modal setMypageModifyOpen={showMypageModify} />}
-          <Modal
-            visible={mypageModifyOpen}
-            effect='fadeInDown'
-            onClickAway={closeMypageModify}
-          >
-            <StaffMypageModifyForm closeMypageModify={closeMypageModify} />
-          </Modal>
+          {mypageModifyOpen && (
+            <Modal
+              visible={mypageModifyOpen}
+              effect='fadeInDown'
+              onClickAway={closeMypageModify}
+            >
+              <StaffMypageModifyForm
+                closeMypageModify={closeMypageModify}
+                info={info}
+              />
+            </Modal>
+          )}
         </li>
         <li className='nav-item'>
           <a className='nav-link active' aria-current='page' onClick={logout}>
@@ -146,11 +154,7 @@ function Header() {
         <div className='collapse navbar-collapse'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <a
-                className='nav-link active'
-                aria-current='page'
-                href=''
-              >
+              <a className='nav-link active' aria-current='page' href=''>
                 영화
               </a>
             </li>

@@ -92,7 +92,7 @@ function StaffLogined() {
             href='/movie_frontend/staff/role'
             aria-current='page'
           >
-            등장인물 관리
+            역할 관리
           </a>
         </li>
         <li className='nav-item'>

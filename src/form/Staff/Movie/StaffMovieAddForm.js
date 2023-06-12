@@ -163,7 +163,7 @@ export default function StaffMovieAddForm(props) {
       console.log('Request body', data);
       formData.append('title', data.title);
       formData.append('releaseDate', data.releaseDate);
-      formData.append('runngingTime', data.runngingTime);
+      formData.append('runningTime', data.runningTime);
       formData.append('info', data.info);
       formData.append('countryCode', data.countryCode);
       formData.append('language', data.language);
@@ -265,15 +265,15 @@ export default function StaffMovieAddForm(props) {
                 type='number'
                 placeholder='상영 시간을 입력하세요'
                 aria-invalid={
-                  !isDirty ? undefined : errors.runngingTime ? 'true' : 'false'
+                  !isDirty ? undefined : errors.runningTime ? 'true' : 'false'
                 }
-                {...register('runngingTime', {
+                {...register('runningTime', {
                   required: '상영 시간을 입력하세요.',
                 })}
               />
-              {errors.runngingTime && (
+              {errors.runningTime && (
                 <small role='alert' className='input-alert'>
-                  {errors.runngingTime.message}
+                  {errors.runningTime.message}
                 </small>
               )}
             </div>

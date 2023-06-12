@@ -43,7 +43,7 @@ export default function StaffRatingAddForm(props) {
       console.log('response', response.data);
 
       closeRatingModal();
-      alert('장르가 등록되었습니다');
+      alert('등급이 등록되었습니다');
       getRatingList();
       resetData();
     } catch (error) {
